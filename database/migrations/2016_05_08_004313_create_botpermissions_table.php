@@ -12,7 +12,14 @@ class CreateBotpermissionsTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('botpermissions', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('bot_id')->unsigned();
+            $table->foreign('bot_id')->references('id')->on('bots')->onDelete('cascade');
+            $table->boolean('higher')->default(false);
+        });
     }
 
     /**
@@ -22,6 +29,6 @@ class CreateBotpermissionsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('botpermissions');
     }
 }

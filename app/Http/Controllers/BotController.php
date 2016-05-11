@@ -34,7 +34,7 @@ class BotController extends Controller
     public function create()
     {
         // Lấy tất cả user của hub (chủ yếu là lấy member) trừ owner của hub ra
-        $users = Hub::findOrFail(session('currentHub'))->users()->with((['members' => function($query) { $query->where('hub_id',session('currentHub'))->where('level','!=',0); }]))->orderBy('members.id','DESC')->get();
+        $users = Hub::findOrFail(session('currentHub'))->users()->orderBy('id','DESC')->get();
         $nUsers = [];
         foreach ($users as $user) {
             $nUsers[$user['members'][0]['id']] = $user['username'];
@@ -48,10 +48,10 @@ class BotController extends Controller
             'name'  => 'required|max:100',
             'description' => 'max:1000',
             'image' => 'image',
-            'type'  => 'required|in:1,2,3',
+            'type'  => 'required|between:1,6',
             'token' => 'required|size:10|unique:bots,token',
-            // Kiểm tra xem member's id được add có phải là member của hub không
-            'permissions.*' => 'exists:members,id,hub_id,'.Hub::findOrFail(session('currentHub'))->id
+            // Kiểm tra xem user's id được add có phải là member của hub không
+            'permissions.*' => 'exists:members,user_id,hub_id,'.Hub::findOrFail(session('currentHub'))->id
         ];
 
         $this->validate($request, $rules);
@@ -78,21 +78,16 @@ class BotController extends Controller
         // Thêm quyền điều khiển bot cho member
         if ($request->permissions)
         {
-            foreach ($request->permissions as $member_id)
+            foreach ($request->permissions as $user_id)
             {
-                $newPerm = new Permission;
+                $newPerm = new BotPermission;
                 $newPerm->bot_id = $bot->id;
-                $newPerm->member_id = $member_id;
+                $newPerm->user_id = $user_id;
                 $newPerm->save();
             }
         }
 
-        // Thêm quyền điều khiển bot cho owner
-        $newPerm = new Permission;
-        $newPerm->bot_id = $bot->id;
-        $newPerm->member_id = Hub::findOrFail(session('currentHub'))->owner()->getMemberInfoOf(session('currentHub'))->id;
-        $newPerm->save();
-
+        // Thêm quyền điều khiển bot cho các level cao //////////
         return redirect()->to(route('h::b::index'));
     }
 

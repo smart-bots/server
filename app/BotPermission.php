@@ -4,14 +4,14 @@ namespace SmartBots;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Member extends Model
+class BotPermission extends Model
 {
-    protected $table = 'members';
-    protected $fillable = ['hub_id','user_id','status'];
+    protected $table = 'botpermissions';
+    protected $fillable = ['user_id','bot_id'];
     protected $hidden = [];
     public $timestamps = false;
-    public function hub() {
-    	return $this->belongsTo('SmartBots\Hub','hub_id');
+    public function bot() {
+    	return $this->belongsTo('SmartBots\Bot','bot_id');
     }
     public function user() {
     	return $this->belongsTo('SmartBots\User','user_id');

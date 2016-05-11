@@ -4,6 +4,15 @@ namespace SmartBots;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+use SmartBots\User;
+use SmartBots\Hub;
+use SmartBots\Member;
+use SmartBots\Bot;
+use SmartBots\BotPermission;
+use SmartBots\Schedule;
+use SmartBots\SchedulePermission;
+use SmartBots\HighPermission;
+
 class User extends Authenticatable
 {
     protected $table = 'users';
@@ -15,8 +24,12 @@ class User extends Authenticatable
         return $this->hasMany('SmartBots\Member','user_id');
     }
 
-    public function permissions() {
-        return $this->hasMany('SmartBots\Permission','user_id');
+    public function botpermissions() {
+        return $this->hasMany('SmartBots\BotPermission','user_id');
+    }
+
+    public function schedulepermissions() {
+        return $this->hasMany('SmartBots\BotPermission','user_id');
     }
 
     public function schedules() {
@@ -32,12 +45,12 @@ class User extends Authenticatable
     }
 
     public function bots() {
-        $permissions = $this->permissions;
-        foreach ($permissions as $permission) {
+        $botpermissions = $this->botpermissions;
+        foreach ($botpermissions as $botpermission) {
             if (!isset($bots)) {
-                $bots = $permission->bots;
+                $bots = $botpermission->bots;
             } else {
-                $bots = $bots->merge($permission->bots);
+                $bots = $bots->merge($botpermission->bots);
             }
         }
         return $bots;

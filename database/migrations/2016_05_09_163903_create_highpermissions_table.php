@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSchedulepermissionsTable extends Migration
+class CreateHighpermissionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,15 @@ class CreateSchedulepermissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('schedulepermissions', function (Blueprint $table) {
+        Schema::create('highpermissions', function (Blueprint $table) {
             $table->increments('id');
+            // $table->integer('member_id')->unsigned();
+            // $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('schedule_id')->unsigned();
-            $table->foreign('schedule_id')->references('id')->on('schedules')->onDelete('cascade');
-            $table->boolean('higher')->default(false);
+            $table->integer('hub_id')->unsigned();
+            $table->foreign('hub_id')->references('id')->on('hubs')->onDelete('cascade');
+            $table->integer('data');
         });
     }
 
@@ -29,6 +31,6 @@ class CreateSchedulepermissionsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('schedulepermissions');
+        Schema::drop('highpermissions');
     }
 }

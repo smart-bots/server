@@ -16,7 +16,7 @@ class HubController extends Controller
 {
     public function index() {
         // Lấy tất cả hub mà user tham gia
-        $hubs = User::findOrFail(auth()->user()->id)->allHubs(true)->sortByDesc('id');
+        $hubs = User::findOrFail(auth()->user()->id)->hubs()->with('bots')->get()->sortByDesc('id');
         return view('hub.index')->withHubs($hubs);
     }
 
@@ -33,7 +33,6 @@ class HubController extends Controller
         $this->validate($request, $rules);
 
 		$newHub = new Hub;
-		$newHub->user_id     = auth()->user()->id;
 		$newHub->name        = $request->name;
 		$newHub->description = $request->description;
 		$newHub->token         = str_random(50);
@@ -51,6 +50,8 @@ class HubController extends Controller
         $newMember->hub_id = $newHub->id;
         $newMember->level = 0;
         $newMember->save();
+
+        // Thêm add permission
 
 		return redirect()->to(route('h::index'));
     }

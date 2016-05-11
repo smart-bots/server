@@ -13,15 +13,15 @@ class Bot extends Model
     public function hub() {
     	return $this->belongsTo('SmartBots\Hub','hub_id');
     }
-    public function permissions() {
-        return $this->hasMany('SmartBots\Permission','bot_id');
+    public function botpermissions() {
+        return $this->hasMany('SmartBots\BotPermission','bot_id');
     }
     public function users() {
-        // thông qua permission
-        $permissions = $this->permissions;
+        // thông qua botpermission
+        $botpermissions = $this->botpermissions;
         $users = [];
-        foreach ($permissions as $permission) {
-            $users[] = $permissions->user;
+        foreach ($botpermissions as $botpermission) {
+            $users[] = $botpermissions->user;
         }
         return collect($users);
     }
@@ -29,6 +29,6 @@ class Bot extends Model
         return $hub_id == $this->hub->id;
     }
     public function canBeManagedBy($user_id) {
-        return in_array($user_id, array_pluck($this->permissions->toArray(),'user_id'));
+        return in_array($user_id, array_pluck($this->botpermissions->toArray(),'user_id'));
     }
 }

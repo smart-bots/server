@@ -135,7 +135,7 @@ class UserController extends Controller
 
     public function update(Request $request) {
         $rules = [
-            'name' => 'required|between:6,255',
+            'name'  => 'required|between:6,255',
             'email' => 'required|email|unique:users,id,'.auth()->user()->id,
             'phone' => 'required|numeric|unique:users,id,'.auth()->user()->id
         ];
