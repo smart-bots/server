@@ -19,7 +19,6 @@ class CreateMembersTable extends Migration
             $table->integer('hub_id')->unsigned();
             $table->foreign('hub_id')->references('id')->on('hubs')->onDelete('cascade');
             $table->boolean('status')->default(true);
-            $table->tinyInteger('level')->default(1); // 0 = Owner
         });
     }
 

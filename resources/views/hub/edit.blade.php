@@ -14,7 +14,7 @@
 	        var r = Math.random();
 	        s+= (r<0.1?Math.floor(r*100):String.fromCharCode(Math.floor(r*26) + (r>0.5?97:65)));
 	    }
-	    $("[name='token_old']").attr('name','token').val(s);
+	    $("[name='token']").val(s);
 	}
 	</script>
 @endsection
@@ -48,7 +48,7 @@
 			</div>
 			@endif
 			<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-				{!! Form::label('name', 'Hub name', ['class' => 'col-sm-2 control-label']) !!}
+				{!! Form::label('name', 'Name', ['class' => 'col-sm-2 control-label']) !!}
 				<div class="col-sm-10">
 					{!! Form::text('name', $hub['name'], ['class' => 'form-control']) !!}
 					@if ($errors->has('name'))
@@ -62,7 +62,7 @@
 				{!! Form::label('token', 'Token', ['class' => 'col-sm-2 control-label']) !!}
 				<div class="col-sm-10">
 					<div class="input-group">
-						{!! Form::text('token_old', $hub['token'], ['class' => 'form-control', 'readonly' => 'readonly']) !!}
+						{!! Form::text('token', $hub['token'], ['class' => 'form-control', 'readonly' => 'readonly']) !!}
 						<span class="input-group-btn">
 							{!! Form::button('<i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;&nbsp;Renew', ['type' => 'button', 'class' => 'btn bg-olive', 'onclick' => 'renewToken();']) !!}
 						</span>

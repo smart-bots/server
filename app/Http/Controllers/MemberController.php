@@ -12,23 +12,21 @@ use SmartBots\User;
 use SmartBots\Hub;
 use SmartBots\Member;
 use SmartBots\Bot;
-use SmartBots\Permission;
+use SmartBots\BotPermission;
 
 class MemberController extends Controller
 {
     public function index()
     {
-        // Lấy tất cả member (trừ owner)
-        $members = Hub::findOrFail(session('currentHub'))->members()->where('level','!=',0)->with('user')->orderBy('id','DESC')->get()->toArray();
+        $members = Hub::findOrFail(session('currentHub'))->members()->with('user')->orderBy('id','DESC')->get()->toArray();
         for ($i = 0;$i < count($members);$i++) {
-            $members[$i]['bots'] = Permission::where('member_id',$members[$i]['id'])->get()->count();
+            $members[$i]['bots'] = BotPermission::where('user_id',$members[$i]['user']['id'])->get()->count();
         }
         return view('hub.member.index')->withMembers($members);
     }
 
     public function create()
     {
-        // Lấy tất cả bot
         $bots = Hub::findOrFail(session('currentHub'))->bots()->orderBy('id','DESC')->get()->toArray();
         $nBots = [];
         foreach ($bots as $bot) {
@@ -41,12 +39,12 @@ class MemberController extends Controller
     {
         $rules = [
             'username' => 'required|exists:users,username',
-            'permissions.*' => 'exists:bots,id,hub_id,'.Hub::findOrFail(session('currentHub'))->id
+            'permissions.*' => 'exists:bots,id,hub_id,'.session('currentHub'),
+            'higherpermissions.*' => 'exists:bots,id,hub_id,'.session('currentHub')
         ];
 
         $this->validate($request, $rules);
 
-        // Lấy thông tin của user từ username
         $user = User::where('username',$request->username)->firstOrFail();
 
         // Kiểm tra xem user có phải là member của hub
@@ -58,14 +56,18 @@ class MemberController extends Controller
         $newMember->user_id = $user->id;
         $newMember->hub_id = session('currentHub');
         $newMember->save();
-        if ($request->permissions) {
-            foreach ($request->permissions as $bot_id)
-            {
-                $newPerm = new Permission;
-                $newPerm->member_id = $newMember->id;
-                $newPerm->bot_id = $bot_id;
-                $newPerm->save();
-            }
+
+        foreach ($request->permissions as $bot_id)
+        {
+            $newPerm = new BotPermission;
+            $newPerm->user_id = $user->id;
+            $newPerm->bot_id = $bot_id;
+            $newPerm->save();
+        }
+
+        foreach ($request->higherpermissions as $user_id)
+        {
+            BotPermission::updateOrCreate(['bot_id' => $bot_id, 'user_id' => $user->id],['higher' => true]);
         }
 
         return redirect()->to(route('h::m::index'));
@@ -73,17 +75,20 @@ class MemberController extends Controller
 
     public function edit($id)
     {
+        $member = Member::findOrFail($id);
+        $user = $member->user;
         // Lấy tất cả bot
         $bots = Hub::findOrFail(session('currentHub'))->bots()->orderBy('id','DESC')->get()->toArray();
         $nBots = [];
         foreach ($bots as $bot) {
             $nBots[$bot['id']] = $bot['name'];
         }
-        $mem = Member::findOrFail($id);
-        $perms = Member::findOrFail($id)->permissions()->get()->toArray();
-        $sBots = array_column($perms,'bot_id');
-        $user = Member::findOrFail($id)->user()->firstOrFail();
-        return view('hub.member.edit')->withMem($mem)->withBots($nBots)->withSelected($sBots)->withUsername($user->username);
+        $perms = BotPermission::where('user_id',$user->id)->whereIn('bot_id',array_pluck($bots,'id'))->get();
+        $sBots = array_pluck($perms,'bot_id');
+
+        $perm2s = BotPermission::where('user_id',$user->id)->whereIn('bot_id',array_pluck($bots,'id'))->where('higher',true)->get();
+        $sBot2s = array_pluck($perm2s,'bot_id');
+        return view('hub.member.edit')->withMem($member)->withBots($nBots)->withSelected($sBots)->withSelected2($sBot2s)->withUsername($user->username);
     }
 
     public function update(Request $request, $id)
@@ -92,15 +97,42 @@ class MemberController extends Controller
 
 		$this->validate($request, $rules);
 
-        Permission::where('member_id',$id)->delete();
+        $member = Member::findOrFail($id);
 
-        if ($request->permissions) {
-            foreach ($request->permissions as $bot_id)
+        $user = $member->user;
+
+        $bots = Hub::findOrFail(session('currentHub'))->bots()->orderBy('id','DESC')->get();
+
+        $botperms = BotPermission::where('user_id',$member->user_id)->whereIn('bot_id',array_pluck($bots,'id'))->get();
+
+        $bots_of_user_old = array_pluck($botperms,'bot_id');
+
+        if (count($bots_of_user_old) > count($request->permissions)) { // Xóa bớt
+            $diff = collect($bots_of_user_old)->diff($request->permissions);
+            BotPermission::where('user_id',$member->user_id)->whereIn('bot_id',$diff->all())->delete();
+        } else { // Hoặc thêm
+            $diff = collect($request->permissions)->diff($bots_of_user_old)->toArray();
+            foreach ($diff as $bot_id)
             {
-                $newPerm = new Permission;
-                $newPerm->member_id = $id;
+                $newPerm = new BotPermission;
+                $newPerm->user_id = $user->id;
                 $newPerm->bot_id = $bot_id;
                 $newPerm->save();
+            }
+        }
+
+        $botperms = BotPermission::where('user_id',$member->user_id)->whereIn('bot_id',array_pluck($bots,'id'))->where('higher',true)->get();
+
+        $bots_of_user_old = array_pluck($botperms,'bot_id');
+
+        if (count($bots_of_user_old) > count($request->higherpermissions)) { // Xóa bớt
+            $diff = collect($bots_of_user_old)->diff($request->higherpermissions);
+            BotPermission::where('user_id',$member->user_id)->whereIn('bot_id',$diff->all())->where('higher',true)->update(['higher' => false]);
+        } else { // Hoặc thêm
+            $diff = collect($request->higherpermissions)->diff($bots_of_user_old)->toArray();
+            foreach ($diff as $bot_id)
+            {
+                BotPermission::updateOrCreate(['bot_id' => $bot_id, 'user_id' => $user->id],['higher' => true]);
             }
         }
 

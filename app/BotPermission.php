@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class BotPermission extends Model
 {
     protected $table = 'botpermissions';
-    protected $fillable = ['user_id','bot_id'];
+    protected $fillable = ['user_id','bot_id','higher'];
     protected $hidden = [];
     public $timestamps = false;
     public function bot() {

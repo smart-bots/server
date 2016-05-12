@@ -12,6 +12,7 @@
 </script>
 <script>
   $("[name='permissions[]']").multiSelect();
+  $("[name='higherpermissions[]']").multiSelect();
   function botDeactivate(id) {
     bootbox.confirm("R u sure?", function(result) {
       if (result == true) {
@@ -189,6 +190,19 @@
             @if ($errors->has('permissions'))
             <span class="help-block margin-bottom-none">
               {{ $errors->first('permissions') }}
+            </span>
+            @else
+            <span class="help-block margin-bottom-none">Users can manage this bot</span>
+            @endif
+          </div>
+        </div>
+        <div class="form-group{{ $errors->has('higherpermissions') ? ' has-error' : '' }}">
+          {!! Form::label('higherpermissions', 'Higher permissions', ['class' => 'col-sm-2 control-label']) !!}
+          <div class="col-sm-10">
+            {!! Form::select('higherpermissions[]', $users, $selected2, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+            @if ($errors->has('higherpermissions'))
+            <span class="help-block margin-bottom-none">
+              {{ $errors->first('higherpermissions') }}
             </span>
             @else
             <span class="help-block margin-bottom-none">Users can manage this bot</span>

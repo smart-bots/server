@@ -50,6 +50,7 @@
 <script src="{{ asset('resources/assets/plugins/lou-multi-select/js/jquery.multi-select.js') }}" type="text/javascript"></script>
 <script>
 $("[name='permissions[]']").multiSelect();
+$("[name='higherpermissions[]']").multiSelect();
 var username = new Bloodhound({
   datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
   queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -130,6 +131,17 @@ $('[name="username"]').typeahead(null, {
             @if ($errors->has('permissions'))
             <span class="help-block margin-bottom-none">
               {{ $errors->first('permissions') }}
+            </span>
+            @endif
+          </div>
+        </div>
+        <div class="form-group{{ $errors->has('higherpermissions') ? ' has-error' : '' }}">
+          {!! Form::label('username', 'Members\'s higher-permissions', ['class' => 'col-sm-2 control-label']) !!}
+          <div class="col-sm-10">
+            {!! Form::select('higherpermissions[]', $bots, old('higherpermissions'), ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+            @if ($errors->has('higherpermissions'))
+            <span class="help-block margin-bottom-none">
+              {{ $errors->first('higherpermissions') }}
             </span>
             @endif
           </div>

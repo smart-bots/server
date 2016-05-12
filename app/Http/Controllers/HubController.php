@@ -10,13 +10,12 @@ use SmartBots\User;
 use SmartBots\Hub;
 use SmartBots\Bot;
 use SmartBots\Member;
-use SmartBots\Permission;
+use SmartBots\HubPermission;
 
 class HubController extends Controller
 {
     public function index() {
-        // Lấy tất cả hub mà user tham gia
-        $hubs = User::findOrFail(auth()->user()->id)->hubs()->with('bots')->get()->sortByDesc('id');
+        $hubs = auth()->user()->hubs()->with('bots')->get()->sortByDesc('id');
         return view('hub.index')->withHubs($hubs);
     }
 
@@ -45,13 +44,11 @@ class HubController extends Controller
 		}
 		$newHub->save();
 
-        $newMember = new Member;
-        $newMember->user_id = auth()->user()->id;
-        $newMember->hub_id = $newHub->id;
-        $newMember->level = 0;
-        $newMember->save();
-
-        // Thêm add permission
+        $newHubPermission = new HubPermission;
+        $newHubPermission->user_id = auth()->user()->id;
+        $newHubPermission->hub_id = $newHub->id;
+        $newHubPermission->data = 0; // root admin
+        $newHubPermission->save();
 
 		return redirect()->to(route('h::index'));
     }
@@ -60,7 +57,7 @@ class HubController extends Controller
     {
         $error = 1;
         // Kiểm tra xem user có tham gia hub hay không
-        if (User::findOrFail(auth()->user()->id)->isOf($request->id)) {
+        if (auth()->user()->isOf($request->id)) {
             session()->put('currentHub',$request->id);
             $error = 0;
         }
@@ -82,7 +79,7 @@ class HubController extends Controller
     {
         $rules = [
             'name'  => 'required|max:100',
-            'token'   => 'sometimes|required|size:50|unique:hubs',
+            'token'   => 'required|size:50|unique:hubs,id,'.session('currentHub'),
             'description' => 'max:1000'
         ];
 
@@ -91,9 +88,7 @@ class HubController extends Controller
 		$hub = Hub::findOrFail(session('currentHub'));
 		$hub->name        = $request->name;
 		$hub->description = $request->description;
-		if (!empty($request->token)) {
-			$hub->token   = $request->token;
-		}
+		$hub->token   = $request->token;
 		if (!empty($request->image_values)) {
 			$image_values  = json_decode($request->image_values);
 			$image_name    = str_random(10).'.jpg';
@@ -108,7 +103,6 @@ class HubController extends Controller
 
     public function botsStatus(Request $request)
     {
-        // Lấy toàn bộ bot trong hub
         $bots = Hub::findOrFail(session('currentHub'))->bots;
         $bots2 = [];
         for ($i=0;$i<count($bots);$i++) {

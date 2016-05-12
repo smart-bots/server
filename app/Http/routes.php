@@ -1,14 +1,15 @@
 <?php
-use SmartBots\Hub, SmartBots\User;
+use SmartBots\Hub, SmartBots\User, SmartBots\BotPermission;
 Route::get('', function () {
     return view('comingsoon.index');
 });
 
 Route::get('test', function () {
-	$str = 'Saturday 23:09';
-	$pattern = '/^(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday) ([01]{1}[0-9]{1}|[2]{1}[0-3]{1}):([012345]{1}[0-9]{1})$/';
-	preg_match($pattern, $str, $matches);
-	return dd($matches);
+	// dd(auth()->user()->can('view',Hub::findOrFail(session('currentHub'))));
+	// $str = 'Saturday 23:09';
+	// $pattern = '/^(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday) ([01]{1}[0-9]{1}|[2]{1}[0-3]{1}):([012345]{1}[0-9]{1})$/';
+	// preg_match($pattern, $str, $matches);
+	// return dd($matches);
 });
 
 // Route::auth();
@@ -55,7 +56,7 @@ Route::group([
 	Route::post('login','HubController@login')->name('::login');
 
 	Route::group([
-		'middleware' => ['hubLogedIn','hasPerm']
+		'middleware' => ['hubLogedIn']
 	], function () {
 
 		Route::get('/', function() {

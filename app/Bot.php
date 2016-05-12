@@ -17,7 +17,6 @@ class Bot extends Model
         return $this->hasMany('SmartBots\BotPermission','bot_id');
     }
     public function users() {
-        // thông qua botpermission
         $botpermissions = $this->botpermissions;
         $users = [];
         foreach ($botpermissions as $botpermission) {

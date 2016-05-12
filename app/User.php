@@ -4,15 +4,6 @@ namespace SmartBots;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-use SmartBots\User;
-use SmartBots\Hub;
-use SmartBots\Member;
-use SmartBots\Bot;
-use SmartBots\BotPermission;
-use SmartBots\Schedule;
-use SmartBots\SchedulePermission;
-use SmartBots\HighPermission;
-
 class User extends Authenticatable
 {
     protected $table = 'users';
@@ -69,13 +60,5 @@ class User extends Authenticatable
                 }
             }
         }
-    }
-
-    public function canControlId($bot_id) {
-        return in_array($bot_id, array_pluck($this->bots()->toArray(),'id'));
-    }
-
-    public function canControlToken($bot_token) {
-        return in_array($bot_token, array_pluck($this->bots()->toArray(),'token'));
     }
 }

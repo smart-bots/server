@@ -9,6 +9,7 @@
 <script src="{{ asset('resources/assets/plugins/lou-multi-select/js/jquery.multi-select.js') }}" type="text/javascript"></script>
 <script>
 $("[name='permissions[]']").multiSelect();
+$("[name='higherpermissions[]']").multiSelect();
 function memDeactivate(id) {
     bootbox.confirm("R u sure?", function(result) {
       if (result == true) {
@@ -85,7 +86,7 @@ function memDeactivate(id) {
   </h1>
   {{breadcrumb([
     'Hub' => route('h::edit'),
-    'Member' => route('h::b::index'),
+    'Member' => route('h::m::index'),
     'Edit' => 'active'
   ])}}
 </section>
@@ -130,6 +131,22 @@ function memDeactivate(id) {
           {!! Form::label('username', 'Members\'s permissions', ['class' => 'col-sm-2 control-label']) !!}
           <div class="col-sm-10">
             {!! Form::select('permissions[]', $bots, $selected, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+            @if ($errors->has('permissions'))
+            <span class="help-block margin-bottom-none">
+              {{ $errors->first('permissions') }}
+            </span>
+            @endif
+          </div>
+        </div>
+        <div class="form-group">
+          {!! Form::label('username', 'Members\'s higher-permissions', ['class' => 'col-sm-2 control-label']) !!}
+          <div class="col-sm-10">
+            {!! Form::select('higherpermissions[]', $bots, $selected2, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+            @if ($errors->has('higherpermissions'))
+            <span class="help-block margin-bottom-none">
+              {{ $errors->first('higherpermissions') }}
+            </span>
+            @endif
           </div>
         </div>
       </div>

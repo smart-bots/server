@@ -31,7 +31,7 @@
   @if (session('success') === true)
     <div class="alert alert-success alert-dismissible">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <span class="glyphicon glyphicons-tick" aria-hidden="true"></span>&nbsp;
+      <span class="glyphicon glyphicons-ok" aria-hidden="true"></span>&nbsp;
       Registration succeed.
     </div>
   @endif

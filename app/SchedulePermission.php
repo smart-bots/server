@@ -4,10 +4,10 @@ namespace SmartBots;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BotPermission extends Model
+class SchedulePermission extends Model
 {
     protected $table = 'schedulepermissions';
-    protected $fillable = ['user_id','schedule_id'];
+    protected $fillable = ['user_id','schedule_id','higher'];
     protected $hidden = [];
     public $timestamps = false;
     public function schedule() {

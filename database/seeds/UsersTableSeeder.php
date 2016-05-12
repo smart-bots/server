@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Faker\Factory;
-use App\User;
+use SmartBots\User;
 
 class UsersTableSeeder extends Seeder
 {

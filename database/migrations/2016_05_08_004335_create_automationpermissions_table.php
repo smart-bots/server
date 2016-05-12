@@ -29,6 +29,6 @@ class CreateAutomationpermissionsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('automationpermissions');
+        // Schema::drop('automationpermissions');
     }
 }

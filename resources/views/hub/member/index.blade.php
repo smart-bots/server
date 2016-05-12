@@ -13,7 +13,7 @@
   </h1>
   {{breadcrumb([
     'Hub' => route('h::edit'),
-    'Member' => route('h::b::index'),
+    'Member' => route('h::m::index'),
     'Index' => 'active'
   ])}}
 </section>

@@ -12,6 +12,7 @@
 </script>
 <script>
   $("[name='permissions[]']").multiSelect();
+  $("[name='higherpermissions[]']").multiSelect();
   function verifyToken() {
     return false;
   }
@@ -112,7 +113,20 @@
               {{ $errors->first('permissions') }}
             </span>
             @else
-            <span class="help-block margin-bottom-none">Users can manage this bot</span>
+            <span class="help-block margin-bottom-none">Users can view/control this bot</span>
+            @endif
+          </div>
+        </div>
+        <div class="form-group{{ $errors->has('higherpermissions') ? ' has-error' : '' }}">
+          {!! Form::label('higherpermissions', 'Higher permissions', ['class' => 'col-sm-2 control-label']) !!}
+          <div class="col-sm-10">
+            {!! Form::select('higherpermissions[]', $users, old('higherpermissions'), ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+            @if ($errors->has('higherpermissions'))
+            <span class="help-block margin-bottom-none">
+              {{ $errors->first('higherpermissions') }}
+            </span>
+            @else
+            <span class="help-block margin-bottom-none">Users can edit/delete this bot</span>
             @endif
           </div>
         </div>

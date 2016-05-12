@@ -129,7 +129,7 @@ class UserController extends Controller
     }
 
     public function edit() {
-        $user = User::findOrFail(auth()->user()->id);
+        $user = auth()->user();
         return view('account.edit')->withUser($user);
     }
 
@@ -142,7 +142,7 @@ class UserController extends Controller
 
         $this->validate($request,$rules);
 
-        $user = User::findOrFail(auth()->user()->id);
+        $user = auth()->user();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;

@@ -30,8 +30,8 @@ class ScheduleController extends Controller
 
 		$schedule = new Schedule;
 
-		if (User::findOrFail(auth()->user()->id)->getMemberInfoOf(session('currentHub')) != true) {
-			$schedule->member_id = User::findOrFail(auth()->user()->id)->getMemberInfoOf(session('currentHub'))->id;
+		if (auth()->user()->getMemberInfoOf(session('currentHub')) != true) {
+			$schedule->member_id = auth()->user()->getMemberInfoOf(session('currentHub'))->id;
 		}
 
 		$schedule->name = $request->name;
