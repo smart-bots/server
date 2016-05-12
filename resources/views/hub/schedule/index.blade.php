@@ -5,7 +5,6 @@
 @section('additionFooter')
 @endsection
 @section('body')
-{{ dd($schedules) }}
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>

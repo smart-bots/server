@@ -57,4 +57,13 @@ class HubPolicy
     public function editDeleteAllAutomations(User $user) {
         return $this->doAnything($user,$hub) || HubPermission::where('user_id',$user->id)->where('hub_id',$hub->id)->where('data',11)->exists();
     }
+    public function addMembers(User $user, Hub $hub) {
+        return $this->doAnything($user,$hub) || HubPermission::where('user_id',$user->id)->where('hub_id',$hub->id)->where('data',12)->exists();
+    }
+    public function viewMembers(User $user, Hub $hub) {
+        return $this->doAnything($user,$hub) || $this->editDeleteMembers($user,$hub) || HubPermission::where('user_id',$user->id)->where('hub_id',$hub->id)->where('data',13)->exists();
+    }
+    public function editDeleteMembers(User $user, Hub $hub) {
+        return $this->doAnything($user,$hub) || HubPermission::where('user_id',$user->id)->where('hub_id',$hub->id)->where('data',14)->exists();
+    }
 }

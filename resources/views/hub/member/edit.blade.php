@@ -2,14 +2,26 @@
 @section('title','Add new member')
 @section('additionHeader')
 <link href="{{ asset('resources/assets/plugins/lou-multi-select/css/multi-select.css') }}" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="{{ asset('resources/assets/plugins/iCheck/square/blue.css') }}">
+<style>
+.table td {
+  text-align: center;
+  font-weight: bold;
+}
+</style>
 @endsection
 @section('additionFooter')
 <script src="{{ asset('resources/assets/plugins/typeahead/typeahead.js') }}" type="text/javascript"></script>
 <script src="{{ asset('resources/assets/plugins/handlebars/handlebars.js') }}" type="text/javascript"></script>
 <script src="{{ asset('resources/assets/plugins/lou-multi-select/js/jquery.multi-select.js') }}" type="text/javascript"></script>
+<script src="{{ asset('resources/assets/plugins/iCheck/icheck.min.js') }}"></script>
 <script>
 $("[name='permissions[]']").multiSelect();
 $("[name='higherpermissions[]']").multiSelect();
+$('input').iCheck({
+      checkboxClass: 'icheckbox_square-blue',
+      radioClass: 'iradio_square-blue'
+    });
 function memDeactivate(id) {
     bootbox.confirm("R u sure?", function(result) {
       if (result == true) {
@@ -149,6 +161,53 @@ function memDeactivate(id) {
             @endif
           </div>
         </div>
+        <div class="form-group">
+          <div class="col-sm-12">
+            <table class="table table-bordered table-striped margin-bottom-none">
+            <thead>
+              <tr>
+              <td></td>
+              <td width="1%">Add/Create</td>
+              <td width="1%">View&nbsp;/Control</td>
+              <td width="1%">Edit/Delete</td>
+              </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="text-left">Hub</td>
+              <td></td>
+              <td>{!! Form::checkbox('hubpermissions[]', 1, in_array(1,$hubperms)) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 2, in_array(2,$hubperms)) !!}</td>
+            </tr>
+            <tr>
+              <td class="text-left">Bots</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 3, in_array(3,$hubperms)) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 4, in_array(4,$hubperms)) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 5, in_array(5,$hubperms)) !!}</td>
+            </tr>
+            <tr>
+              <td class="text-left">Schedules</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 6, in_array(6,$hubperms)) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 7, in_array(7,$hubperms)) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 8, in_array(8,$hubperms)) !!}</td>
+            </tr>
+            <tr>
+              <td class="text-left">Automations</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 9, in_array(9,$hubperms)) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 10, in_array(10,$hubperms)) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 11, in_array(11,$hubperms)) !!}</td>
+            </tr>
+            <tr>
+              <td class="text-left">Members</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 12, in_array(12,$hubperms)) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 13, in_array(13,$hubperms)) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 13, in_array(14,$hubperms)) !!}</td>
+            </tr>
+            </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
       <!-- /.box-body -->
       <div class="box-footer">

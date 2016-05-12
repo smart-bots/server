@@ -10,6 +10,7 @@ use Validator;
 
 use SmartBots\User;
 use SmartBots\Hub;
+use SmartBots\HubPermission;
 use SmartBots\Member;
 use SmartBots\Bot;
 use SmartBots\BotPermission;
@@ -40,7 +41,8 @@ class MemberController extends Controller
         $rules = [
             'username' => 'required|exists:users,username',
             'permissions.*' => 'exists:bots,id,hub_id,'.session('currentHub'),
-            'higherpermissions.*' => 'exists:bots,id,hub_id,'.session('currentHub')
+            'higherpermissions.*' => 'exists:bots,id,hub_id,'.session('currentHub'),
+            'hubpermissions.*' => 'between:1,14'
         ];
 
         $this->validate($request, $rules);
@@ -70,6 +72,14 @@ class MemberController extends Controller
             BotPermission::updateOrCreate(['bot_id' => $bot_id, 'user_id' => $user->id],['higher' => true]);
         }
 
+        foreach ($request->hubpermissions as $data) {
+            $newperm = new HubPermission;
+            $newperm->user_id = $user->id;
+            $newperm->hub_id = session('currentHub');
+            $newperm->data = $data;
+            $newperm->save();
+        }
+
         return redirect()->to(route('h::m::index'));
     }
 
@@ -88,7 +98,10 @@ class MemberController extends Controller
 
         $perm2s = BotPermission::where('user_id',$user->id)->whereIn('bot_id',array_pluck($bots,'id'))->where('higher',true)->get();
         $sBot2s = array_pluck($perm2s,'bot_id');
-        return view('hub.member.edit')->withMem($member)->withBots($nBots)->withSelected($sBots)->withSelected2($sBot2s)->withUsername($user->username);
+
+        $hubperms = HubPermission::where('user_id',$user->id)->where('hub_id',session('currentHub'))->get();
+        $hubperms = array_pluck($hubperms,'data');
+        return view('hub.member.edit')->withMem($member)->withBots($nBots)->withSelected($sBots)->withSelected2($sBot2s)->withUsername($user->username)->withHubperms($hubperms);
     }
 
     public function update(Request $request, $id)
@@ -133,6 +146,20 @@ class MemberController extends Controller
             foreach ($diff as $bot_id)
             {
                 BotPermission::updateOrCreate(['bot_id' => $bot_id, 'user_id' => $user->id],['higher' => true]);
+            }
+        }
+
+        $hubperms = HubPermission::where('user_id',$member->user_id)->where('hub_id',session('currentHub'))->get();
+
+        $hubperms_old = array_pluck($hubperms,'data');
+
+        if (count($hubperms_old) > count($request->hubpermissions)) {
+            $diff = collect($hubperms_old)->diff($request->hubpermissions);
+            HubPermission::where('user_id',$member->user_id)->where('hub_id',session('currentHub'))->whereIn('data',$diff->all())->delete();
+        } else {
+            $diff = collect($request->hubpermissions)->diff($hubperms_old)->toArray();
+            foreach ($diff as $data) {
+                HubPermission::firstOrCreate(['user_id' => $user->id, 'hub_id' => session('currentHub'), 'data' => $data]);
             }
         }
 

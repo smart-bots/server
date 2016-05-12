@@ -2,6 +2,7 @@
 @section('title','Add new member')
 @section('additionHeader')
 <link href="{{ asset('resources/assets/plugins/lou-multi-select/css/multi-select.css') }}" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="{{ asset('resources/assets/plugins/iCheck/square/blue.css') }}">
 <style>
 .tt-menu {
   width: 100%;
@@ -42,15 +43,24 @@
 .twitter-typeahead {
   width: 100%;
 }
+.table td {
+  text-align: center;
+  font-weight: bold;
+}
 </style>
 @endsection
 @section('additionFooter')
 <script src="{{ asset('resources/assets/plugins/typeahead/typeahead.js') }}" type="text/javascript"></script>
 <script src="{{ asset('resources/assets/plugins/handlebars/handlebars.js') }}" type="text/javascript"></script>
 <script src="{{ asset('resources/assets/plugins/lou-multi-select/js/jquery.multi-select.js') }}" type="text/javascript"></script>
+<script src="{{ asset('resources/assets/plugins/iCheck/icheck.min.js') }}"></script>
 <script>
 $("[name='permissions[]']").multiSelect();
 $("[name='higherpermissions[]']").multiSelect();
+$('input').iCheck({
+      checkboxClass: 'icheckbox_square-blue',
+      radioClass: 'iradio_square-blue'
+    });
 var username = new Bloodhound({
   datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
   queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -103,7 +113,6 @@ $('[name="username"]').typeahead(null, {
     'Create' => 'active'
   ])}}
 </section>
-
 <!-- Main content -->
 <section class="content">
   <!-- Default box -->
@@ -144,6 +153,52 @@ $('[name="username"]').typeahead(null, {
               {{ $errors->first('higherpermissions') }}
             </span>
             @endif
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-12">
+            <table class="table table-bordered table-striped margin-bottom-none">
+            <thead>
+              <tr>
+              <td></td>
+              <td width="1%">Add/Create</td>
+              <td width="1%">View&nbsp;/Control</td>
+              <td width="1%">Edit/Delete</td>
+              </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="text-left">Hub</td>
+              <td></td>
+              <td>{!! Form::checkbox('hubpermissions[]', 1) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 2) !!}</td>
+            </tr>
+            <tr>
+              <td class="text-left">Bots</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 3) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 4) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 5) !!}</td>
+            </tr>
+            <tr>
+              <td class="text-left">Schedules</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 6) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 7) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 8) !!}</td>
+            </tr>
+            <tr>
+              <td class="text-left">Automations</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 9) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 10) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 11) !!}</td>
+            </tr>
+            <tr>
+              <td class="text-left">Members</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 12) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 13) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 14) !!}</td>
+            </tr>
+            </tbody>
+            </table>
           </div>
         </div>
       </div>
