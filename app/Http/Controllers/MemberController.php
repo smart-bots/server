@@ -8,12 +8,13 @@ use SmartBots\Http\Requests;
 
 use Validator;
 
-use SmartBots\User;
-use SmartBots\Hub;
-use SmartBots\HubPermission;
-use SmartBots\Member;
-use SmartBots\Bot;
-use SmartBots\BotPermission;
+use SmartBots\{
+    User,
+    Hub,
+    Member,
+    HubPermission,
+    BotPermission,
+};
 
 class MemberController extends Controller
 {

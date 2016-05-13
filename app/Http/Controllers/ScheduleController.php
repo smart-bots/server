@@ -7,12 +7,10 @@ use Illuminate\Http\Request;
 use SmartBots\Http\Requests;
 use Validator;
 
-use SmartBots\User;
-use SmartBots\Hub;
-use SmartBots\Member;
-use SmartBots\Bot;
-use SmartBots\Permission;
-use SmartBots\Schedule;
+use SmartBots\{
+    Hub,
+    Schedule
+};
 
 class ScheduleController extends Controller
 {

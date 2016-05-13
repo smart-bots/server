@@ -19,7 +19,7 @@ class Authenticated
     {
         if (auth()->guard($guard)->guest()) {
             if ($request->ajax() || $request->wantsJson()) {
-                return response('Unauthorized.', 401);
+                return abort(401);
             } else {
                 return redirect()->route('a::login');
             }

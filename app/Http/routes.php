@@ -1,5 +1,18 @@
 <?php
-use SmartBots\Hub, SmartBots\User, SmartBots\BotPermission;
+
+use SmartBots\{
+    User,
+    Hub,
+    Bot,
+    Member,
+    Schedule,
+    Automation,
+    HubPermission,
+    BotPermission,
+    SchedulePermission,
+    AutomationPermission
+};
+
 Route::get('', function () {
     return view('comingsoon.index');
 });
@@ -56,7 +69,7 @@ Route::group([
 	Route::post('login','HubController@login')->name('::login');
 
 	Route::group([
-		'middleware' => ['hubLogedIn','can']
+		'middleware' => ['hubLogedIn']
 	], function () {
 
 		Route::get('/', function() {
@@ -66,15 +79,17 @@ Route::group([
 		Route::get('dashboard','HubController@dashboard')->name('::dashboard');
 
 		Route::get('logout','HubController@logout')->name('::logout');
+		Route::group(['middleware' => 'can:editDelete'], function () {
 
-		Route::get('edit','HubController@edit')->name('::edit');
-		Route::post('edit','HubController@update');
+			Route::get('edit','HubController@edit')->name('::edit');
+			Route::post('edit','HubController@update');
 
-		Route::get('deactivate','HubController@deactivate')->name('::deactivate');
+			Route::get('deactivate','HubController@deactivate')->name('::deactivate');
 
-		Route::get('reactivate','HubController@reactivate')->name('::reactivate');
+			Route::get('reactivate','HubController@reactivate')->name('::reactivate');
 
-		Route::get('destroy','HubController@destroy')->name('::destroy');
+			Route::get('destroy','HubController@destroy')->name('::destroy');
+		});
 
 		Route::get('bots-status','HubController@botsStatus')->name('::botsStatus');
 
@@ -87,18 +102,25 @@ Route::group([
 				return redirect()->to(route('h::m::index'),301);
 			});
 
-			Route::get('index','MemberController@index')->name('::index');
+			Route::get('index','MemberController@index')->name('::index')->middleware('can:viewAllMembers');
 
-			Route::get('edit/{id}','MemberController@edit')->name('::edit');
-			Route::post('edit/{id}','MemberController@update');
+			Route::group(['middleware' => 'can:addMembers'], function () {
 
-			Route::get('create','MemberController@create')->name('::create');
-			Route::post('create','MemberController@store');
+				Route::get('create','MemberController@create')->name('::create');
+				Route::post('create','MemberController@store');
+			});
 
-			Route::post('deactivate','MemberController@deactivate')->name('::deactivate');
-			Route::post('reactivate','MemberController@reactivate')->name('::reactivate');
+			Route::group(['middleware' => 'can:editDeleteAllMembers'], function () {
 
-			Route::post('destroy','MemberController@destroy')->name('::destroy');
+				Route::get('edit/{id}','MemberController@edit')->name('::edit');
+				Route::post('edit/{id}','MemberController@update');
+
+				Route::post('deactivate','MemberController@deactivate')->name('::deactivate');
+				Route::post('reactivate','MemberController@reactivate')->name('::reactivate');
+
+				Route::post('destroy','MemberController@destroy')->name('::destroy');
+			});
+
 		});
 
 		Route::group([
@@ -112,18 +134,24 @@ Route::group([
 
 			Route::get('index','BotController@index')->name('::index');
 
-			Route::get('edit/{id}','BotController@edit')->name('::edit');
-			Route::post('edit/{id}','BotController@update');
+			Route::post('control','BotController@control')->name('::control')->middleware('can:basic');
 
-			Route::get('create','BotController@create')->name('::create');
-			Route::post('create','BotController@store');
+			Route::group(['middleware' => 'can:addBots'], function () {
 
-			Route::post('deactivate','BotController@deactivate')->name('::deactivate');
-			Route::post('reactivate','BotController@reactivate')->name('::reactivate');
+				Route::get('create','BotController@create')->name('::create');
+				Route::post('create','BotController@store');
+			});
 
-			Route::post('destroy','BotController@destroy')->name('::destroy');
+			Route::group(['middleware' => 'can:higher'], function () {
 
-			Route::post('control','BotController@control')->name('::control');
+				Route::get('edit/{id}','BotController@edit')->name('::edit');
+				Route::post('edit/{id}','BotController@update');
+
+				Route::post('deactivate','BotController@deactivate')->name('::deactivate');
+				Route::post('reactivate','BotController@reactivate')->name('::reactivate');
+
+				Route::post('destroy','BotController@destroy')->name('::destroy');
+			});
 
 			Route::get('search/{query?}/{query2?}','BotController@search')->name('::search');
 
@@ -140,16 +168,22 @@ Route::group([
 
 			Route::get('index','ScheduleController@index')->name('::index');
 
-			Route::get('edit/{id}','ScheduleController@edit')->name('::edit');
-			Route::post('edit/{id}','ScheduleController@update');
+			Route::group(['middleware' => 'can:createSchedules'], function () {
 
-			Route::get('create','ScheduleController@create')->name('::create');
-			Route::post('create','ScheduleController@store');
+				Route::get('create','ScheduleController@create')->name('::create');
+				Route::post('create','ScheduleController@store');
+			});
+			Route::group(['middleware' => 'can:higher'], function () {
 
-			Route::post('deactivate','ScheduleController@deactivate')->name('::deactivate');
-			Route::post('reactivate','ScheduleController@reactivate')->name('::reactivate');
+				Route::get('edit/{id}','ScheduleController@edit')->name('::edit');
+				Route::post('edit/{id}','ScheduleController@update');
 
-			Route::post('destroy','ScheduleController@destroy')->name('::destroy');
+				Route::post('deactivate','ScheduleController@deactivate')->name('::deactivate');
+				Route::post('reactivate','ScheduleController@reactivate')->name('::reactivate');
+
+				Route::post('destroy','ScheduleController@destroy')->name('::destroy');
+			});
+
 		});
 
 	});

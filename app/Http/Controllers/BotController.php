@@ -8,11 +8,11 @@ use SmartBots\Http\Requests;
 
 use Validator;
 
-use SmartBots\User;
-use SmartBots\Hub;
-use SmartBots\Member;
-use SmartBots\Bot;
-use SmartBots\BotPermission;
+use SmartBots\{
+    Hub,
+    Bot,
+    BotPermission
+};
 
 class BotController extends Controller
 {

@@ -6,11 +6,12 @@ use Illuminate\Http\Request;
 
 use SmartBots\Http\Requests;
 
-use SmartBots\User;
-use SmartBots\Hub;
-use SmartBots\Bot;
-use SmartBots\Member;
-use SmartBots\HubPermission;
+use SmartBots\{
+    User,
+    Hub,
+    Member,
+    HubPermission
+};
 
 class HubController extends Controller
 {

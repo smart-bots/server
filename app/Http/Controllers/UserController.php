@@ -4,10 +4,11 @@ namespace SmartBots\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use SmartBots\User;
 use SmartBots\Http\Requests;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Auth\Events\Lockout;
+
+use SmartBots\User;
 
 /**
  * Uses lot of ValidatesRequests trait

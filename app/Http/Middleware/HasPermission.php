@@ -4,6 +4,15 @@ namespace SmartBots\Http\Middleware;
 
 use Closure;
 
+use SmartBots\{
+    User,
+    Hub,
+    Bot,
+    Member,
+    Schedule,
+    Automation
+};
+
 class HasPermission
 {
     /**
@@ -13,14 +22,32 @@ class HasPermission
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, $thing)
     {
-        dd($request->instance());
-        // $request->route('id');
         // https://laravel.com/api/5.1/Illuminate/Http/Request.html
-        // if ($request->user()->cant($thing,$hub)) {
-        //     // Redirect...
-        // }
+        $routePrefix = $request->route()->getPrefix();
+        // dd($routePrefix);
+        switch ($routePrefix) {
+            case 'hub/member':
+                $model = Hub::findOrFail(session('currentHub'));
+                break;
+            case 'hub/bot':
+                $model = Bot::findOrFail($request->route('id'));
+                break;
+            case 'hub/schedule':
+                $model = Schedule::findOrFail($request->route('id'));
+                break;
+            case 'hub/automation':
+                $model = Automation::findOrFail($request->route('id'));
+                break;
+            case '/hub':
+                $model = Hub::findOrFail(session('currentHub'));
+                break;
+        }
+        // dd($model);
+        if ($request->user()->cant($thing,$model)) {
+            abort(403);
+        }
         return $next($request);
     }
 }
