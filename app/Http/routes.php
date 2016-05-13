@@ -56,7 +56,7 @@ Route::group([
 	Route::post('login','HubController@login')->name('::login');
 
 	Route::group([
-		'middleware' => ['hubLogedIn']
+		'middleware' => ['hubLogedIn','can']
 	], function () {
 
 		Route::get('/', function() {

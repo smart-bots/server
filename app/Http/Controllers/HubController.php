@@ -44,6 +44,11 @@ class HubController extends Controller
 		}
 		$newHub->save();
 
+        $newMember = new Member;
+        $newMember->user_id = auth()->user()->id;
+        $newMember->hub_id = $newHub->id;
+        $newMember->save();
+
         $newHubPermission = new HubPermission;
         $newHubPermission->user_id = auth()->user()->id;
         $newHubPermission->hub_id = $newHub->id;
