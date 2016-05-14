@@ -75,6 +75,10 @@ class HubController extends Controller
         return redirect()->route('h::edit');
     }
 
+    public function show() {
+        
+    }
+
     public function edit()
     {
         $hub = Hub::findOrFail(session('currentHub'));

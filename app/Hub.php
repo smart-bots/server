@@ -31,8 +31,8 @@ class Hub extends Model
         return $this->belongsToMany('SmartBots\User','members');
     }
 
-    public function isActivated() {
-    	return $this->status == 1 ? true : false;
+    public function isActivated():bool {
+    	return $this->status;
     }
 
     public function hasUser($user_id) {

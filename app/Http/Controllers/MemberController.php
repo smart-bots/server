@@ -13,7 +13,7 @@ use SmartBots\{
     Hub,
     Member,
     HubPermission,
-    BotPermission,
+    BotPermission
 };
 
 class MemberController extends Controller
@@ -82,6 +82,10 @@ class MemberController extends Controller
         }
 
         return redirect()->to(route('h::m::index'));
+    }
+
+    public function show($id) {
+        
     }
 
     public function edit($id)
@@ -167,25 +171,25 @@ class MemberController extends Controller
         return redirect()->route('h::m::edit',['id' => $id])->withSuccess(true);
     }
 
-    public function deactivate(Request $request)
+    public function deactivate($id)
     {
-    	$mem = Member::findOrFail($request->id);
+    	$mem = Member::findOrFail($id);
     	$mem->status = 0;
     	$mem->save();
     	return response()->json(['error' => 0]);
     }
 
-    public function reactivate(Request $request)
+    public function reactivate($id)
     {
-    	$mem = Member::findOrFail($request->id);
+    	$mem = Member::findOrFail($id);
     	$mem->status = 1;
     	$mem->save();
     	return response()->json(['error' => 0]);
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        Member::destroy($request->id);
+        Member::destroy($id);
         return response()->json(['error' => 0]);
     }
 }

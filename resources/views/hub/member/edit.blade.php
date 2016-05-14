@@ -26,7 +26,7 @@ function memDeactivate(id) {
     bootbox.confirm("R u sure?", function(result) {
       if (result == true) {
       $.ajax({
-          url : '{{ route('h::m::deactivate') }}',
+          url : '{{ route('h::m::deactivate',$mem['id']) }}',
           type : 'post',
           dataType: 'json',
           data : {
@@ -36,7 +36,7 @@ function memDeactivate(id) {
           success : function (response)
           {
               $('#memTus').text('Deactivated').removeClass('label-primary').addClass('label-danger');
-              memDeactivateBtn = $('#memDeactivateBtn').attr('id','memReactivateBtn').removeClass('btn-warning').addClass('bg-olive').attr('onclick','memReactivate({{ $mem['id'] }})');
+              memDeactivateBtn = $('#memDeactivateBtn').attr('id','memReactivateBtn').removeClass('btn-warning').addClass('bg-olive').attr('onclick','memReactivate()');
               memDeactivateBtn.find('i').removeClass('fa-ban').addClass('fa-check-square-o');
               memDeactivateBtn.find('span').text('Reactivate');
           }
@@ -49,7 +49,7 @@ function memDeactivate(id) {
     bootbox.confirm("R u sure?", function(result) {
       if (result == true) {
       $.ajax({
-          url : '{{ route('h::m::reactivate') }}',
+          url : '{{ route('h::m::reactivate',$mem['id']) }}',
           type : 'post',
           dataType: 'json',
           data : {
@@ -59,7 +59,7 @@ function memDeactivate(id) {
           success : function (response)
           {
               $('#memTus').text('Activated').removeClass('label-danger').addClass('label-primary');
-              memReactivateBtn = $('#memReactivateBtn').attr('id','memDeactivateBtn').addClass('btn-warning').removeClass('bg-olive').attr('onclick','memDeactivate({{ $mem['id'] }})');
+              memReactivateBtn = $('#memReactivateBtn').attr('id','memDeactivateBtn').addClass('btn-warning').removeClass('bg-olive').attr('onclick','memDeactivate()');
               memReactivateBtn.find('i').addClass('fa-ban').removeClass('fa-check-square-o');
               memReactivateBtn.find('span').text('Deactivate');
           }
@@ -68,17 +68,14 @@ function memDeactivate(id) {
     });
   }
 
-  function memDelete(id) {
+  function memDelete() {
     bootbox.confirm("R u sure?", function(result) {
       if (result == true) {
       $.ajax({
-          url : '{{ route('h::m::destroy') }}',
+          url : '{!!  route('h::m::destroy',$mem['id']) !!}',
           type : 'post',
           dataType: 'json',
-          data : {
-            _token: '{{ csrf_token() }}',
-            id: id
-          },
+          data : { _token: '{{ csrf_token() }}' },
           success : function (response)
           {
               window.location.href = '{{ route('h::m::index') }}';
@@ -133,6 +130,7 @@ function memDeactivate(id) {
           ?>
         </div>
       </div>
+        {!! Form::hidden('id', $mem['id']) !!}
         <div class="form-group">
           {!! Form::label('username', 'Members\'s username', ['class' => 'col-sm-2 control-label']) !!}
           <div class="col-sm-10">
@@ -212,11 +210,11 @@ function memDeactivate(id) {
       <!-- /.box-body -->
       <div class="box-footer">
         {!! Form::button('<i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;&nbsp;Save', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
-        {!! Form::button('<i class="fa fa-trash" aria-hidden="true"></i>&nbsp;&nbsp;Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'memDelete('.$mem['id'].')']) !!}</a>
+        {!! Form::button('<i class="fa fa-trash" aria-hidden="true"></i>&nbsp;&nbsp;Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'memDelete()']) !!}</a>
         @if ($mem['status'] != 0)
-          {!! Form::button('<i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;<span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right margin-right-sm','id' => 'memDeactivateBtn','onclick' => 'memDeactivate('.$mem['id'].')']) !!}
+          {!! Form::button('<i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;<span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right margin-right-sm','id' => 'memDeactivateBtn','onclick' => 'memDeactivate()']) !!}
         @else
-          {!! Form::button('<i class="fa fa-check-square-o" aria-hidden="true"></i></i>&nbsp;&nbsp;<span>Reactivate</span>', ['type' => 'button', 'class' => 'btn bg-olive pull-right margin-right-sm','id' => 'memReactivateBtn','onclick' => 'memReactivate('.$mem['id'].')']) !!}
+          {!! Form::button('<i class="fa fa-check-square-o" aria-hidden="true"></i></i>&nbsp;&nbsp;<span>Reactivate</span>', ['type' => 'button', 'class' => 'btn bg-olive pull-right margin-right-sm','id' => 'memReactivateBtn','onclick' => 'memReactivate()']) !!}
         @endif
       </div>
       <!-- /.box-footer -->

@@ -13,7 +13,12 @@ class Member extends Model
     public function hub() {
     	return $this->belongsTo('SmartBots\Hub','hub_id');
     }
+
     public function user() {
     	return $this->belongsTo('SmartBots\User','user_id');
+    }
+
+    public function isActivated():bool {
+        return $this->status;
     }
 }

@@ -78,6 +78,8 @@ Route::group([
 
 		Route::get('dashboard','HubController@dashboard')->name('::dashboard');
 
+		Route::get('show','HubController@show')->name('::show');
+
 		Route::get('logout','HubController@logout')->name('::logout');
 		Route::group(['middleware' => 'can:editDelete'], function () {
 
@@ -110,15 +112,17 @@ Route::group([
 				Route::post('create','MemberController@store');
 			});
 
+			Route::get('{id}/show','MemberController@show')->name('::show');
+
 			Route::group(['middleware' => 'can:editDeleteAllMembers'], function () {
 
-				Route::get('edit/{id}','MemberController@edit')->name('::edit');
-				Route::post('edit/{id}','MemberController@update');
+				Route::get('{id}/edit','MemberController@edit')->name('::edit');
+				Route::post('{id}/edit','MemberController@update');
 
-				Route::post('deactivate','MemberController@deactivate')->name('::deactivate');
-				Route::post('reactivate','MemberController@reactivate')->name('::reactivate');
+				Route::post('{id}/deactivate','MemberController@deactivate')->name('::deactivate');
+				Route::post('{id}/reactivate','MemberController@reactivate')->name('::reactivate');
 
-				Route::post('destroy','MemberController@destroy')->name('::destroy');
+				Route::post('{id}/destroy','MemberController@destroy')->name('::destroy');
 			});
 
 		});
@@ -134,23 +138,26 @@ Route::group([
 
 			Route::get('index','BotController@index')->name('::index');
 
-			Route::post('control','BotController@control')->name('::control')->middleware('can:basic');
-
 			Route::group(['middleware' => 'can:addBots'], function () {
 
 				Route::get('create','BotController@create')->name('::create');
 				Route::post('create','BotController@store');
 			});
+			Route::group(['middleware' => 'can:basic'], function () {
+
+				Route::get('{id}/show','BotController@show')->name('::show');
+				Route::post('control','BotController@control')->name('::control');
+			});
 
 			Route::group(['middleware' => 'can:higher'], function () {
 
-				Route::get('edit/{id}','BotController@edit')->name('::edit');
-				Route::post('edit/{id}','BotController@update');
+				Route::get('{id}/edit','BotController@edit')->name('::edit');
+				Route::post('{id}/edit','BotController@update');
 
-				Route::post('deactivate','BotController@deactivate')->name('::deactivate');
-				Route::post('reactivate','BotController@reactivate')->name('::reactivate');
+				Route::post('{id}/deactivate','BotController@deactivate')->name('::deactivate');
+				Route::post('{id}/reactivate','BotController@reactivate')->name('::reactivate');
 
-				Route::post('destroy','BotController@destroy')->name('::destroy');
+				Route::post('{id}/destroy','BotController@destroy')->name('::destroy');
 			});
 
 			Route::get('search/{query?}/{query2?}','BotController@search')->name('::search');
@@ -168,6 +175,8 @@ Route::group([
 
 			Route::get('index','ScheduleController@index')->name('::index');
 
+			Route::get('{id}/show','ScheduleController@show')->name('::show');
+
 			Route::group(['middleware' => 'can:createSchedules'], function () {
 
 				Route::get('create','ScheduleController@create')->name('::create');
@@ -175,13 +184,13 @@ Route::group([
 			});
 			Route::group(['middleware' => 'can:higher'], function () {
 
-				Route::get('edit/{id}','ScheduleController@edit')->name('::edit');
-				Route::post('edit/{id}','ScheduleController@update');
+				Route::get('{id}/edit','ScheduleController@edit')->name('::edit');
+				Route::post('{id}/edit','ScheduleController@update');
 
-				Route::post('deactivate','ScheduleController@deactivate')->name('::deactivate');
-				Route::post('reactivate','ScheduleController@reactivate')->name('::reactivate');
+				Route::post('{id}/deactivate','ScheduleController@deactivate')->name('::deactivate');
+				Route::post('{id}/reactivate','ScheduleController@reactivate')->name('::reactivate');
 
-				Route::post('destroy','ScheduleController@destroy')->name('::destroy');
+				Route::post('{id}/destroy','ScheduleController@destroy')->name('::destroy');
 			});
 
 		});
@@ -191,3 +200,6 @@ Route::group([
 });
 
 
+// Route::any('{all}', function(){
+//     abort(404);
+// })->where('all', '.*');

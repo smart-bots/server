@@ -23,10 +23,10 @@ class SchedulePolicy
     }
 
     public function basic(User $user, Schedule $schedule) {
-        return $user->can('viewAllSchedules',$bot->hub) || SchedulePermission::where('user_id',$user->id)->where('schedule_id',$schedule->id)->exists();
+        return $user->member($schedule->hub->id)->isActivated() && ($user->can('viewAllSchedules',$schedule->hub) || SchedulePermission::where('user_id',$user->id)->where('schedule_id',$schedule->id)->exists());
     }
 
     public function higher(User $user, Schedule $schedule) {
-        return $user->can('editDeleteAllSchedules',$bot->hub) || SchedulePermission::where('user_id',$user->id)->where('schedule_id',$schedule->id)->where('higher',1)->exists();
+        return $user->member($schedule->hub->id)->isActivated() && ($user->can('editDeleteAllSchedules',$schedule->hub) || SchedulePermission::where('user_id',$user->id)->where('schedule_id',$schedule->id)->where('higher',1)->exists());
     }
 }

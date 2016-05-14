@@ -23,10 +23,10 @@ class BotPolicy
     }
 
     public function basic(User $user, Bot $bot) {
-        return $user->can('viewControlAllBots',$bot->hub) || BotPermission::where('user_id',$user->id)->where('bot_id',$bot->id)->exists();
+        return $user->member($bot->hub->id)->isActivated() && ($user->can('viewControlAllBots',$bot->hub) || BotPermission::where('user_id',$user->id)->where('bot_id',$bot->id)->exists());
     }
 
     public function higher(User $user, Bot $bot) {
-        return $user->can('editDeleteAllBots',$bot->hub) || BotPermission::where('user_id',$user->id)->where('bot_id',$bot->id)->where('higher',1)->exists();
+        return $user->member($bot->hub->id)->isActivated() && ($user->can('editDeleteAllBots',$bot->hub) || BotPermission::where('user_id',$user->id)->where('bot_id',$bot->id)->where('higher',1)->exists());
     }
 }

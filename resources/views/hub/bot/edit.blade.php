@@ -13,21 +13,18 @@
 <script>
   $("[name='permissions[]']").multiSelect();
   $("[name='higherpermissions[]']").multiSelect();
-  function botDeactivate(id) {
+  function botDeactivate() {
     bootbox.confirm("R u sure?", function(result) {
       if (result == true) {
       $.ajax({
-          url : '{{ route('h::b::deactivate') }}',
+          url : '{{ route('h::b::deactivate',$bot['id']) }}',
           type : 'post',
           dataType: 'json',
-          data : {
-            _token: '{{ csrf_token() }}',
-            id: id
-          },
+          data : { _token: '{{ csrf_token() }}' },
           success : function (response)
           {
               $('#botTus').text('Deactivated').removeClass('label-default label-info label-success label-primary').addClass('label-danger');
-              botDeactivateBtn = $('#botDeactivateBtn').attr('id','botReactivateBtn').removeClass('btn-warning').addClass('bg-olive').attr('onclick','botReactivate({{ $bot['id'] }})');
+              botDeactivateBtn = $('#botDeactivateBtn').attr('id','botReactivateBtn').removeClass('btn-warning').addClass('bg-olive').attr('onclick','botReactivate()');
               botDeactivateBtn.find('i').removeClass('fa-ban').addClass('fa-check-square-o');
               botDeactivateBtn.find('span').text('Reactivate');
           }
@@ -36,21 +33,18 @@
     });
   }
 
-  function botReactivate(id) {
+  function botReactivate() {
     bootbox.confirm("R u sure?", function(result) {
       if (result == true) {
       $.ajax({
-          url : '{{ route('h::b::reactivate') }}',
+          url : '{{ route('h::b::reactivate',$bot['id']) }}',
           type : 'post',
           dataType: 'json',
-          data : {
-            _token: '{{ csrf_token() }}',
-            id: id
-          },
+          data : { _token: '{{ csrf_token() }}' },
           success : function (response)
           {
               $('#botTus').text('Reactivated').removeClass('label-default label-info label-success label-danger').addClass('label-primary');
-              botReactivateBtn = $('#botReactivateBtn').attr('id','botDeactivateBtn').addClass('btn-warning').removeClass('bg-olive').attr('onclick','botDeactivate({{ $bot['id'] }})');
+              botReactivateBtn = $('#botReactivateBtn').attr('id','botDeactivateBtn').addClass('btn-warning').removeClass('bg-olive').attr('onclick','botDeactivate()');
               botReactivateBtn.find('i').addClass('fa-ban').removeClass('fa-check-square-o');
               botReactivateBtn.find('span').text('Deactivate');
           }
@@ -59,17 +53,14 @@
     });
   }
 
-  function botDelete(id) {
+  function botDelete() {
     bootbox.confirm("R u sure?", function(result) {
       if (result == true) {
       $.ajax({
-          url : '{{ route('h::b::destroy') }}',
+          url : '{{ route('h::b::destroy',$bot['id']) }}',
           type : 'post',
           dataType: 'json',
-          data : {
-            _token: '{{ csrf_token() }}',
-            id: id
-          },
+          data : { _token: '{{ csrf_token() }}' },
           success : function (response)
           {
               window.location.href = '{{ route('h::b::index') }}';
@@ -108,6 +99,7 @@
         Saved
       </div>
       @endif
+      {!! Form::hidden('id', $bot['id']) !!}
       <div class="form-group margin-bottom-sm">
         {!! Form::label('status', 'Status',['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
@@ -213,11 +205,11 @@
       <!-- /.box-body -->
       <div class="box-footer">
         {!! Form::button('<i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;&nbsp;Save', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
-        {!! Form::button('<i class="fa fa-trash" aria-hidden="true"></i>&nbsp;&nbsp;Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'botDelete('.$bot['id'].')']) !!}</a>
+        {!! Form::button('<i class="fa fa-trash" aria-hidden="true"></i>&nbsp;&nbsp;Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'botDelete()']) !!}</a>
         @if ($bot['status'] != -1)
-          {!! Form::button('<i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;<span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right margin-right-sm','id' => 'botDeactivateBtn','onclick' => 'botDeactivate('.$bot['id'].')']) !!}
+          {!! Form::button('<i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;<span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right margin-right-sm','id' => 'botDeactivateBtn','onclick' => 'botDeactivate()']) !!}
         @else
-          {!! Form::button('<i class="fa fa-check-square-o" aria-hidden="true"></i></i>&nbsp;&nbsp;<span>Reactivate</span>', ['type' => 'button', 'class' => 'btn bg-olive pull-right margin-right-sm','id' => 'botReactivateBtn','onclick' => 'botReactivate('.$bot['id'].')']) !!}
+          {!! Form::button('<i class="fa fa-check-square-o" aria-hidden="true"></i></i>&nbsp;&nbsp;<span>Reactivate</span>', ['type' => 'button', 'class' => 'btn bg-olive pull-right margin-right-sm','id' => 'botReactivateBtn','onclick' => 'botReactivate()']) !!}
         @endif
       </div>
       <!-- /.box-footer -->

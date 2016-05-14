@@ -91,6 +91,10 @@ class BotController extends Controller
         return redirect()->to(route('h::b::index'));
     }
 
+    public function show($id) {
+        
+    }
+
     public function edit($id)
     {
         $bot = Bot::findOrFail($id);
@@ -178,25 +182,25 @@ class BotController extends Controller
         return response()->json(['error' => $error]);
     }
 
-    public function deactivate(Request $request)
+    public function deactivate($id)
     {
-    	$hub = Bot::findOrFail($request->id);
+    	$hub = Bot::findOrFail($id);
     	$hub->status = -1;
     	$hub->save();
     	return response()->json(['error' => 0]);
     }
 
-    public function reactivate(Request $request)
+    public function reactivate($id)
     {
-    	$hub = Bot::findOrFail($request->id);
+    	$hub = Bot::findOrFail($id);
     	$hub->status = 0;
     	$hub->save();
     	return response()->json(['error' => 0]);
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        Bot::destroy($request->id);
+        Bot::destroy($id);
         return response()->json(['error' => 0]);
     }
 

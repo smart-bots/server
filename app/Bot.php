@@ -32,7 +32,11 @@ class Bot extends Model
         return $hub_id == $this->hub->id;
     }
 
-    public function canBeManagedBy($user_id) {
-        return in_array($user_id, array_pluck($this->botpermissions->toArray(),'user_id'));
+    public function isActivated():bool {
+        return ($this->status != -1);
     }
+
+    // public function canBeManagedBy($user_id) {
+    //     return in_array($user_id, array_pluck($this->botpermissions->toArray(),'user_id'));
+    // }
 }

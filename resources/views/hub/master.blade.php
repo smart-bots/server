@@ -30,6 +30,7 @@
       </a>
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
+          @include('partials.notificationsMenu')
           @include('partials.userMenu')
           <li>
             <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>

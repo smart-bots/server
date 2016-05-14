@@ -36,4 +36,8 @@ class Schedule extends Model
     public function isOf($hub_id) {
         return $hub_id == $this->hub->id;
     }
+
+    public function isActivated():bool {
+    	return $this->status;
+    }
 }
