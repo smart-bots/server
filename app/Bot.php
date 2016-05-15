@@ -36,6 +36,29 @@ class Bot extends Model
         return ($this->status != -1);
     }
 
+    public function scopeActivated($query) {
+        return $query->where('status',1);
+    }
+
+    public function control($state)
+    {
+        $this->status = $state;
+        $this->true = false;
+        $this->save();
+    }
+
+    public function deactivate()
+    {
+        $this->status = -1;
+        $this->save();
+    }
+
+    public function reactivate()
+    {
+        $this->status = 0;
+        $this->save();
+    }
+
     // public function canBeManagedBy($user_id) {
     //     return in_array($user_id, array_pluck($this->botpermissions->toArray(),'user_id'));
     // }

@@ -16,7 +16,12 @@ use SmartBots\{
 class HubController extends Controller
 {
     public function index() {
-        $hubs = auth()->user()->hubs()->with('bots')->get()->sortByDesc('id');
+        $hubs = collect([]);
+        // chỉ lấy hub mà member đang active
+        $members = auth()->user()->members()->activated()->get();
+        foreach ($members as $member) {
+            $hubs = $hubs->merge($member->hub()->with('bots')->get());
+        }
         return view('hub.index')->withHubs($hubs);
     }
 
@@ -61,22 +66,16 @@ class HubController extends Controller
 
     public function login(Request $request)
     {
-        $error = 1;
-        // Kiểm tra xem user có tham gia hub hay không
-        if (auth()->user()->isOf($request->id)) {
+        // Kiểm tra: có phải member, member có active?
+        if (auth()->user()->member($request->id)->isActivated() && auth()->user()->isOf($request->id)) {
             session()->put('currentHub',$request->id);
-            $error = 0;
-        }
-        return response()->json(['error' => $error]);
+            return resonpse()->json(['location' => $location]);
+        } else abort(403);
     }
 
     public function dashboard()
     {
         return redirect()->route('h::edit');
-    }
-
-    public function show() {
-        
     }
 
     public function edit()
@@ -128,17 +127,13 @@ class HubController extends Controller
 
     public function deactivate()
     {
-    	$hub = Hub::findOrFail(session('currentHub'));
-    	$hub->status = 0;
-    	$hub->save();
+    	$hub = Hub::findOrFail(session('currentHub'))->deactivate();
     	return response()->json(['error' => 0]);
     }
 
     public function reactivate()
     {
-    	$hub = Hub::findOrFail(session('currentHub'));
-    	$hub->status = 1;
-    	$hub->save();
+    	$hub = Hub::findOrFail(session('currentHub'))->reactivate();
     	return response()->json(['error' => 0]);
     }
 

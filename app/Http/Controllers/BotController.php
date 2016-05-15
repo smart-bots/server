@@ -91,10 +91,6 @@ class BotController extends Controller
         return redirect()->to(route('h::b::index'));
     }
 
-    public function show($id) {
-        
-    }
-
     public function edit($id)
     {
         $bot = Bot::findOrFail($id);
@@ -173,10 +169,8 @@ class BotController extends Controller
     public function control(Request $request)
     {
         $bot = Bot::findOrFail($request->id);
-        if ($bot->status != -1) {
-            $bot->status = $request->val;
-            $bot->true = false;
-            $bot->save();
+        if ($bot->isActivated()) {
+            $bot->control($request->val);
             $error = 0;
         } else { $error = 1; }
         return response()->json(['error' => $error]);
@@ -184,17 +178,13 @@ class BotController extends Controller
 
     public function deactivate($id)
     {
-    	$hub = Bot::findOrFail($id);
-    	$hub->status = -1;
-    	$hub->save();
+    	Bot::findOrFail($id)->deactivate();
     	return response()->json(['error' => 0]);
     }
 
     public function reactivate($id)
     {
-    	$hub = Bot::findOrFail($id);
-    	$hub->status = 0;
-    	$hub->save();
+    	Bot::findOrFail($id)->reactivate();
     	return response()->json(['error' => 0]);
     }
 

@@ -40,4 +40,8 @@ class Schedule extends Model
     public function isActivated():bool {
     	return $this->status;
     }
+
+    public function scopeActivated($query) {
+        return $query->where('status',1);
+    }
 }

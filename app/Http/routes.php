@@ -78,12 +78,12 @@ Route::group([
 
 		Route::get('dashboard','HubController@dashboard')->name('::dashboard');
 
-		Route::get('show','HubController@show')->name('::show');
+		Route::get('edit','HubController@edit')->name('::edit')->middleware('can:view');
 
 		Route::get('logout','HubController@logout')->name('::logout');
+
 		Route::group(['middleware' => 'can:editDelete'], function () {
 
-			Route::get('edit','HubController@edit')->name('::edit');
 			Route::post('edit','HubController@update');
 
 			Route::get('deactivate','HubController@deactivate')->name('::deactivate');
@@ -112,11 +112,10 @@ Route::group([
 				Route::post('create','MemberController@store');
 			});
 
-			Route::get('{id}/show','MemberController@show')->name('::show');
+			Route::get('{id}/edit','MemberController@edit')->name('::edit')->middleware('can:viewAllMembers');
 
 			Route::group(['middleware' => 'can:editDeleteAllMembers'], function () {
 
-				Route::get('{id}/edit','MemberController@edit')->name('::edit');
 				Route::post('{id}/edit','MemberController@update');
 
 				Route::post('{id}/deactivate','MemberController@deactivate')->name('::deactivate');
@@ -143,15 +142,15 @@ Route::group([
 				Route::get('create','BotController@create')->name('::create');
 				Route::post('create','BotController@store');
 			});
+
 			Route::group(['middleware' => 'can:basic'], function () {
 
-				Route::get('{id}/show','BotController@show')->name('::show');
+				Route::get('{id}/edit','BotController@edit')->name('::edit');
 				Route::post('control','BotController@control')->name('::control');
 			});
 
 			Route::group(['middleware' => 'can:higher'], function () {
 
-				Route::get('{id}/edit','BotController@edit')->name('::edit');
 				Route::post('{id}/edit','BotController@update');
 
 				Route::post('{id}/deactivate','BotController@deactivate')->name('::deactivate');
@@ -175,16 +174,16 @@ Route::group([
 
 			Route::get('index','ScheduleController@index')->name('::index');
 
-			Route::get('{id}/show','ScheduleController@show')->name('::show');
+			Route::get('{id}/edit','ScheduleController@edit')->name('::edit')->middleware('can:basic');
 
 			Route::group(['middleware' => 'can:createSchedules'], function () {
 
 				Route::get('create','ScheduleController@create')->name('::create');
 				Route::post('create','ScheduleController@store');
 			});
+
 			Route::group(['middleware' => 'can:higher'], function () {
 
-				Route::get('{id}/edit','ScheduleController@edit')->name('::edit');
 				Route::post('{id}/edit','ScheduleController@update');
 
 				Route::post('{id}/deactivate','ScheduleController@deactivate')->name('::deactivate');

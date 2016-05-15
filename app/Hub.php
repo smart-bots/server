@@ -35,6 +35,10 @@ class Hub extends Model
     	return $this->status;
     }
 
+    public function scopeActivated($query) {
+        return $query->where('status',1);
+    }
+
     public function hasUser($user_id) {
         return in_array($user_id, array_pluck($this->members->toArray(),'user_id'));
     }
@@ -45,5 +49,17 @@ class Hub extends Model
 
     public function hasBotToken($bot_token) {
         return in_array($bot_token, array_pluck($this->bots->toArray(),'token'));
+    }
+
+    public function deactivate()
+    {
+        $this->status = 0;
+        $this->save();
+    }
+
+    public function reactivate()
+    {
+        $this->status = 1;
+        $this->save();
     }
 }

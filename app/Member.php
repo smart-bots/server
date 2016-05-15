@@ -21,4 +21,20 @@ class Member extends Model
     public function isActivated():bool {
         return $this->status;
     }
+
+    public function scopeActivated($query) {
+        return $query->where('status',1);
+    }
+
+    public function deactivate()
+    {
+        $this->status = 0;
+        $this->save();
+    }
+
+    public function reactivate()
+    {
+        $this->status = 1;
+        $this->save();
+    }
 }

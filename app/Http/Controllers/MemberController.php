@@ -84,10 +84,6 @@ class MemberController extends Controller
         return redirect()->to(route('h::m::index'));
     }
 
-    public function show($id) {
-        
-    }
-
     public function edit($id)
     {
         $member = Member::findOrFail($id);
@@ -173,17 +169,13 @@ class MemberController extends Controller
 
     public function deactivate($id)
     {
-    	$mem = Member::findOrFail($id);
-    	$mem->status = 0;
-    	$mem->save();
+    	$mem = Member::findOrFail($id)->deactivate();
     	return response()->json(['error' => 0]);
     }
 
     public function reactivate($id)
     {
-    	$mem = Member::findOrFail($id);
-    	$mem->status = 1;
-    	$mem->save();
+    	$mem = Member::findOrFail($id)->reactivate();
     	return response()->json(['error' => 0]);
     }
 

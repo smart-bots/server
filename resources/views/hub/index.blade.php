@@ -29,7 +29,7 @@
           <a href='javascript:chooseHub({{ $hub['id'] }})'>
           <img class="img-thumbnail" src="{{ asset($hub['image']) }}">
           <span class="users-list-name">{{ $hub['name'] }}</span>
-          <span class="users-list-date">{{ count($hub['bots']) }} devices</span>
+          <span class="users-list-date">{{ count($hub['bots']) }} bots</span>
           </a>
         </li>
       @endforeach
