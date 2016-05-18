@@ -24,6 +24,15 @@ Route::get('test', function () {
 // Route::auth();
 
 Route::group([
+	'middleware' => [],
+	'prefix'     => 'api',
+	'as'		 => 'api'
+], function() {
+	Route::get('{host_key}/up/{bot_key}/{status}/{hard?}','ApiController@up')->name('::up');
+	Route::get('{host_key}/down','ApiController@down')->name('::down');
+});
+
+Route::group([
 	'prefix' => 'account',
 	'as'     => 'a'
 ], function () {
@@ -186,6 +195,37 @@ Route::group([
 				Route::post('{id}/reactivate','ScheduleController@reactivate')->name('::reactivate');
 
 				Route::post('{id}/destroy','ScheduleController@destroy')->name('::destroy');
+			});
+
+		});
+
+		Route::group([
+			'prefix' => 'automation',
+			'as'     => '::a'
+		], function() {
+
+			Route::get('/',function () {
+				return redirect()->to(route('h::a::index'),301);
+			});
+
+			Route::get('index','Automation@index')->name('::index');
+
+			Route::get('{id}/edit','Automation@edit')->name('::edit')->middleware('can:basic');
+
+			Route::group(['middleware' => 'can:createSchedules'], function () {
+
+				Route::get('create','Automation@create')->name('::create');
+				Route::post('create','Automation@store')->name('::create');
+			});
+
+			Route::group(['middleware' => 'can:higher'], function () {
+
+				Route::post('{id}/edit','Automation@update')->name('::edit');
+
+				Route::post('{id}/deactivate','Automation@deactivate')->name('::deactivate');
+				Route::post('{id}/reactivate','Automation@reactivate')->name('::reactivate');
+
+				Route::post('{id}/destroy','Automation@destroy')->name('::destroy');
 			});
 
 		});

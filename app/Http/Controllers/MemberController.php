@@ -59,26 +59,30 @@ class MemberController extends Controller
         $newMember->user_id = $user->id;
         $newMember->hub_id = session('currentHub');
         $newMember->save();
-
-        foreach ($request->permissions as $bot_id)
-        {
-            $newPerm = new BotPermission;
-            $newPerm->user_id = $user->id;
-            $newPerm->bot_id = $bot_id;
-            $newPerm->save();
+        if (is_array($request->permissions)) {
+            foreach ($request->permissions as $bot_id)
+            {
+                $newPerm = new BotPermission;
+                $newPerm->user_id = $user->id;
+                $newPerm->bot_id = $bot_id;
+                $newPerm->save();
+            }
         }
 
-        foreach ($request->higherpermissions as $user_id)
-        {
-            BotPermission::updateOrCreate(['bot_id' => $bot_id, 'user_id' => $user->id],['higher' => true]);
+        if (is_array($request->higherpermissions)) {
+            foreach ($request->higherpermissions as $user_id)
+            {
+                BotPermission::updateOrCreate(['bot_id' => $bot_id, 'user_id' => $user->id],['higher' => true]);
+            }
         }
-
-        foreach ($request->hubpermissions as $data) {
-            $newperm = new HubPermission;
-            $newperm->user_id = $user->id;
-            $newperm->hub_id = session('currentHub');
-            $newperm->data = $data;
-            $newperm->save();
+        if (is_array($request->hubpermissions)) {
+            foreach ($request->hubpermissions as $data) {
+                $newperm = new HubPermission;
+                $newperm->user_id = $user->id;
+                $newperm->hub_id = session('currentHub');
+                $newperm->data = $data;
+                $newperm->save();
+            }
         }
 
         return redirect()->to(route('h::m::index'));

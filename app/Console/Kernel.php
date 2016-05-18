@@ -122,9 +122,6 @@ class Kernel extends ConsoleKernel
                                         $cron[4] = 6;
                                         break;
                                 }
-                                if ($single_data[1] = 2) {
-                                    $cron[4] = '#'.$cron[4];
-                                }
                                 $cron[0] = $matches[3];
                                 $cron[1] = $matches[2];
                                 $cron[2] = '*';

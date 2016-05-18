@@ -34,7 +34,7 @@ class ScheduleController extends Controller
 		$schedule = new Schedule;
 
 		$schedule->user_id = 1;
-		$schedule->hub_id = session('currentHub');
+        $schedule->hub_id = session('currentHub');
 
 		$schedule->name = $request->name;
 		$schedule->description = $request->description;
@@ -146,7 +146,7 @@ class ScheduleController extends Controller
 		// 							$rules['frequency.at.'.$i] = ['required','regex:/^([01]{1}[0-9]{1}|[2]{1}[0-3]{1}):([012345]{1}[0-9]{1})$/'];
 		// 							break;
 		// 						case 4: // weeks
-		// 							$rules['frequency.value.'.$i] = 'required|between:1,2';
+		// 							$rules['frequency.value.'.$i] = 'required|between:1,5';
 		// 							$rules['frequency.at.'.$i] = ['required','regex:/^(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday) ([01]{1}[0-9]{1}|[2]{1}[0-3]{1}):([012345]{1}[0-9]{1})$/'];
 		// 							break;
 		// 						case 5: // months

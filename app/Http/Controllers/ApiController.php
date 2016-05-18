@@ -12,13 +12,13 @@ use SmartBots\Bot;
 class ApiController extends Controller
 {
 
-	public function up($key,$bot_key,$status,$hard = 0) {
-        // $status là trạng thái của bot được host gửi
+	public function up($token,$bot_token,$status,$hard = 0) {
+        // $status là trạng thái của bot được hub gửi
         // nếu $hard được gán nghĩa là thay đổi cứng (server phải thay đổi theo)
-        // http://localhost/ss/api/1MH9hU6bNMWB0XQoM0jnESyckf30GnfzOA9ZmdIL1OLlU8XoxK/up/abcabcabc1/0/1
-        if (Hub::where('key',$key)->firstOrFail()->hasBotKey($bot_key))
+        // http://localhost/smartbots/api/BqkbCjdsOIicxLwQo5CT7e9gBKxbcHM9hHJs4JH19UlnsntCmx/up/abcabcabc1/0/1
+        if (Hub::where('token',$token)->firstOrFail()->hasBotToken($bot_token))
         {
-            $bot = Bot::where('key',$bot_key)->firstOrFail();
+            $bot = Bot::where('token',$bot_token)->firstOrFail();
             if ($hard == 0) {
                 if ($bot->true != 1) {
                     if ($bot->status == $status) {
@@ -41,12 +41,12 @@ class ApiController extends Controller
             return [false];
         }
     }
-    public function down($host_key) {
-        // http://localhost/ss/api/1MH9hU6bNMWB0XQoM0jnESyckf30GnfzOA9ZmdIL1OLlU8XoxK/down
-        $bots = Hub::where('key',$host_key)->firstOrFail()->bots()->where('true',0)->get();
+    public function down($token) {
+        // http://localhost/smartbots/api/BqkbCjdsOIicxLwQo5CT7e9gBKxbcHM9hHJs4JH19UlnsntCmx/down
+        $bots = Hub::where('token',$token)->firstOrFail()->bots()->activated()->where('true',0)->get();
         $nBots = ["c" => count($bots)];
         for ($i=0; $i < count($bots); $i++) {
-            $nBots[$i] = $bots[$i]['key'].$bots[$i]['status'];
+            $nBots[$i] = $bots[$i]['token'].$bots[$i]['status'];
         }
         return response()->json($nBots);
     }

@@ -79,15 +79,18 @@ class BotController extends Controller
 		}
 
         $bot->save();
-        foreach ($request->permissions as $user_id) {
-            $newPerm = new BotPermission;
-            $newPerm->bot_id = $bot->id;
-            $newPerm->user_id = $user_id;
-            $newPerm->save();
+        if (is_array($request->permissions)) {
+            foreach ($request->permissions as $user_id) {
+                $newPerm = new BotPermission;
+                $newPerm->bot_id = $bot->id;
+                $newPerm->user_id = $user_id;
+                $newPerm->save();
+            }
         }
-
-        foreach ($request->higherpermissions as $user_id) {
-            BotPermission::updateOrCreate(['bot_id' => $bot->id, 'user_id' => $user_id],['higher' => true]);
+        if (is_array($request->higherpermissions)) {
+            foreach ($request->higherpermissions as $user_id) {
+                BotPermission::updateOrCreate(['bot_id' => $bot->id, 'user_id' => $user_id],['higher' => true]);
+            }
         }
 
         return redirect()->to(route('h::b::index'));

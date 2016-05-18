@@ -37,7 +37,7 @@ class Bot extends Model
     }
 
     public function scopeActivated($query) {
-        return $query->where('status',1);
+        return $query->where('status','!=',-1);
     }
 
     public function control($state)
