@@ -42,7 +42,20 @@ class Bot extends Model
 
     public function control($state)
     {
-        $this->status = $state;
+        if ($this->status != -1) {
+            $this->status = $state;
+            $this->true = false;
+            $this->save();
+        }
+    }
+
+    public function toggle()
+    {
+        if ($this->status == 1) {
+            $this->status = 0;
+        } else if ($this->status == 0) {
+            $this->status = 1;
+        }
         $this->true = false;
         $this->save();
     }
@@ -59,7 +72,12 @@ class Bot extends Model
         $this->save();
     }
 
-    // public function canBeManagedBy($user_id) {
-    //     return in_array($user_id, array_pluck($this->botpermissions->toArray(),'user_id'));
-    // }
+    public function realStatus()
+    {
+        if ($this->true = false) {
+            return 2;
+        } else {
+            return $this->status;
+        }
+    }
 }

@@ -9,13 +9,18 @@ use Validator;
 
 use SmartBots\{
     Hub,
-    Schedule
+    Schedule,
+    SchedulePermission
 };
 
 class ScheduleController extends Controller
 {
 	public function index() {
-		$schedules = Hub::findOrFail(session('currentHub'))->schedules()->orderBy('id','DESC')->get();
+		if (auth()->user()->can('viewAllSchedules',Hub::findOrFail(session('currentHub')))) {
+            $schedules = Hub::findOrFail(session('currentHub'))->schedules()->orderBy('id','DESC')->get();
+        } else {
+            $schedules = auth()->user()->schedulesOf(session('currentHub'))->sortByDesc('id');
+        }
 		return view('hub.schedule.index')->withSchedules($schedules);
 	}
 
@@ -28,9 +33,8 @@ class ScheduleController extends Controller
 
 		$schedule = new Schedule;
 
-		if (auth()->user()->getMemberInfoOf(session('currentHub')) != true) {
-			$schedule->member_id = auth()->user()->getMemberInfoOf(session('currentHub'))->id;
-		}
+		$schedule->user_id = 1;
+		$schedule->hub_id = session('currentHub');
 
 		$schedule->name = $request->name;
 		$schedule->description = $request->description;
@@ -74,6 +78,14 @@ class ScheduleController extends Controller
 		$schedule->deactivate_after_datetime = $request->deactivate_after_datetime;
 
 		$schedule->save();
+
+		$newSchePerm = new SchedulePermission;
+		$newSchePerm->user_id = auth()->user()->id;
+		$newSchePerm->schedule_id = $schedule->id;
+		$newSchePerm->higher = true;
+		$newSchePerm->save();
+
+		return response()->json(['success' => true]);
 
 		// dd($schedule->toArray());
 
@@ -131,10 +143,10 @@ class ScheduleController extends Controller
 		// 							break;
 		// 						case 3: // days
 		// 							$rules['frequency.value.'.$i] = 'required|in:12,8,6,4,3,2,1';
-		// 							$rules['frequency.at.'.$i] = 'required|between:0,59';
+		// 							$rules['frequency.at.'.$i] = ['required','regex:/^([01]{1}[0-9]{1}|[2]{1}[0-3]{1}):([012345]{1}[0-9]{1})$/'];
 		// 							break;
 		// 						case 4: // weeks
-		// 							$rules['frequency.value.'.$i] = 'required|between:1,3';
+		// 							$rules['frequency.value.'.$i] = 'required|between:1,2';
 		// 							$rules['frequency.at.'.$i] = ['required','regex:/^(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday) ([01]{1}[0-9]{1}|[2]{1}[0-3]{1}):([012345]{1}[0-9]{1})$/'];
 		// 							break;
 		// 						case 5: // months
@@ -143,12 +155,11 @@ class ScheduleController extends Controller
 		// 							break;
 		// 						case 6: // years
 		// 							$rules['frequency.value.'.$i] = 'required|numeric';
-		// 							$rules['frequency.at.'.$i] = ['required','regex:/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Otc|Nov|Dec) ([012]{1}[0-9]{1}|[3]{1}[01]) ([01]{1}[0-9]{1}|[2]{1}[0-3]{1}):([012345]{1}[0-9]{1})$/'];
+		// 							$rules['frequency.at.'.$i] = ['required','regex:/^(January|February|March|April|May|June|July|August|September|October|November|December) ([012]{1}[0-9]{1}|[3]{1}[01]) ([01]{1}[0-9]{1}|[2]{1}[0-3]{1}):([012345]{1}[0-9]{1})$/'];
 		// 							break;
 		// 					}
 		// 					$i++;
 		// 				}
-
 		// 				$validator = Validator::make($request->all(), $rules);
 
 		// 				if ($validator->fails()) {
@@ -163,7 +174,8 @@ class ScheduleController extends Controller
 		// }
 	}
 
-    public function show($id) {
-        
+    public function edit($id) {
+    	$schedule = Schedule::findOrFail($id);
+        return view('hub.schedule.edit')->withSchedule($schedule);
     }
 }

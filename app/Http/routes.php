@@ -1,5 +1,5 @@
 <?php
-
+use Carbon\Carbon;
 use SmartBots\{
     User,
     Hub,
@@ -18,11 +18,7 @@ Route::get('', function () {
 });
 
 Route::get('test', function () {
-	// dd(auth()->user()->can('view',Hub::findOrFail(session('currentHub'))));
-	// $str = 'Saturday 23:09';
-	// $pattern = '/^(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday) ([01]{1}[0-9]{1}|[2]{1}[0-3]{1}):([012345]{1}[0-9]{1})$/';
-	// preg_match($pattern, $str, $matches);
-	// return dd($matches);
+
 });
 
 // Route::auth();
@@ -34,11 +30,11 @@ Route::group([
 
 	Route::group(['middleware' => ['nonAuthed']], function() {
 		Route::get('login','UserController@getLogin')->name('::login');
-		Route::post('login','UserController@postLogin');
+		Route::post('login','UserController@postLogin')->name('::login');
 		Route::get('register','UserController@getRegister')->name('::register');
-		Route::post('register','UserController@postRegister');
+		Route::post('register','UserController@postRegister')->name('::register');
 		Route::get('forgot','UserController@getForgot')->name('::forgot');
-		Route::post('forgot','UserController@postForgot');
+		Route::post('forgot','UserController@postForgot')->name('::forgot');
 	});
 
 	Route::group(['middleware' => ['authed']], function() {
@@ -50,7 +46,7 @@ Route::group([
 		Route::get('logout','UserController@logout')->name('::logout');
 		Route::post('logout','UserController@logout')->name('::logout');
 		Route::get('change-pass','UserController@getChangePass')->name('::changePass');
-		Route::post('change-pass','UserController@postChangePass');
+		Route::post('change-pass','UserController@postChangePass')->name('::changePass');
 
 		Route::get('search/{query?}','UserController@search')->name('::search');
 	});
@@ -65,7 +61,7 @@ Route::group([
 
 	Route::get('index','HubController@index')->name('::index');
 	Route::get('create','HubController@create')->name('::create');
-	Route::post('create','HubController@store');
+	Route::post('create','HubController@store')->name('::create');
 	Route::post('login','HubController@login')->name('::login');
 
 	Route::group([
@@ -84,7 +80,7 @@ Route::group([
 
 		Route::group(['middleware' => 'can:editDelete'], function () {
 
-			Route::post('edit','HubController@update');
+			Route::post('edit','HubController@update')->name('::edit');
 
 			Route::get('deactivate','HubController@deactivate')->name('::deactivate');
 
@@ -109,14 +105,14 @@ Route::group([
 			Route::group(['middleware' => 'can:addMembers'], function () {
 
 				Route::get('create','MemberController@create')->name('::create');
-				Route::post('create','MemberController@store');
+				Route::post('create','MemberController@store')->name('::create');
 			});
 
 			Route::get('{id}/edit','MemberController@edit')->name('::edit')->middleware('can:viewAllMembers');
 
 			Route::group(['middleware' => 'can:editDeleteAllMembers'], function () {
 
-				Route::post('{id}/edit','MemberController@update');
+				Route::post('{id}/edit','MemberController@update')->name('::edit');
 
 				Route::post('{id}/deactivate','MemberController@deactivate')->name('::deactivate');
 				Route::post('{id}/reactivate','MemberController@reactivate')->name('::reactivate');
@@ -140,7 +136,7 @@ Route::group([
 			Route::group(['middleware' => 'can:addBots'], function () {
 
 				Route::get('create','BotController@create')->name('::create');
-				Route::post('create','BotController@store');
+				Route::post('create','BotController@store')->name('::create');
 			});
 
 			Route::group(['middleware' => 'can:basic'], function () {
@@ -151,7 +147,7 @@ Route::group([
 
 			Route::group(['middleware' => 'can:higher'], function () {
 
-				Route::post('{id}/edit','BotController@update');
+				Route::post('{id}/edit','BotController@update')->name('::edit');
 
 				Route::post('{id}/deactivate','BotController@deactivate')->name('::deactivate');
 				Route::post('{id}/reactivate','BotController@reactivate')->name('::reactivate');
@@ -179,12 +175,12 @@ Route::group([
 			Route::group(['middleware' => 'can:createSchedules'], function () {
 
 				Route::get('create','ScheduleController@create')->name('::create');
-				Route::post('create','ScheduleController@store');
+				Route::post('create','ScheduleController@store')->name('::create');
 			});
 
 			Route::group(['middleware' => 'can:higher'], function () {
 
-				Route::post('{id}/edit','ScheduleController@update');
+				Route::post('{id}/edit','ScheduleController@update')->name('::edit');
 
 				Route::post('{id}/deactivate','ScheduleController@deactivate')->name('::deactivate');
 				Route::post('{id}/reactivate','ScheduleController@reactivate')->name('::reactivate');

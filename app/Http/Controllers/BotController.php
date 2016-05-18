@@ -19,7 +19,11 @@ class BotController extends Controller
 	public function index()
     {
         // Lấy tất cả bot của hub
-        $bots = Hub::findOrFail(session('currentHub'))->bots()->orderBy('id','DESC')->get();
+        if (auth()->user()->can('viewControlAllBots',Hub::findOrFail(session('currentHub')))) {
+            $bots = Hub::findOrFail(session('currentHub'))->bots()->orderBy('id','DESC')->get();
+        } else {
+            $bots = auth()->user()->botsOf(session('currentHub'))->sortByDesc('id');
+        }
         // Lấy trạng thái của bot (truestatus)
         for ($i=0;$i<count($bots);$i++) {
             if ($bots[$i]['true'] == 0) {
@@ -75,16 +79,14 @@ class BotController extends Controller
 		}
 
         $bot->save();
-        foreach ($request->permissions as $user_id)
-        {
+        foreach ($request->permissions as $user_id) {
             $newPerm = new BotPermission;
             $newPerm->bot_id = $bot->id;
             $newPerm->user_id = $user_id;
             $newPerm->save();
         }
 
-        foreach ($request->higherpermissions as $user_id)
-        {
+        foreach ($request->higherpermissions as $user_id) {
             BotPermission::updateOrCreate(['bot_id' => $bot->id, 'user_id' => $user_id],['higher' => true]);
         }
 

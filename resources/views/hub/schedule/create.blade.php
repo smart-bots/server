@@ -119,6 +119,7 @@
         '</div>',
         '</div>'
       ].join(''));
+      $('.datetimepicker').datetimepicker();
     } else {
       $('#one-many-time-div').html([
         '<div class="form-group">',
@@ -132,7 +133,7 @@
         '{!! Form::select('frequency[unit][]', ['1' => 'minute(s)', '2' => 'hour(s)', '3' => 'day(s)', '4' => 'week(s)', '5' => 'month(s)', '6' => 'year(s)'], null, ['id' => 'fre1','class' => 'form-control up-zindex', 'onChange' => 'changeFrequency(1)']) !!}',
         '</div>',
         '<span class="input-group-addon border-left-none">At</span>',
-        '{!! Form::text('frequency[at][]', null, ['id' => 'f2re1', 'class' => 'form-control datetimepicker border-right-none border-left-none', 'readonly' => 'readonly']) !!}',
+        '{!! Form::text('frequency[at][]', null, ['id' => 'f2re1', 'class' => 'form-control datetimepicker border-left-none', 'readonly' => 'readonly']) !!}',
         '</div>',
         '</div>',
         '{!! Form::button('<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add frequency', ['class' => 'btn bg-olive pull-right','onclick' => 'addFrequency()']) !!}',
@@ -194,7 +195,7 @@
       '<div class="input-group margin-top-sm">',
       '<input class="form-control border-right-none" name="condition[bot][]" type="text">',
       '<div class="input-group-btn">',
-      '<select class="form-control" onchange="changeCondition()" style="width: 120px !important;" name="condition[state][]">',
+      '<select class="form-control" style="width: 120px !important;" name="condition[state][]">',
       '<option value="1">is turned on</option>',
       '<option value="2">is turned off</option>',
       '</select>',

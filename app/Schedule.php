@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model
 {
 	protected $table = 'schedules';
-    protected $fillable = ['user_id','hub_id','name', 'description','action','type','data','condition','activate_after','deactivate_after'];
+    protected $fillable = ['hub_id','name', 'description','action','type','data','condition','activate_after','deactivate_after','status','ran_times'];
     protected $hidden = [];
     public $timestamps = false;
 
@@ -39,6 +39,18 @@ class Schedule extends Model
 
     public function isActivated():bool {
     	return $this->status;
+    }
+
+    public function deactivate()
+    {
+        $this->status = 0;
+        $this->save();
+    }
+
+    public function reactivate()
+    {
+        $this->status = 1;
+        $this->save();
     }
 
     public function scopeActivated($query) {

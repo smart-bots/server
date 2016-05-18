@@ -161,7 +161,7 @@ return [
         SmartBots\Providers\ViewComposerServiceProvider::class,
         SmartBots\Providers\BladeServiceProvider::class,
 
-        Barryvdh\Debugbar\ServiceProvider::class,
+        // Barryvdh\Debugbar\ServiceProvider::class,
 
     ],
 

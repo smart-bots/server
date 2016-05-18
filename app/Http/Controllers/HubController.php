@@ -69,13 +69,15 @@ class HubController extends Controller
         // Kiểm tra: có phải member, member có active?
         if (auth()->user()->member($request->id)->isActivated() && auth()->user()->isOf($request->id)) {
             session()->put('currentHub',$request->id);
-            return resonpse()->json(['location' => $location]);
+            return response()->json(['error' => 0]);
         } else abort(403);
     }
 
     public function dashboard()
     {
-        return redirect()->route('h::edit');
+        if (auth()->user()->can('view',Hub::findOrFail(session('currentHub')))) {
+            return redirect()->route('h::edit');
+        } else { return redirect()->route('h::b::index'); }
     }
 
     public function edit()

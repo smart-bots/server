@@ -28,6 +28,7 @@ class HasPermission
         $routePrefix = $request->route()->getPrefix();
         $routeName = $request->route()->getName();
         // dd($routePrefix);
+        // dd($routeName);
         switch ($routeName) {
             case 'h::b::control':
                 $model = Bot::findOrFail($request->id);
@@ -58,7 +59,6 @@ class HasPermission
                 }
                 break;
         }
-
         // dd($model);
         if ($request->user()->cant($thing,$model)) {
             abort(403);

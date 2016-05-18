@@ -8,8 +8,8 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-    Hub Edit
-    <small>Setting your hub</small>
+    Member list
+    <small>All members</small>
   </h1>
   {{breadcrumb([
     'Hub' => route('h::edit'),

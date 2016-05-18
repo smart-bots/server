@@ -20,11 +20,7 @@ class User extends Authenticatable
     }
 
     public function schedulepermissions() {
-        return $this->hasMany('SmartBots\BotPermission','user_id');
-    }
-
-    public function schedules() {
-        return $this->hasMany('SmartBots\Schedule','user_id');
+        return $this->hasMany('SmartBots\SchedulePermission','user_id');
     }
 
     public function highpermissions() {
@@ -35,16 +31,44 @@ class User extends Authenticatable
         return $this->belongsToMany('SmartBots\Hub','members');
     }
 
+    public function schedules() {
+        $schedulepermissions = $this->schedulepermissions;
+        $schedules = collect([]);
+        foreach ($schedulepermissions as $schedulepermission) {
+            $schedules = $schedules->push($schedulepermission->schedule);
+        }
+        return $schedules;
+    }
+
     public function bots() {
         $botpermissions = $this->botpermissions;
+        $bots = collect([]);
         foreach ($botpermissions as $botpermission) {
-            if (!isset($bots)) {
-                $bots = $botpermission->bots;
-            } else {
-                $bots = $bots->merge($botpermission->bots);
+            $bots = $bots->push($botpermission->bot);
+        }
+        return $bots;
+    }
+
+    public function botsOf($hub_id) {
+        $botpermissions = $this->botpermissions;
+        $bots = collect([]);
+        foreach ($botpermissions as $botpermission) {
+            if ($botpermission->bot->isOf($hub_id)) {
+                $bots = $bots->push($botpermission->bot);
             }
         }
         return $bots;
+    }
+
+    public function schedulesOf($hub_id) {
+        $schedulepermissions = $this->schedulepermissions;
+        $schedules = collect([]);
+        foreach ($schedulepermissions as $schedulepermission) {
+            if ($schedulepermission->schedule->isOf($hub_id)) {
+                $schedules = $schedules->push($schedulepermission->schedule);
+            }
+        }
+        return $schedules;
     }
 
     public function isOf($hub_id) {
