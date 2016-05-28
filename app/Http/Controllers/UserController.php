@@ -10,6 +10,8 @@ use Illuminate\Auth\Events\Lockout;
 
 use SmartBots\User;
 
+use Validator;
+
 /**
  * Uses lot of ValidatesRequests trait
  */
@@ -33,18 +35,31 @@ class UserController extends Controller
 
     public function loginWith(Request $request)
     {
-    	return $request->has('username') ? 'username' : 'email';
+    	return is_email($request->username) ? 'email' : 'username';
     }
 
     public function postLogin(Request $request) {
 
     	$rules = [
-			'username'              => 'sometimes|required|between:6,255',
-			'email'                 => 'sometimes|required|email',
-			'password'              => 'required|between:6,255',
+            'username' => 'required|between:6,255',
+            'password' => 'required|between:6,255',
 		];
 
-        $this->validate($request, $rules);
+        $messenges = [
+            'username'
+        ];
+        // foreach ($rules as $input => $rule) {
+        //     $validator = Validator::make([$input => $request->$input], [$input => $rule]);
+        //     if ($validator->fails()) {
+        //         $error = [$input => $validator->errors()->first($input)];
+        //         return response()->json($error);
+        //     }
+        // }
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
 
         $isUsingThrottles = property_exists($this, 'maxLoginAttempts') ? true : false;
 
@@ -56,34 +71,33 @@ class UserController extends Controller
 
             $seconds = $this->secondsRemainingOnLockout($request);
 
-	        return redirect()->back()
-	            ->withInput($request->only($this->loginWith($request), 'remember'))
-	            ->withErrors([
-	                'custom' => trans('auth.throttle',['second' => $seconds]),
-	            ]);
-        }
+	        $error = ['global' => trans('login.throttle',['second' => $seconds])];
 
-        $credentials = $request->only($this->loginWith($request), 'password');
+            return response()->json($error);
+        }
+        $credentials = [
+            $this->loginWith($request) => $request->username,
+            'password' => $request->password
+        ];
 
         if (auth()->guard($this->guard)->attempt($credentials, $request->has('remember'))) {
 
 	        if ($isUsingThrottles) {
 	            $this->clearLoginAttempts($request);
 	        }
+            // Success
+            $error = ['success' => true, 'href' => route($this->redirectAfterLogin)];
 
-	        return redirect()->route($this->redirectAfterLogin);
-
+            return response()->json($error);
         }
 
         if ($isUsingThrottles && !$lockedOut) {
             $this->incrementLoginAttempts($request);
         }
 
-        return redirect()->back()
-            ->withInput($request->only($this->loginWith($request), 'remember'))
-            ->withErrors([
-                'custom' => trans('auth.failed')
-            ]);
+        $error = ['global' => trans('login.failed')];
+
+        return response()->json($error);
     }
 
     public function getRegister() {
@@ -102,7 +116,7 @@ class UserController extends Controller
 			'password_confirmation' => 'required'
 		];
 
-		$this->validate($request, $rules, ['agree_with_terms.required' => trans('auth.terms_agreement')]);
+		$this->validate($request, $rules, ['agree_with_terms.required' => trans('login.terms_agreement')]);
 
 		$newUser = new User;
 		$newUser->username = $request->username;
@@ -168,11 +182,13 @@ class UserController extends Controller
         }
         return response()->json($users);
     }
+
     //---------------------------------------------------------------------------------------------------------------------
 
     public function getThrottleKey(Request $request)
     {
-        return mb_strtolower($request->input($this->loginWith($request))).'|'.$request->ip();
+        return $request->ip();
+        // return mb_strtolower($request->username).'|'.$request->ip();
     }
 
     public function hasTooManyLoginAttempts(Request $request)

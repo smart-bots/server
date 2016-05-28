@@ -9,17 +9,17 @@
 <meta name="description" content="">
 <meta name="keywords" content="">
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-<link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ asset('resources/assets/comingsoon/images/ico/apple-touch-icon-144.png') }}">
-<link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ asset('resources/assets/comingsoon/images/ico/apple-touch-icon-114.png') }}">
-<link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ asset('resources/assets/comingsoon/images/ico/apple-touch-icon-72.png') }}">
-<link rel="apple-touch-icon-precomposed" href="{{ asset('resources/assets/comingsoon/images/ico/apple-touch-icon-57.png') }}">
-<link rel="shortcut icon" href="{{ asset('resources/assets/comingsoon/images/ico/favicon.png') }}">
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ asset('public/comingsoon/images/ico/apple-touch-icon-144.png') }}">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ asset('public/comingsoon/images/ico/apple-touch-icon-114.png') }}">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ asset('public/comingsoon/images/ico/apple-touch-icon-72.png') }}">
+<link rel="apple-touch-icon-precomposed" href="{{ asset('public/comingsoon/images/ico/apple-touch-icon-57.png') }}">
+<link rel="shortcut icon" href="{{ asset('public/comingsoon/images/ico/favicon.png') }}">
 <!--[if IE]><![endif]-->
-<link rel="stylesheet" href="{{ asset('resources/assets/comingsoon/css/style.css') }}">
-<script src="{{ asset('resources/assets/comingsoon/js/jquery.js') }}"></script>
-<script src="{{ asset('resources/assets/comingsoon/js/countdown.js') }}"></script>
-<script src="{{ asset('resources/assets/comingsoon/js/uikit.scrollspy.js') }}"></script>
-<script src="{{ asset('resources/assets/comingsoon/js/scripts.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('public/comingsoon/css/style.css') }}">
+<script src="{{ asset('public/comingsoon/js/jquery.js') }}"></script>
+<script src="{{ asset('public/comingsoon/js/countdown.js') }}"></script>
+<script src="{{ asset('public/comingsoon/js/uikit.scrollspy.js') }}"></script>
+<script src="{{ asset('public/comingsoon/js/scripts.js') }}"></script>
 <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>
 <body id="backtotop">

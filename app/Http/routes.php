@@ -14,11 +14,11 @@ use SmartBots\{
 };
 
 Route::get('', function () {
-    return view('comingsoon.index');
+    return view('landing.index');
 });
 
 Route::get('test', function () {
-
+	return view('account.login2');
 });
 
 // Route::auth();
@@ -28,8 +28,8 @@ Route::group([
 	'prefix'     => 'api',
 	'as'		 => 'api'
 ], function() {
-	Route::get('{host_key}/up/{bot_key}/{status}/{hard?}','ApiController@up')->name('::up');
-	Route::get('{host_key}/down','ApiController@down')->name('::down');
+	Route::get('{hub_token}/up/{bot_token}/{status}/{hard?}','ApiController@up')->name('::up');
+	Route::get('{hub_token}/down','ApiController@down')->name('::down');
 });
 
 Route::group([

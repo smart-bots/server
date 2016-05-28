@@ -1,134 +1,122 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Login | SmartBots</title>
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <link rel="stylesheet" href="{{ asset('resources/assets/bootstrap/css/bootstrap.min.css') }}">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <link rel="stylesheet" href="{{ asset('resources/assets/dist/css/AdminLTE.css') }}">
-  <link rel="stylesheet" href="{{ asset('resources/assets/plugins/iCheck/square/blue.css') }}">
-  <link rel="stylesheet" href="{{ asset('resources/assets/plugins/bootstrap-select/css/bootstrap-select.min.css') }}">
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
+    <meta charset="utf-8">
+    <title>{{ trans('login.title') }} | Smartbots</title>
+    <link rel="shortcut icon" href="assets/img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato:400,300,300italic,400italic,700,700italic">
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/skin/default_skin/css/theme.css') }} ">
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/allcp/forms/css/forms.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/js/sweetalert/sweetalert.css') }}">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+    .logo {
+        font-family: 'Lato';
+        font-size: 40px;
+        font-weight: 100;
+    }
+    .logo .lgf {
+        font-weight: 700;
+    }
+    .alert a {
+        color: white;
+    }
+    </style>
 </head>
-<body class="hold-transition login-page">
-<div class="login-box">
-  <div class="login-logo">
-    <a href="#"><b>Smart</b>Bots</a>
-  </div>
-
-  @if ($errors->has('custom'))
-    <div class="alert alert-danger alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>&nbsp;
-      {{ $errors->first('custom') }}
-    </div>
-  @endif
-
-  <div class="login-box-body">
-    <p class="login-box-msg">Log in to start your session</p>
-
-    {!! Form::open(array('route' => 'a::login')) !!}
-      @if (old('loginWith') == 'email' || !empty(old('email')))
-      <div class="form-group has-feedback{{ $errors->has('email') ? ' has-error' : '' }}">
-        <div class="input-group">
-          <div class="input-group-btn">
-            <select name="loginWith" class="form-control border-right-none">
-              <option value="username">Username</option>
-              <option value="email" selected>Email</option>
-            </select>
-          </div>
-          {!! Form::text('email', old('email'), ['class' => 'form-control border-left-none', 'placeholder' => 'Email']) !!}
+<body class="utility-page sb-l-c sb-r-c">
+<div id="main" class="animated fadeIn">
+    <section id="content_wrapper">
+        <div id="canvas-wrapper">
+            <canvas id="demo-canvas"></canvas>
         </div>
-        <span class="glyphicon glyphicon-user form-control-feedback" style='z-index:3'></span>
-        @if ($errors->has('email'))
-            <span class="help-block">
-                {{ $errors->first('email') }}
-            </span>
-        @endif
-      </div>
-      @else
-      <div class="form-group has-feedback{{ $errors->has('username') ? ' has-error' : '' }}">
-        <div class="input-group">
-          <div class="input-group-btn">
-            <select name="loginWith" class="form-control border-right-none">
-              <option value="username" selected>Username</option>
-              <option value="email">Email</option>
-            </select>
-          </div>
-          {!! Form::text('username', old('username'), ['class' => 'form-control border-left-none', 'placeholder' => 'Username']) !!}
-        </div>
-        <span class="glyphicon glyphicon-user form-control-feedback" style='z-index:3'></span>
-        @if ($errors->has('username'))
-            <span class="help-block">
-                {{ $errors->first('username') }}
-            </span>
-        @endif
-      </div>
-      @endif
-      <div class="form-group has-feedback{{ $errors->has('password') ? ' has-error' : '' }}">
-        {!! Form::password('password', ['class' => 'form-control', 'placeholder' => 'Password']) !!}
-        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-        @if ($errors->has('password'))
-            <span class="help-block">
-                {{ $errors->first('password') }}
-            </span>
-        @endif
-      </div>
-      <div class="row">
-        <div class="col-xs-8">
-          <div class="checkbox icheck">
-            <label>
-              {!! Form::checkbox('remember', 1, true) !!}&nbsp;&nbsp;Remember Me
-            </label>
-          </div>
-        </div>
-        <div class="col-xs-4">
-          {!! Form::button('<i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;&nbsp;Login', ['type' => 'submit', 'class' => 'btn btn-primary btn-block btn-flat']) !!}
-        </div>
-      </div>
-
-    {!! Form::close() !!}
-
-    <div class="social-auth-links text-center">
-      <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using
-        Facebook</a>
-      <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using
-        Google</a>
-    </div>
-
-    <a href="{{ route('a::forgot') }}">I forgot my password</a><br/>
-    <a href="{{ route('a::register') }}" class="text-center">Register a new membership</a>
-
-  </div>
+        <section id="content">
+            <div class="allcp-form theme-primary mw450" id="login">
+                <div class="bg-primary text-center mb20 br3 pv15">
+                    <span class="logo"><span class="fa fa-signal"></span> <span class="lgf">Smart</span>bots</span>
+                </div>
+                <div class="panel panel-primary mw450">
+                    <div class="panel-heading pn">
+                        <span class="panel-title">{{ trans('login.helper') }}</span>
+                    </div>
+                    {!! Form::open(['route' => 'a::login', 'name' => 'login-form', 'onsubmit' => 'return login()']) !!}
+                        <div class="panel-body pn mt20">
+                            <div class="section">
+                                <label for="username" class="field prepend-icon">
+                                    <input type="text" name="username" id="username" class="gui-input" placeholder="{{ trans('login.username') }}">
+                                    <label for="username" class="field-icon">
+                                        <i class="fa fa-user"></i>
+                                    </label>
+                                </label>
+                            </div>
+                            <div class="section">
+                                <label for="password" class="field prepend-icon">
+                                    <input type="password" name="password" id="password" class="gui-input" placeholder="{{ trans('login.password') }}">
+                                    <label for="password" class="field-icon">
+                                        <i class="fa fa-lock"></i>
+                                    </label>
+                                </label>
+                            </div>
+                            <div class="section">
+                                <div class="bs-component pull-left pt5">
+                                    <div class="radio-custom radio-primary mb5 lh25">
+                                        <input type="checkbox" id="remember" name="remember" checked>
+                                        <label for="remember">{{ trans('login.remember_me') }}</label>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-bordered btn-primary pull-right"><i class="fa fa-sign-in mr10" aria-hidden="true"></i>{{ trans('login.login') }}</button>
+                            </div>
+                        </div>
+                        <div class="alert alert-primary mt20">
+                            <a href="{{ route('a::register') }}"><i class="fa fa-user-plus mr10" aria-hidden="true"></i>{{ trans('login.link_register') }}</a>                        </div>
+                        <div class="alert alert-primary mb5">
+                            <a href="{{ route('a::forgot') }}"><i class="fa fa-info-circle mr10" aria-hidden="true"></i>{{ trans('login.link_forgot') }}</a>
+                        </div>
+                    {!! Form::close() !!}
+                </div>
+            </div>
+        </section>
+    </section>
 </div>
-<script src="{{ asset('resources/assets/plugins/jQuery/jQuery-2.2.0.min.js') }}"></script>
-<script src="{{ asset('resources/assets/bootstrap/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('resources/assets/plugins/iCheck/icheck.min.js') }}"></script>
-<script src="{{ asset('resources/assets/plugins/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
-<script>
-  $(function () {
-    $('select').selectpicker();
-    $("[name='loginWith']").change(function() {
-      switch($("[name='loginWith']").val()) {
-        case 'username':
-          $("[name='email']").attr('name','username').attr('placeholder','Username').val('');
-          break;
-        case 'email':
-          $("[name='username']").attr('name','email').attr('placeholder','Email').val('');
-          break;
-      }
-    })
-    $('input').iCheck({
-      checkboxClass: 'icheckbox_square-blue',
-      radioClass: 'iradio_square-blue'
+<script src="{{ asset('public/js/jquery/jquery-2.2.4.min.js') }} "></script>
+<script src="{{ asset('public/js/jquery/jquery_ui/jquery-ui.min.js') }}"></script>
+<script src="{{ asset('public/js/plugins/canvasbg/canvasbg.js') }}"></script>
+<script src="{{ asset('public/js/utility/utility.js') }}"></script>
+<script src="{{ asset('public/js/main.js') }}"></script>
+<script src="{{ asset('public/js/plugins/scrollTo/jquery.scrollTo.min.js') }}"></script>
+<script src="{{ asset('public/js/sweetalert/sweetalert.min.js') }}"></script>
+<script src="{{ asset('public/js/custom.js') }}"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        "use strict";
+        Core.init();
+        // CanvasBG.init({
+        //     Loc: {
+        //         x: window.innerWidth / 5,
+        //         y: window.innerHeight / 10
+        //     }
+        // });
     });
-  });
+    function login() {
+        $.ajax({
+            url : '{{ route('a::login') }}',
+            type : 'post',
+            data : $('[name=login-form]').serializeArray(),
+            dataType : 'json',
+            success : function (response)
+            {
+                // for (var prop in response) {
+                //     $('[name="'+prop+'"]').haz('error',response[prop]);
+                // };
+                $('[name=login-form]').validate(response, ['remember']);
+            }
+        });
+        return false;
+    }
 </script>
 </body>
 </html>
