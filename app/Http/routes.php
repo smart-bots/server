@@ -18,7 +18,7 @@ Route::get('', function () {
 });
 
 Route::get('test', function () {
-	return view('account.login2');
+	return view('test');
 });
 
 // Route::auth();

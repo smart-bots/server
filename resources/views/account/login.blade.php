@@ -1,106 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>{{ trans('login.title') }} | Smartbots</title>
-    <link rel="shortcut icon" href="assets/img/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato:400,300,300italic,400italic,700,700italic">
-    <link rel="stylesheet" type="text/css" href="{{ asset('public/skin/default_skin/css/theme.css') }} ">
-    <link rel="stylesheet" type="text/css" href="{{ asset('public/allcp/forms/css/forms.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('public/js/sweetalert/sweetalert.css') }}">
-    <!--[if lt IE 9]>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <style>
-    .logo {
-        font-family: 'Lato';
-        font-size: 40px;
-        font-weight: 100;
-    }
-    .logo .lgf {
-        font-weight: 700;
-    }
-    .alert a {
-        color: white;
-    }
-    </style>
-</head>
-<body class="utility-page sb-l-c sb-r-c">
-<div id="main" class="animated fadeIn">
-    <section id="content_wrapper">
-        <div id="canvas-wrapper">
-            <canvas id="demo-canvas"></canvas>
-        </div>
-        <section id="content">
-            <div class="allcp-form theme-primary mw450" id="login">
-                <div class="bg-primary text-center mb20 br3 pv15">
-                    <span class="logo"><span class="fa fa-signal"></span> <span class="lgf">Smart</span>bots</span>
-                </div>
-                <div class="panel panel-primary mw450">
-                    <div class="panel-heading pn">
-                        <span class="panel-title">{{ trans('login.helper') }}</span>
-                    </div>
-                    {!! Form::open(['route' => 'a::login', 'name' => 'login-form', 'onsubmit' => 'return login()']) !!}
-                        <div class="panel-body pn mt20">
-                            <div class="section">
-                                <label for="username" class="field prepend-icon">
-                                    <input type="text" name="username" id="username" class="gui-input" placeholder="{{ trans('login.username') }}">
-                                    <label for="username" class="field-icon">
-                                        <i class="fa fa-user"></i>
-                                    </label>
-                                </label>
-                            </div>
-                            <div class="section">
-                                <label for="password" class="field prepend-icon">
-                                    <input type="password" name="password" id="password" class="gui-input" placeholder="{{ trans('login.password') }}">
-                                    <label for="password" class="field-icon">
-                                        <i class="fa fa-lock"></i>
-                                    </label>
-                                </label>
-                            </div>
-                            <div class="section">
-                                <div class="bs-component pull-left pt5">
-                                    <div class="radio-custom radio-primary mb5 lh25">
-                                        <input type="checkbox" id="remember" name="remember" checked>
-                                        <label for="remember">{{ trans('login.remember_me') }}</label>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-bordered btn-primary pull-right"><i class="fa fa-sign-in mr10" aria-hidden="true"></i>{{ trans('login.login') }}</button>
-                            </div>
-                        </div>
-                        <div class="alert alert-primary mt20">
-                            <a href="{{ route('a::register') }}"><i class="fa fa-user-plus mr10" aria-hidden="true"></i>{{ trans('login.link_register') }}</a>                        </div>
-                        <div class="alert alert-primary mb5">
-                            <a href="{{ route('a::forgot') }}"><i class="fa fa-info-circle mr10" aria-hidden="true"></i>{{ trans('login.link_forgot') }}</a>
-                        </div>
-                    {!! Form::close() !!}
-                </div>
-            </div>
-        </section>
-    </section>
-</div>
-<script src="{{ asset('public/js/jquery/jquery-2.2.4.min.js') }} "></script>
-<script src="{{ asset('public/js/jquery/jquery_ui/jquery-ui.min.js') }}"></script>
-<script src="{{ asset('public/js/plugins/canvasbg/canvasbg.js') }}"></script>
-<script src="{{ asset('public/js/utility/utility.js') }}"></script>
-<script src="{{ asset('public/js/main.js') }}"></script>
-<script src="{{ asset('public/js/plugins/scrollTo/jquery.scrollTo.min.js') }}"></script>
-<script src="{{ asset('public/js/sweetalert/sweetalert.min.js') }}"></script>
-<script src="{{ asset('public/js/custom.js') }}"></script>
-<script type="text/javascript">
-    jQuery(document).ready(function () {
-        "use strict";
-        Core.init();
-        // CanvasBG.init({
-        //     Loc: {
-        //         x: window.innerWidth / 5,
-        //         y: window.innerHeight / 10
-        //     }
-        // });
-    });
+@extends('account.master')
+@section('title',trans('login.title'))
+@section('additionHeader')
+@endsection
+@section('additionFooter')
+<script>
+    var login_success_title = '{{ trans('login.success_title') }}',
+        login_success_text = '{{ trans('login.success_text') }}',
+        login_btn_text = '{{ trans('login.success_btn') }}';
+
     function login() {
         $.ajax({
             url : '{{ route('a::login') }}',
@@ -109,14 +16,103 @@
             dataType : 'json',
             success : function (response)
             {
-                // for (var prop in response) {
-                //     $('[name="'+prop+'"]').haz('error',response[prop]);
-                // };
-                $('[name=login-form]').validate(response, ['remember']);
+
+                $('[name=login-form]').validate(response, ['remember'], function (response) {
+
+                    swal({
+                        title: login_success_title,
+                        text: login_success_text,
+                        type: "success",
+                        confirmButtonText: login_btn_text,
+                    }, function() {
+
+                        window.location.href = response['href'];
+
+                    });
+                });
             }
         });
         return false;
     }
 </script>
-</body>
-</html>
+@endsection
+@section('body')
+<div class="card-box animated bounceIn">
+
+    <div class="panel-heading animated">
+        <h1 class="smartbot text-center text-custom"><span class="fa fa-signal"></span> <span class="smart">Smart</span>bots</h1>
+    </div>
+
+    <div class="panel-body animated">
+        <span class="panel-title">{{ trans('login.helper') }}</span>
+
+        {!! Form::open(['route' => 'a::login', 'name' => 'login-form', 'class' => 'form-horizontal m-t-20', 'onsubmit' => 'return login()']) !!}
+
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <input type="text" class="form-control" name="username" placeholder="{{ trans('login.username') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <input type="password" class="form-control" name="password" placeholder="{{ trans('login.password') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <div class="checkbox checkbox-custom">
+                        <input name="remmember" type="checkbox" checked>
+                        <label for="remember">&nbsp;{{ trans('login.remember_me') }}</label>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="form-group text-center m-t-40">
+                <div class="col-xs-12">
+                    <button class="btn btn-custom btn-default btn-block text-uppercase waves-effect waves-light" type="submit">{{ trans('login.login') }}</button>
+                </div>
+            </div>
+
+            <div class="form-group m-t-20 m-b-0">
+                <div class="col-sm-12">
+                    <a href="{{ route('a::forgot') }}" class="text-dark"><i class="fa fa-lock m-r-5"></i>&nbsp;{{ trans('login.link_forgot') }}</a>
+                </div>
+            </div>
+
+            <div class="form-group m-t-20 m-b-0">
+                <div class="col-sm-12 text-center">
+                    <h4><b>{{ trans('login.login_with') }}</b></h4>
+                </div>
+            </div>
+
+            <div class="form-group m-b-0 text-center">
+                <div class="col-sm-12">
+                    <button type="button" class="btn btn-facebook waves-effect waves-light m-t-20">
+                       <i class="fa fa-facebook m-r-5"></i> Facebook
+                    </button>
+
+                    <button type="button" class="btn btn-twitter waves-effect waves-light m-t-20">
+                       <i class="fa fa-twitter m-r-5"></i> Twitter
+                    </button>
+
+                    <button type="button" class="btn btn-googleplus waves-effect waves-light m-t-20">
+                       <i class="fa fa-google-plus m-r-5"></i> Google+
+                    </button>
+                </div>
+            </div>
+
+        {!! Form::close() !!}
+
+    </div>
+</div>
+<div class="row animated bounceIn">
+    <div class="col-sm-12 text-center">
+        <p>
+            {{ trans('login.link_register_helper') }}&nbsp;<a href="{{ route('a::register') }}" class="text-primary m-l-5"><b>{{ trans('login.register') }}</b></a>
+        </p>
+    </div>
+</div>
+@endsection

@@ -1,0 +1,41 @@
+{
+  "name": "smartbots",
+  "description": "The Smart Bots System",
+  "main": "index.php",
+  "authors": [
+    "Huỳnh Đức Duy <h2dvnnet@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.4",
+    "bootstrap": "^3.3.6",
+    "font-awesome": "^4.6.3",
+    "jquery-ui": "jqueryui#^1.11.4",
+    "jquery.scrollTo": "^2.1.2",
+    "modernizr": "^3.3.1",
+    "jquery.nicescroll": "nicescroll#^3.6.8",
+    "slimscroll": "^1.3.7",
+    "fastclick": "^1.0.6",
+    "blockUI": "blockui#*",
+    "Waves": "waves#^0.7.5",
+    "wow": "^1.1.2",
+    "sweetalert": "^1.1.3",
+    "animate.css": "^3.5.1"
+  },
+  "resolutions": {
+    "jquery": "^2.2.4"
+  },
+  "install": {
+    "path": "public/libs"
+  }
+}

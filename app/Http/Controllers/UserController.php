@@ -46,8 +46,8 @@ class UserController extends Controller
 		];
 
         $messenges = [
-            'username'
         ];
+
         // foreach ($rules as $input => $rule) {
         //     $validator = Validator::make([$input => $request->$input], [$input => $rule]);
         //     if ($validator->fails()) {
@@ -116,7 +116,10 @@ class UserController extends Controller
 			'password_confirmation' => 'required'
 		];
 
-		$this->validate($request, $rules, ['agree_with_terms.required' => trans('login.terms_agreement')]);
+        $validator = Validator::make($request->all(), $rules, ['agree_with_terms.required' => trans('register.terms_disagreement')]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
 
 		$newUser = new User;
 		$newUser->username = $request->username;
@@ -126,7 +129,8 @@ class UserController extends Controller
 		$newUser->password = bcrypt($request->password);
 		$newUser->save();
 
-        return redirect()->back()->withSuccess(true);
+        $error = ['success' => true];
+        return response()->json($error);
     }
 
     public function getForgot() {
