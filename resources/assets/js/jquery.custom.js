@@ -216,3 +216,29 @@ $.fn.validate = function(data, except = [], successCallBack) {
         });
     }
 }
+
+function randStr(x){
+    var s = "";
+    while(s.length<x&&x>0){
+        var r = Math.random();
+        s+= (r<0.1?Math.floor(r*100):String.fromCharCode(Math.floor(r*26) + (r>0.5?97:65)));
+    }
+    return s;
+}
+
+$.fn.materialSwitch = function (labelClass = 'default', additionStyle = '', additionClass = '') {
+    var elements = this.toArray();
+    elements.forEach(function(item, index) {
+      var input = $(item);
+      if (input.attr('type') == 'checkbox') {
+        if (input.attr('id') == null) {
+            var id = randStr(5);
+            input.attr('id',id);
+        } else {
+            var id = input.attr('id');
+        }
+        input.before('<div class="material-switch '+additionClass+'" id="'+id+'div" style="'+additionStyle+'"><label for="'+id+'" class="label-'+labelClass+'"></label></div>');
+        input.prependTo($('div#'+id+'div'));
+      }
+    });
+}

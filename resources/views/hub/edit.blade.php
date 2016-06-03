@@ -1,10 +1,10 @@
 @extends('hub.master')
-@section('title','Hub Setting')
+@section('title','Hub edit')
 @section('additionHeader')
-	<link rel="stylesheet" href="{{ asset('resources/assets/plugins/html5imageupload/html5imageupload.css') }}">
+	<link rel="stylesheet" href="{{ asset('public/libs/html5imageupload/html5imageupload.css') }}">
 @endsection
 @section('additionFooter')
-	<script src="{{ asset('resources/assets/plugins/html5imageupload/html5imageupload.js') }}"></script>
+	<script src="{{ asset('public/libs/html5imageupload/html5imageupload.js') }}"></script>
 	<script>
 	$('.dropzone').html5imageupload();
 	function renewToken() {
@@ -19,61 +19,32 @@
 	</script>
 @endsection
 @section('body')
-<!-- Content Header (Page header) -->
-<section class="content-header">
-	<h1>
-		Hub Edit
-		<small>Setting your hub</small>
-	</h1>
-	<ol class="breadcrumb">
-		<li><a href="#"><i class="fa fa-dashboard"></i> {{ $hub['name']}}</a></li>
-		<li class="active">Setting</li>
-	</ol>
-</section>
-<!-- Main content -->
-<section class="content">
-	<!-- Default box -->
-	<div class="box">
-		<div class="box-header">
-			<h3 class="box-title">Basic info</h3>
-		</div>
-		<!-- /.box-header -->
-		{!! Form::open(['route' => 'h::edit','files' => true,'class' => 'form-horizontal']) !!}
+{!! content_header('Hub edit', [
+    'Hub' => '#',
+    'Edit' => 'active'
+]) !!}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-box">
+        <h3 class="m-t-0 header-title"><b>Edit hub's settings</b></h3>
+		{!! Form::open(['route' => 'h::edit','class' => 'form-horizontal']) !!}
 		<div class="box-body">
-			@if (isset($success) && $success == true)
-			<div class="alert alert-success alert-dismissible fade in">
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<i class="fa fa-check" aria-hidden="true"></i>&nbsp;
-				Saved
-			</div>
-			@endif
-			<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+			<div class="form-group">
 				{!! Form::label('name', 'Name', ['class' => 'col-sm-2 control-label']) !!}
 				<div class="col-sm-10">
 					{!! Form::text('name', $hub['name'], ['class' => 'form-control']) !!}
-					@if ($errors->has('name'))
-					<span class="help-block margin-bottom-none">
-						{{ $errors->first('name') }}
-					</span>
-					@endif
 				</div>
 			</div>
-			<div class="form-group{{ $errors->has('token') ? ' has-error' : '' }}">
+			<div class="form-group">
 				{!! Form::label('token', 'Token', ['class' => 'col-sm-2 control-label']) !!}
 				<div class="col-sm-10">
 					<div class="input-group">
 						{!! Form::text('token', $hub['token'], ['class' => 'form-control', 'readonly' => 'readonly']) !!}
 						<span class="input-group-btn">
-							{!! Form::button('<i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;&nbsp;Renew', ['type' => 'button', 'class' => 'btn bg-olive', 'onclick' => 'renewToken();']) !!}
+							{!! Form::button('<i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;&nbsp;Renew', ['type' => 'button', 'class' => 'btn btn-default waves-effect waves-light', 'onclick' => 'renewToken();']) !!}
 						</span>
 					</div>
-					@if ($errors->has('token'))
-					<span class="help-block margin-bottom-none">
-						{{ $errors->first('token') }}
-					</span>
-					@else
 					<p class="help-block margin-bottom-none">This token is quite important, so dont let it fall into the wrong hands</p>
-					@endif
 				</div>
 			</div>
 			<div class="form-group">
@@ -84,33 +55,18 @@
 					</div>
 				</div>
 			</div>
-			<div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
+			<div class="form-group">
 				{!! Form::label('description', 'Description', ['class' => 'col-sm-2 control-label']) !!}
 				<div class="col-sm-10">
 					{!! Form::textarea('description', $hub['description'], ['class' => 'form-control']) !!}
-					@if ($errors->has('description'))
-					<span class="help-block margin-bottom-none">
-						{{ $errors->first('description') }}
-					</span>
-					@endif
 				</div>
 			</div>
-		</div>
-		<!-- /.box-body -->
-		<div class="box-footer">
 			{!! Form::button('<i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;&nbsp;Save', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
 			{!! Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;&nbsp;Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'hubDelete()']) !!}
 			@if ($hub['status'] == 1)
-				{!! Form::button('<i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;<span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right margin-right-sm','id' => 'hubDeactivateBtn','onclick' => 'hubDeactivate()']) !!}
+				{!! Form::button('<i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;<span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right m-r-5','id' => 'hubDeactivateBtn','onclick' => 'hubDeactivate()']) !!}
 			@else
-				{!! Form::button('<i class="fa fa-check-square-o" aria-hidden="true"></i></i>&nbsp;&nbsp;<span>Reactivate</span>', ['type' => 'button', 'class' => 'btn bg-olive pull-right margin-right-sm','id' => 'hubReactivateBtn','onclick' => 'hubReactivate()']) !!}
+				{!! Form::button('<i class="fa fa-check-square-o" aria-hidden="true"></i></i>&nbsp;&nbsp;<span>Reactivate</span>', ['type' => 'button', 'class' => 'btn btn-default pull-right m-r-5','id' => 'hubReactivateBtn','onclick' => 'hubReactivate()']) !!}
 			@endif
-		</div>
-		<!-- /.box-footer -->
 		{!! Form::close() !!}
-		<!-- /.box-body -->
-	</div>
-	<!-- /.box -->
-</section>
-<!-- /.content -->
 @endsection

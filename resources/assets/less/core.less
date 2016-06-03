@@ -537,48 +537,96 @@ a {
   color: @custom;
 }
 
+a.text-custom:hover {
+  color: darken(@custom,10%)
+}
+
 .text-white {
   color: @white;
+}
+
+a.text-white:hover {
+  color: darken(@white,10%)
 }
 
 .text-danger {
   color: @danger;
 }
 
+a.text-danger:hover {
+  color: darken(@danger,10%)
+}
+
 .text-muted {
   color: #98a6ad;
+}
+
+a.text-muted:hover {
+  color: darken(#98a6ad,10%)
 }
 
 .text-primary {
   color: @primary;
 }
 
+a.text-primary:hover {
+  color: darken(@primary,10%)
+}
+
 .text-warning {
   color: @warning;
+}
+
+a.text-warning:hover {
+  color: darken(@warning,10%)
 }
 
 .text-success {
   color: @success;
 }
 
+a.text-success:hover {
+  color: darken(@success,10%)
+}
+
 .text-info {
   color: @info;
+}
+
+a.text-info:hover {
+  color: darken(@info,10%)
 }
 
 .text-inverse {
   color: @inverse;
 }
 
+a.text-inverse:hover {
+  color: darken(@inverse,10%)
+}
+
 .text-pink {
   color: @pink;
+}
+
+a.text-pink:hover {
+  color: darken(@pink,10%)
 }
 
 .text-purple {
   color: @purple;
 }
 
+a.text-purple:hover {
+  color: darken(@purple,10%)
+}
+
 .text-dark {
   color: @lightdark7 !important;
+}
+
+a.text-dark:hover {
+  color: darken(@lightdark7,10%)
 }
 
 
@@ -1304,6 +1352,12 @@ pre{
     height: 36px;
     width: 36px;
   }
+  .user-name {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin-left: 6px;
+  }
 }
 
 .dropdown-menu-lg {
@@ -1394,9 +1448,9 @@ body.fixed-left {
 }
 
 .content-page > .content {
-  margin-bottom: 60px;
+  margin-bottom: 0;
   margin-top: 60px;
-  padding: 20px 5px 15px 5px;
+  padding: 20px 5px 0 5px;
 }
 
 .button-menu-mobile {
@@ -1427,8 +1481,8 @@ body.fixed-left {
 }
 
 #sidebar-menu {
-  padding-bottom: 30px;
-  padding-top: 30px;
+  padding-bottom: 10px;
+  padding-top: 10px;
   width: 100%;
   .nav > li > a {
 
@@ -1456,7 +1510,7 @@ body.fixed-left {
       a {
         color: #75798B;
         display: block;
-        padding: 10px 20px 10px 65px;
+        padding: 10px 20px 10px 30px;
         &:hover {
           color: @custom;
         }
@@ -1485,7 +1539,7 @@ body.fixed-left {
 #sidebar-menu > ul > li > a {
   color: @dark;
   display: block;
-  padding: 12px 20px;
+  padding: 12px 15px;
   margin: 4px 0px;
   border-left: 3px solid @white;
   &:hover {
@@ -1504,10 +1558,10 @@ body.fixed-left {
       a{
         i{
           display: inline-block;
-          font-size: 16px;
-          line-height: 17px;
-          margin-left: 3px;
-          margin-right: 15px;
+          font-size: 18px;
+          line-height: 19px;
+          margin-left: 0;
+          margin-right: 12px;
           text-align: center;
           vertical-align: middle;
           width: 20px;
@@ -1786,8 +1840,8 @@ body.fixed-left {
 }
 
 .user-details {
-  padding: 20px;
-  padding-bottom: 0px;
+  padding: 10px;
+  border-bottom: 1px solid @light5;
   position: relative;
   img {
     position: relative;
@@ -1795,7 +1849,8 @@ body.fixed-left {
   }
   .user-info {
     color: @lightdark4;
-    margin-left: 60px;
+    margin-left: 55px;
+    margin-right: 35px;
     position: relative;
     z-index: 99999;
     a.dropdown-toggle {
@@ -1806,6 +1861,16 @@ body.fixed-left {
       font-weight: 600;
       padding-top: 5px;
     }
+    .user-name {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+  .logout-left-side {
+    position: relative;
+    font-size: 30px;
+    top: -35px;
   }
 }
 
@@ -2153,4 +2218,90 @@ body.fixed-left {
     margin-top: 0px;
   }
 
+}
+
+/* ==================
+    Custom Dropdown
+================== */
+
+ul.dropdown-menu {
+  .custom {
+    text-align: center;
+    background: @danger !important;
+    color: #FFFFFF !important;
+  }
+  .custom:hover {
+    background: darken(@danger, 10%) !important;
+    color: #FFFFFF !important;
+  }
+}
+
+/* Custom Quick control */
+
+ul.quick-control {
+  li {
+    line-height: 30px;
+    .name {
+      padding-top: 0 !important;
+    }
+  }
+}
+
+.quick-control-btn {
+  position: relative;
+  font-size: 16px;
+  top: -45px;
+  right: 12px;
+}
+
+/* Linh tinh */
+
+.back-btn {
+  font-size: 50px;
+}
+
+.content-header {
+  margin-left: 50px
+}
+
+/* Hub list */
+.hubs-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+
+    float: left;
+    padding: 10px;
+    text-align: center;
+
+    img {
+      border-radius: 50%;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .hubs-list-name {
+      font-weight: 600;
+      color: #444;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      display: block;
+    }
+
+    .hubs-list-bots {
+      color: #999;
+      font-size: 12px;
+    }
+  }
+}
+
+/* Create button */
+
+.btn-create {
+  position: absolute;
+  top: -15px;
+  right: 30px;
 }

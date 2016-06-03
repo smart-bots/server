@@ -18,7 +18,8 @@ Route::get('', function () {
 });
 
 Route::get('test', function () {
-	return view('test');
+	Session::forget('currentHub');
+	// return view('test');
 });
 
 // Route::auth();

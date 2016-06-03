@@ -7,8 +7,10 @@ use SmartBots\Hub;
 class HubPanelComposer {
 
 	public function compose($view) {
-		$hub = Hub::findOrFail(session('currentHub'));
-		$view->withHub($hub);
+        if (session()->has('currentHub')) {
+    		$hub = Hub::findOrFail(session('currentHub'));
+    		$view->withHubPanel($hub);
+        }
 	}
 
 }

@@ -29,14 +29,14 @@ class ViewComposerServiceProvider extends ServiceProvider
     }
 
     private function composeMenu() {
-        view()->composer('partials.menu','SmartBots\Http\Composers\MenuComposer@compose');
+        view()->composer('hub.partials.menu','SmartBots\Http\Composers\MenuComposer@compose');
     }
 
     private function composeHubPanel() {
-        view()->composer('partials.hubPanel','SmartBots\Http\Composers\HubPanelComposer@compose');
+        view()->composer('hub.partials.hub-panel','SmartBots\Http\Composers\HubPanelComposer@compose');
     }
 
     private function composeUserMenu() {
-        view()->composer('partials.userMenu','SmartBots\Http\Composers\UserMenuComposer@compose');
+        view()->composer('hub.partials.user-menu','SmartBots\Http\Composers\UserMenuComposer@compose');
     }
 }

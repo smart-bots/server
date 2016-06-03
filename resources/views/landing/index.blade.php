@@ -7,30 +7,27 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
-    <meta name="description" content="The Smartbots System">
-    <meta name="author" content="">
 
     <title>The Smartbots System</title>
 
-    <!-- Bootstrap core CSS -->
+    <meta content="noindex, nofollow" name="robots">
+
+    <meta name="description" content="The Smartbots System">
+    <meta name="author" content="">
+
     <link href="{{ asset('public/landing/css/bootstrap.min.css') }}" rel="stylesheet">
 
-    <!-- Custom Google Web Font -->
     <link href="{{ asset('public/landing/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Arvo:400,700' rel='stylesheet' type='text/css'>
-
-    <!-- Custom CSS-->
     <link href="{{ asset('public/landing/css/general.css') }}" rel="stylesheet">
 
-	 <!-- Owl-Carousel -->
     <link href="{{ asset('public/landing/css/custom.css') }}" rel="stylesheet">
 	<link href="{{ asset('public/landing/css/owl.carousel.css') }}" rel="stylesheet">
     <link href="{{ asset('public/landing/css/owl.theme.css') }}" rel="stylesheet">
 	<link href="{{ asset('public/landing/css/style.css') }}" rel="stylesheet">
 	<link href="{{ asset('public/landing/css/animate.css') }}" rel="stylesheet">
 
-	<!-- Magnific Popup core CSS file -->
 	<link rel="stylesheet" href="{{ asset('public/landing/css/magnific-popup.css') }}">
 
 	<script src="{{ asset('public/landing/js/modernizr-2.8.3.min.js') }}"></script>  <!-- Modernizr /-->
@@ -49,12 +46,10 @@
 
 <body id="home">
 
-	<!-- Preloader -->
 	<div id="preloader">
 		<div id="status"></div>
 	</div>
 
-	<!-- FullScreen -->
     <div class="intro-header">
 		<div class="col-xs-12 text-center abcen1">
 			<h1 class="h1_home wow fadeIn" data-wow-delay="0.4s">Smart Bots</h1>
@@ -66,7 +61,7 @@
 				</li>
 			</ul>
 		</div>
-        <!-- /.container -->
+
 		<div class="col-xs-12 text-center abcen wow fadeIn">
 			<div class="button_down ">
 				<a class="imgcircle wow bounceInUp" data-wow-duration="1.5s"  href="#whatis"> <img class="img_scroll" src="{{ asset('public/landing/img/icon/circle.png') }}" alt=""> </a>
@@ -74,7 +69,6 @@
 		</div>
     </div>
 
-	<!-- NavBar-->
 	<nav class="navbar-default" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
@@ -101,7 +95,6 @@
 		</div>
 	</nav>
 
-	<!-- What is -->
 	<div id="whatis" class="content-section-b" style="border-top: 0">
 		<div class="container">
 
@@ -117,21 +110,21 @@
 				  <img class="rotate" src="{{ asset('public/landing/img/icon/tick.svg') }}" width="100px" alt="Generic placeholder image">
 				  <h3>Easy</h3>
 				  <p class="lead">Easy to install, easy to setup, easy to use</p>
-				</div><!-- /.col-lg-4 -->
+				</div>
 
 				<div class="col-sm-4  wow fadeInDown text-center">
 				  <img class="rotate" src="{{ asset('public/landing/img/icon/ball.svg') }}" width="100px" alt="Generic placeholder image">
 				  <h3>Fit</h3>
 				  <p class="lead">Fit every devices and can control every thing</p>
-				</div><!-- /.col-lg-4 -->
+				</div>
 
 				<div class="col-sm-4 wow fadeInDown text-center">
 				  <img  class="rotate" src="{{ asset('public/landing/img/icon/home.svg') }}" width="100px" alt="Generic placeholder image">
 				   <h3>Anywhere</h3>
 				   <p class="lead">Can be controlled from anywhere</p>
-				</div><!-- /.col-lg-4 -->
+				</div>
 
-			</div><!-- /.row -->
+			</div>
 
 			<div class="row tworow">
 
@@ -139,21 +132,21 @@
 				  <img  class="rotate" src="{{ asset('public/landing/img/icon/interface.svg') }}" width="100px" alt="Generic placeholder image">
 				   <h3>Automatically</h3>
 					<p class="lead">Also can work automatically as scheduled, or with workflows</p>
-				</div><!-- /.col-lg-4 -->
+				</div>
 
 				<div class="col-sm-4 wow fadeInDown text-center">
 				  <img  class="rotate" src="{{ asset('public/landing/img/icon/shopping.svg') }}" width="100px" alt="Generic placeholder image">
 				   <h3>Low cost</h3>
 				   <p class="lead">Low price suitable for all audiences</p>
-				</div><!-- /.col-lg-4 -->
+				</div>
 
 				<div class="col-sm-4 wow fadeInDown text-center">
 				  <img  class="rotate" src="{{ asset('public/landing/img/icon/app.svg') }}" width="100px" alt="Generic placeholder image">
 				   <h3>Beautiful</h3>
 				 <p class="lead">Beautiful design and beautiful app</p>
-				</div><!-- /.col-lg-4 -->
+				</div>
 
-			</div><!-- /.row -->
+			</div>
 		</div>
 	</div>
 
@@ -301,7 +294,7 @@
 					<a href="mailto:h2dvnnet@gmail.com"><i class="fa fa-envelope fa-size"> </i></a>
 					<a href="skype:delete.vn"><i class="fa fa-skype fa-size"> </i></a>
 				  </li>
-				</div><!-- /.col-lg-4 -->
+				</div>
 
 				<div class="col-sm-4  wow fadeInDown text-center">
 				  <img class="rotate img-rounded" src="https://avatars1.githubusercontent.com/u/16163451" alt="Generic placeholder image" width="200px">
@@ -313,7 +306,7 @@
 					<a href="mailto:yorkittran@gmail.com"><i class="fa fa-envelope fa-size"> </i></a>
 					<a href="skype:yorkittran@outlook.com"><i class="fa fa-skype fa-size"> </i></a>
 				  </li>
-				</div><!-- /.col-lg-4 -->
+				</div>
 
 				<div class="col-sm-4 wow fadeInDown text-center">
 				  <img  class="rotate img-rounded" src="https://avatars2.githubusercontent.com/u/10744609" alt="Generic placeholder image" width="200px">
@@ -325,9 +318,9 @@
 					<a href="mailto:baotongxuan@gmail.com"><i class="fa fa-envelope fa-size"> </i></a>
 					<a href="skype:byncuco"><i class="fa fa-skype fa-size"> </i></a>
 				  </li>
-				</div><!-- /.col-lg-4 -->
+				</div>
 
-			</div><!-- /.row -->
+			</div>
 
 		  </div>
 
@@ -363,7 +356,6 @@
 		</div>
 	</div>
 
-	<!-- Contact -->
 	<div id="contact" class="content-section-a">
 		<div class="container">
 			<div class="row">
@@ -423,12 +415,10 @@
       </div>
     </footer>
 
-    <!-- JavaScript -->
     <script src="{{ asset('public/landing/js/jquery-1.10.2.js') }}"></script>
     <script src="{{ asset('public/landing/js/bootstrap.js') }}"></script>
 	<script src="{{ asset('public/landing/js/owl.carousel.js') }}"></script>
 	<script src="{{ asset('public/landing/js/script.js') }}"></script>
-	<!-- StikyMenu -->
 	<script src="{{ asset('public/landing/js/stickUp.min.js') }}"></script>
 	<script type="text/javascript">
 	  jQuery(function($) {
@@ -439,7 +429,6 @@
 	  });
 
 	</script>
-	<!-- Smoothscroll -->
 	<script type="text/javascript" src="{{ asset('public/landing/js/jquery.corner.js') }}"></script>
 	<script src="{{ asset('public/landing/js/wow.min.js') }}"></script>
 	<script>
@@ -447,8 +436,6 @@
 	</script>
 	<script src="{{ asset('public/landing/js/classie.js') }}"></script>
 	<script src="{{ asset('public/landing/js/uiMorphingButton_inflow.js') }}"></script>
-	<!-- Magnific Popup core JS file -->
 	<script src="{{ asset('public/landing/js/jquery.magnific-popup.js') }}"></script>
 </body>
-
 </html>

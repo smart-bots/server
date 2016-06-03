@@ -141,7 +141,7 @@ class HubController extends Controller
 
     public function logout()
     {
-        session()->flush();
+        session()->forget('currentHub');
         return response()->json(['error' => 0]);
     }
 

@@ -151,6 +151,7 @@ return [
         /*
          * Application Service Providers...
          */
+
         SmartBots\Providers\AppServiceProvider::class,
         SmartBots\Providers\AuthServiceProvider::class,
         SmartBots\Providers\EventServiceProvider::class,
@@ -159,9 +160,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
 
         SmartBots\Providers\ViewComposerServiceProvider::class,
-        SmartBots\Providers\BladeServiceProvider::class,
-
-        // Barryvdh\Debugbar\ServiceProvider::class,
+        SmartBots\Providers\BladeServiceProvider::class
 
     ],
 
@@ -212,8 +211,7 @@ return [
         'Form'      => Collective\Html\FormFacade::class,
         'Html'      => Collective\Html\HtmlFacade::class,
 
-        'Carbon'    => 'Carbon\Carbon',
-        'Debugbar'  => Barryvdh\Debugbar\Facade::class,
+        'Carbon'    => 'Carbon\Carbon'
     ],
 
 ];

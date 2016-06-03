@@ -6,56 +6,54 @@ class MenuComposer {
 
 	public function compose($view) {
 		$view->withMenu([
+			'Navigation header',
 			'Dashboard' => [
-				'icon' => 'fa-tachometer',
-				'link' => route('h::dashboard')
+				'icon' => 'ti-home',
+				'href' => route('h::dashboard')
 			],
 			'Hub' => [
-				'icon' => 'fa-cog',
-				'link' => route('h::edit')
+				'icon' => 'ti-settings',
+				'href' => route('h::edit')
 			],
 			'Bot' => [
-				'icon' => 'fa-stop',
-				'nextLevel' => [
+				'icon' => 'ti-package',
+				'sub' => [
 					'Bot list' => [
-						'icon' => 'fa-list-ul',
-						'link' => route('h::b::index')
+						'icon' => 'ti-menu-alt',
+						'href' => route('h::b::index')
 					],
 					'Add new bot' => [
-						'icon' => 'fa-plus',
-						'link' => route('h::b::create')
+						'icon' => 'ti-plus',
+						'href' => route('h::b::create')
 					]
 				]
 			],
 			'Member' => [
-				'icon' => 'fa-users',
-				'nextLevel' => [
+				'icon' => 'ti-user',
+				'sub' => [
 					'Member list' => [
-						'icon' => 'fa-list-ul',
-						'link' => route('h::m::index')
+						'icon' => 'ti-menu-alt',
+						'href' => route('h::m::index')
 					],
 					'Add new member' => [
-						'icon' => 'fa-plus',
-						'link' => route('h::m::create')
+						'icon' => 'ti-plus',
+						'href' => route('h::m::create')
 					]
 				]
 			],
+			'divider',
 			'Schedule' => [
-				'icon' => 'fa-ils',
-				'nextLevel' => [
+				'icon' => 'ti-bookmark-alt',
+				'sub' => [
 					'Schedule list' => [
-						'icon' => 'fa-list-ul',
-						'link' => route('h::s::index')
+						'icon' => 'ti-menu-alt',
+						'href' => route('h::s::index')
 					],
 					'Add new schedule' => [
-						'icon' => 'fa-plus',
-						'link' => route('h::s::create')
+						'icon' => 'ti-plus',
+						'href' => route('h::s::create')
 					]
 				]
-			],
-			'Logout' => [
-				'icon' => 'fa-sign-out',
-				'link' => 'javascript:hubLogout()'
 			]
 		]);
 	}

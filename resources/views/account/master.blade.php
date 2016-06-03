@@ -7,11 +7,13 @@
 
         <title>@yield('title') | Smartbots</title>
 
+        <meta content="noindex, nofollow" name="robots">
+
         <link href="{{ asset('public/libs/bootstrap/css/bootstrap.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('public/libs/font-awesome/css/font-awesome.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('public/css/core.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('public/css/components.css') }}" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('public/css/pages.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('public/css/libs.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('public/css/responsive.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('public/libs/animate.css/animate.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('public/libs/Waves/waves.css') }}" rel="stylesheet" type="text/css" />

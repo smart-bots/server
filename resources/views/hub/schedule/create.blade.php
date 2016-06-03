@@ -1,49 +1,10 @@
 @extends('hub.master')
 @section('title','Add new schedule')
 @section('additionHeader')
-<link rel="stylesheet" href="{{ asset('resources/assets/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css') }}">
+<link rel="stylesheet" href="{{ asset('public/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.css') }}">
 <style>
   .up-zindex {
     z-index: 3 !important;
-  }
-  .tt-menu {
-    width: 100%;
-    border: 1px solid #3c8dbc;
-    background-color: #fff;
-    margin-top: -1px;
-  }
-
-  .tt-suggestion {
-    padding: 3px 10px;
-    width: 100%;
-  }
-
-  .tt-suggestion:hover {
-    cursor: pointer;
-    color: #fff;
-    background-color: #3c8dbc;
-  }
-
-  .tt-suggestion.tt-cursor {
-    cursor: pointer;
-    color: #fff;
-    background-color: #3c8dbc;
-  }
-
-  .tt-no-result {
-    padding: 3px 10px;
-    width: 100%;
-  }
-  .user-mini-ava {
-    border-radius: 50%;
-    width: 30px;
-    margin: 5px;
-  }
-  .tt-text {
-    margin-right: 5px;
-  }
-  .twitter-typeahead {
-    width: 100%;
   }
   select {
     width: 105px !important;
@@ -51,10 +12,10 @@
 </style>
 @endsection
 @section('additionFooter')
-<script src="{{ asset('resources/assets/plugins/typeahead/typeahead.js') }}" type="text/javascript"></script>
-<script src="{{ asset('resources/assets/plugins/handlebars/handlebars.js') }}" type="text/javascript"></script>
-<script src="{{ asset('resources/assets/plugins/moment/moment.js') }}" type="text/javascript"></script>
-<script src="{{ asset('resources/assets/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('public/libs/typeahead.js/typeahead.bundle.js') }}" type="text/javascript"></script>
+<script src="{{ asset('public/libs/handlebars/handlebars.js') }}" type="text/javascript"></script>
+<script src="{{ asset('public/libs/moment/moment.js') }}" type="text/javascript"></script>
+<script src="{{ asset('public/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.js') }}" type="text/javascript"></script>
 <script>
   var bot = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
@@ -64,6 +25,7 @@
       wildcard: '%Q'
     }
   });
+
   var typeahead_bot_option = {
     name: 'bot',
     display: 'id',
@@ -75,28 +37,24 @@
       '</div>'
       ].join(''),
       suggestion: Handlebars.compile([
-        '<table>',
-        '<tr>',
-        '<th rowspan="2" width="1%">',
-        '<img class="user-mini-ava" src="@{{ image }}">',
-        '</th>',
-        '<th>',
-        '<strong class="tt-text">@{{ name }}</strong>',
-        '</th>',
-        '</tr>',
-        '<tr>',
-        '<td>',
-        '<span class="tt-text">@{{ id }}</span>',
-        '</td>',
-        '</tr>',
-        '</table>'].join(''))
+          '<div class="">',
+            '<div class="pull-left">',
+                '<img src="@{{ image }}" alt="" class="user-mini-ava">',
+            '</div>',
+            '<div>',
+                '<strong>@{{ name }}</strong>',
+                '<p class="m-0">@{{ id }}</p>',
+            '</div>',
+          '</div>'].join(''))
     }
   };
+
   $(function () {
     $('[name="action[bot][]"]').typeahead(null, typeahead_bot_option);
     $('[name="condition[bot][]"]').typeahead(null, typeahead_bot_option);
     $('.datetimepicker').datetimepicker({useCurrent: true});
   });
+
   function addAction() {
     $('#action_div').append([
       '<div class="input-group margin-top-sm">',
@@ -109,6 +67,7 @@
     $('select').css('width: 105px');
     $('[name="action[bot][]"]').typeahead(null, typeahead_bot_option);
   }
+
   function changeType() {
     if ($('[name=type]').val() == '1') {
       $('#one-many-time-div').html([
@@ -136,13 +95,14 @@
         '{!! Form::text('frequency[at][]', null, ['id' => 'f2re1', 'class' => 'form-control datetimepicker border-left-none', 'readonly' => 'readonly']) !!}',
         '</div>',
         '</div>',
-        '{!! Form::button('<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add frequency', ['class' => 'btn bg-olive pull-right','onclick' => 'addFrequency()']) !!}',
+        '{!! Form::button('<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add frequency', ['class' => 'btn btn-default pull-right','onclick' => 'addFrequency()']) !!}',
         '</div>',
         '</div>'
       ].join(''));
       $('.datetimepicker').datetimepicker();
     }
   }
+
   function changeFrequency(id) {
     var dtpicker = $('#f2re'+id);
     switch ($('#fre'+id).val()) {
@@ -166,6 +126,7 @@
       break;
     }
   }
+
   function addFrequency() {
     var count = $('#frequency-div').attr('count');
     count++;
@@ -190,6 +151,7 @@
       ].join(''));
     $('.datetimepicker').datetimepicker();
   }
+
   function addCondition() {
     $('#conditions-div').append([
       '<div class="input-group margin-top-sm">',
@@ -204,6 +166,7 @@
       ].join(''));
     $('[name="condition[bot][]"]').typeahead(null, typeahead_bot_option);
   }
+
   function changeCondition() {
     if ($('[name="condition[type]"]').val() != "0") {
       $('#conditions-div').html([
@@ -214,7 +177,7 @@
         '</div>',
         '</div>'
       ].join(''));
-      $('#add-cond-btn-div').html('{!! Form::button('<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add condition', ['class' => 'btn bg-olive pull-right margin-top-sm','onclick' => 'addCondition()']) !!}');
+      $('#add-cond-btn-div').html('{!! Form::button('<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add condition', ['class' => 'btn btn-default pull-right margin-top-sm','onclick' => 'addCondition()']) !!}');
       $('#condMethod').html('{!! Form::select('condition[method]', ['1' => 'And', '2' => 'Or'], null, ['class' => 'form-control border-left-none', 'onChange' => 'changeCondition()']) !!}');
       $('[name="condition[bot][]"]').typeahead(null, typeahead_bot_option);
     } else {
@@ -223,6 +186,7 @@
       $('#condMethod').html('');
     }
   }
+
   function createSchedule() {
     $.ajax({
       url : '{{ route('h::s::create') }}',
@@ -250,23 +214,14 @@
 </script>
 @endsection
 @section('body')
-<!-- Content Header (Page header) -->
-<section class="content-header">
-  <h1>
-    Create schedule
-    <small>Add a new schedule rule to your hub</small>
-  </h1>
-  {{breadcrumb(['Hub' => route('h::edit'),'Schedule' => route('h::s::index'),'Create' => 'active'])}}
-</section>
-<!-- Main content -->
-<section class="content">
-  <!-- Default box -->
-  <div class="box">
-    <div class="box-header">
-      <h3 class="box-title">Add new schedule</h3>
-    </div>
+{!! content_header('Add new schedule', [
+    'Hub' => route('h::edit'),
+    'Schadule' => route('h::s::index'),
+    'Create' => 'active']) !!}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-box">
     {!! Form::open(['route' => 'h::s::create', 'class' => 'form-horizontal', 'name' => 'create-schedule-form', 'onsubmit' => 'return createSchedule()']) !!}
-    <div class="box-body">
       <div class="form-group">
         {!! Form::label('name', 'Name', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
@@ -290,7 +245,7 @@
               {!! Form::text('action[bot][]', null, ['class' => 'form-control border-left-none']) !!}
             </div>
           </div>
-          {!! Form::button('<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add action', ['class' => 'btn bg-olive pull-right','onclick' => 'addAction()']) !!}
+          {!! Form::button('<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add action', ['class' => 'btn btn-default pull-right','onclick' => 'addAction()']) !!}
         </div>
       </div>
       <div class="form-group">
@@ -342,14 +297,9 @@
           </span>
         </div>
       </div>
-    </div>
-    <!-- /.box-body -->
-    <div class="box-footer">
-      {!! Form::button('<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
-    </div>
-    <!-- /.box-footer -->
+      {!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Add', ['type' => 'submit', 'class' => 'btn btn-primary  waves-effect waves-light']) !!}
     {!! Form::close() !!}
   </div>
-</section>
-<!-- /.content -->
+</div>
+</div>
 @endsection

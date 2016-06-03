@@ -5,42 +5,29 @@
 @section('additionFooter')
 @endsection
 @section('body')
-<!-- Content Header (Page header) -->
-<section class="content-header">
-  <h1>
-    Member list
-    <small>All members</small>
-  </h1>
-  {{breadcrumb([
+  {!! content_header('Hub members', [
     'Hub' => route('h::edit'),
-    'Member' => route('h::m::index'),
-    'Index' => 'active'
-  ])}}
-</section>
-<!-- Main content -->
-<section class="content">
-  <!-- Default box -->
-  <div class="box">
-    <div class="box-header">
-      <h3 class="box-title">Member list</h3>
-      <a href='{{ route('h::m::create') }}'>{!! Form::button('<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add member', ['type' => 'submit', 'class' => 'btn btn-success pull-right']) !!}</a>
-    </div>
-    <div class="box-body">
-      <ul class="users-list clearfix users-list-mini">
+    'Member' => '#']) !!}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-box">
+      <a href='{{ route('h::m::create') }}'>{!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Add member', ['type' => 'submit', 'class' => 'btn btn-default waves-effect waves-light btn-create']) !!}</a>
       @if (count($members)>0)
+        <ul class="hubs-list clearfix">
         @foreach ($members as $member)
           <li>
-            <img class="img-thumbnail" src="{{ asset($member['user']['avatar']) }}">
-            <a class="users-list-name" href="{{ route('h::m::edit',$member['id'])}}">{{ $member['user']['name'] }}</a>
-            <span class="users-list-date">{{ $member['bots'] }} bots</span>
+            <a href="{{ route('h::m::edit',$member['id'])}}">
+              <img class="img-thumbnail" src="{{ asset($member['user']['avatar']) }}">
+              <span class="hubs-list-name">{{ $member['user']['name'] }}</span>
+              <span class="hubs-list-date text-muted">{{ $member['bots'] }} bots</span>
+            </a>
           </li>
         @endforeach
+         </ul>
       @else
         <p>No member found.</p>
       @endif
-      </ul>
     </div>
   </div>
-</section>
-<!-- /.content -->
+</div>
 @endsection

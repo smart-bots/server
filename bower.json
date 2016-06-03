@@ -30,12 +30,16 @@
     "Waves": "waves#^0.7.5",
     "wow": "^1.1.2",
     "sweetalert": "^1.1.3",
-    "animate.css": "^3.5.1"
+    "animate.css": "^3.5.1",
+    "themify-icons": "^0.1.2",
+    "multiselect": "multi-select#^0.9.12",
+    "typeahead.js": "^0.11.1",
+    "handlebars": "^4.0.5",
+    "moment": "^2.13.0",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.37",
+    "quicksearch": "https://github.com/riklomas/quicksearch.git"
   },
   "resolutions": {
     "jquery": "^2.2.4"
-  },
-  "install": {
-    "path": "public/libs"
   }
 }

@@ -17,8 +17,7 @@
         "phpunit/phpunit": "~4.0",
         "symfony/css-selector": "2.8.*|3.0.*",
         "symfony/dom-crawler": "2.8.*|3.0.*",
-        "doctrine/dbal": "v2.5",
-        "barryvdh/laravel-debugbar": "*"
+        "doctrine/dbal": "v2.5"
     },
     "autoload": {
         "classmap": [

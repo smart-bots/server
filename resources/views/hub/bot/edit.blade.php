@@ -1,18 +1,55 @@
 @extends('hub.master')
 @section('title','Edit bot')
 @section('additionHeader')
-<link href="{{ asset('resources/assets/plugins/lou-multi-select/css/multi-select.css') }}" media="screen" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="{{ asset('resources/assets/plugins/html5imageupload/html5imageupload.css') }}">
+  <link rel="stylesheet" href="{{ asset('public/libs/html5imageupload/html5imageupload.css') }}">
+  <link href="{{ asset('public/libs/multiselect/css/multi-select.css') }}" media="screen" rel="stylesheet" type="text/css">
 @endsection
 @section('additionFooter')
-<script src="{{ asset('resources/assets/plugins/lou-multi-select/js/jquery.multi-select.js') }}" type="text/javascript"></script>
-<script src="{{ asset('resources/assets/plugins/html5imageupload/html5imageupload.js') }}"></script>
+<script src="{{ asset('public/libs/html5imageupload/html5imageupload.js') }}"></script>
+<script src="{{ asset('public/libs/multiselect/js/jquery.multi-select.js') }}" type="text/javascript"></script>
+<script src="{{ asset('public/libs/quicksearch/jquery.quicksearch.js') }}" type="text/javascript"></script>
 <script>
   $('.dropzone').html5imageupload();
-</script>
-<script>
-  $("[name='permissions[]']").multiSelect();
-  $("[name='higherpermissions[]']").multiSelect();
+
+  var searchableObj = {
+      selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
+      selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
+      afterInit: function (ms) {
+          var that = this,
+              $selectableSearch = that.$selectableUl.prev(),
+              $selectionSearch = that.$selectionUl.prev(),
+              selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+              selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+          that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+              .on('keydown', function (e) {
+                  if (e.which === 40) {
+                      that.$selectableUl.focus();
+                      return false;
+                  }
+              });
+
+          that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+              .on('keydown', function (e) {
+                  if (e.which == 40) {
+                      that.$selectionUl.focus();
+                      return false;
+                  }
+              });
+      },
+      afterSelect: function () {
+          this.qs1.cache();
+          this.qs2.cache();
+      },
+      afterDeselect: function () {
+          this.qs1.cache();
+          this.qs2.cache();
+      }
+  };
+
+  $("[name='permissions[]']").multiSelect(searchableObj);
+  $("[name='higherpermissions[]']").multiSelect(searchableObj);
+
   function botDeactivate() {
     bootbox.confirm("R u sure?", function(result) {
       if (result == true) {
@@ -72,33 +109,15 @@
 </script>
 @endsection
 @section('body')
-<!-- Content Header (Page header) -->
-<section class="content-header">
-  <h1>
-    Edit Bot
-    <small>Edit your bot's infomation</small>
-  </h1>
-  {{breadcrumb([
-    'Hub' => route('h::edit'),
-    'Bot' => route('h::b::index'),
-    'Edit' => 'active'
-  ])}}</section>
-<!-- Main content -->
-<section class="content">
-  <!-- Default box -->
-  <div class="box">
-    <div class="box-header">
-      <h3 class="box-title">Edit your bot</h3>
-    </div>
-    {!! Form::open(['route' => ['h::b::edit',$bot['id']], 'files' => true, 'class' => 'form-horizontal']) !!}
-    <div class="box-body">
-      @if (session('success') === true)
-      <div class="alert alert-success alert-dismissible fade in">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <i class="fa fa-check" aria-hidden="true"></i>&nbsp;
-        Saved
-      </div>
-      @endif
+  {!! content_header('Edit bot', [
+      'Hub' => route('h::edit'),
+      'Bot' => route('h::b::index'),
+      'Edit' => 'active'
+  ]) !!}
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card-box">
+    {!! Form::open(['route' => ['h::b::edit',$bot['id']], 'class' => 'form-horizontal']) !!}
       {!! Form::hidden('id', $bot['id']) !!}
       <div class="form-group margin-bottom-sm">
         {!! Form::label('status', 'Status',['class' => 'col-sm-2 control-label']) !!}
@@ -106,46 +125,36 @@
           <?php
             switch ($bot['status']) {
               case -1:
-                echo '<h5><span class="label label-danger" id="botTus">Deactivated</span></h5>';
+                echo '<h4><span class="label label-danger label-md" id="botTus">Deactivated</span></h4>';
                 break;
               case 0:
                 if ($bot['true'] == 1) {
-                  echo '<h5><span class="label label-default" id="botTus">Turned off</span></h5>';
+                  echo '<h4><span class="label label-default label-md" id="botTus">Turned off</span></h4>';
                 } else {
-                  echo '<h5><span class="label label-info" id="botTus">Turning off</span></h5>';
+                  echo '<h4><span class="label label-info label-md" id="botTus">Turning off</span></h4>';
                 }
                 break;
               case 1:
                 if ($bot['true'] == 1) {
-                  echo '<h5><span class="label label-success" id="botTus">Turned on</span></h5>';
+                  echo '<h4><span class="label label-success label-md" id="botTus">Turned on</span></h4>';
                 } else {
-                  echo '<h5><span class="label label-primary" id="botTus">Turning on</span></h5>';
+                  echo '<h4><span class="label label-primary label-md" id="botTus">Turning on</span></h4>';
                 }
                 break;
             }
           ?>
         </div>
       </div>
-      <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+      <div class="form-group">
         {!! Form::label('name', 'Name', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
           {!! Form::text('name', $bot['name'], ['class' => 'form-control']) !!}
-          @if ($errors->has('name'))
-          <span class="help-block margin-bottom-none">
-            {{ $errors->first('name') }}
-          </span>
-          @endif
         </div>
       </div>
-      <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
+      <div class="form-group">
         {!! Form::label('description', 'Description', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
           {!! Form::textarea('description', $bot['description'], ['class' => 'form-control']) !!}
-          @if ($errors->has('description'))
-          <span class="help-block margin-bottom-none">
-            {{ $errors->first('description') }}
-          </span>
-          @endif
         </div>
       </div>
       <div class="form-group">
@@ -156,7 +165,7 @@
           </div>
         </div>
       </div>
-      <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
+      <div class="form-group">
         {!! Form::label('type', 'Type', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
           {!! Form::select('type', [
@@ -175,46 +184,29 @@
             {!! Form::text('token', $bot['token'], ['class' => 'form-control','readonly' => 'readonly']) !!}
           </div>
         </div>
-        <div class="form-group{{ $errors->has('permissions') ? ' has-error' : '' }}">
+        <div class="form-group">
           {!! Form::label('permissions', 'Permissions', ['class' => 'col-sm-2 control-label']) !!}
           <div class="col-sm-10">
             {!! Form::select('permissions[]', $users, $selected, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
-            @if ($errors->has('permissions'))
-            <span class="help-block margin-bottom-none">
-              {{ $errors->first('permissions') }}
-            </span>
-            @else
             <span class="help-block margin-bottom-none">Users can manage this bot</span>
-            @endif
           </div>
         </div>
-        <div class="form-group{{ $errors->has('higherpermissions') ? ' has-error' : '' }}">
+        <div class="form-group">
           {!! Form::label('higherpermissions', 'Higher permissions', ['class' => 'col-sm-2 control-label']) !!}
           <div class="col-sm-10">
             {!! Form::select('higherpermissions[]', $users, $selected2, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
-            @if ($errors->has('higherpermissions'))
-            <span class="help-block margin-bottom-none">
-              {{ $errors->first('higherpermissions') }}
-            </span>
-            @else
             <span class="help-block margin-bottom-none">Users can manage this bot</span>
-            @endif
           </div>
         </div>
-      </div>
-      <!-- /.box-body -->
-      <div class="box-footer">
-        {!! Form::button('<i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;&nbsp;Save', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
-        {!! Form::button('<i class="fa fa-trash" aria-hidden="true"></i>&nbsp;&nbsp;Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'botDelete()']) !!}</a>
+        {!! Form::button('<span class="btn-label"><i class="fa fa-floppy-o" aria-hidden="true"></i></span>Save', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
+        {!! Form::button('<span class="btn-label"><i class="fa fa-trash" aria-hidden="true"></i></span>Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'botDelete()']) !!}</a>
         @if ($bot['status'] != -1)
-          {!! Form::button('<i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;<span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right margin-right-sm','id' => 'botDeactivateBtn','onclick' => 'botDeactivate()']) !!}
+          {!! Form::button('<span class="btn-label"><i class="fa fa-ban" aria-hidden="true"></i></span><span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right m-r-5','id' => 'botDeactivateBtn','onclick' => 'botDeactivate()']) !!}
         @else
-          {!! Form::button('<i class="fa fa-check-square-o" aria-hidden="true"></i></i>&nbsp;&nbsp;<span>Reactivate</span>', ['type' => 'button', 'class' => 'btn bg-olive pull-right margin-right-sm','id' => 'botReactivateBtn','onclick' => 'botReactivate()']) !!}
+          {!! Form::button('<span class="btn-label"><i class="fa fa-check-square-o" aria-hidden="true"></i></i></span><span>Reactivate</span>', ['type' => 'button', 'class' => 'btn btn-default pull-right m-r-5','id' => 'botReactivateBtn','onclick' => 'botReactivate()']) !!}
         @endif
-      </div>
-      <!-- /.box-footer -->
     {!! Form::close() !!}
+    </div>
   </div>
-</section>
-<!-- /.content -->
+</div>
 @endsection

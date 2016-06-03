@@ -518,38 +518,74 @@ a:focus {
 .text-custom {
   color: #5fbeaa;
 }
+a.text-custom:hover {
+  color: #44a692;
+}
 .text-white {
   color: #ffffff;
+}
+a.text-white:hover {
+  color: #e6e6e6;
 }
 .text-danger {
   color: #f05050;
 }
+a.text-danger:hover {
+  color: #ec2121;
+}
 .text-muted {
   color: #98a6ad;
+}
+a.text-muted:hover {
+  color: #7c8d96;
 }
 .text-primary {
   color: #5d9cec;
 }
+a.text-primary:hover {
+  color: #2f80e7;
+}
 .text-warning {
   color: #ffbd4a;
+}
+a.text-warning:hover {
+  color: #ffaa17;
 }
 .text-success {
   color: #81c868;
 }
+a.text-success:hover {
+  color: #62b944;
+}
 .text-info {
   color: #34d3eb;
+}
+a.text-info:hover {
+  color: #15bdd7;
 }
 .text-inverse {
   color: #4c5667;
 }
+a.text-inverse:hover {
+  color: #363d4a;
+}
 .text-pink {
   color: #fb6d9d;
+}
+a.text-pink:hover {
+  color: #fa3b7c;
 }
 .text-purple {
   color: #7266ba;
 }
+a.text-purple:hover {
+  color: #564aa3;
+}
 .text-dark {
   color: #797979 !important;
+}
+a.text-dark:hover {
+  color: #606060;
 }
 /* Form components */
 textarea.form-control {
@@ -1149,6 +1185,12 @@ pre {
   height: 36px;
   width: 36px;
 }
+.profile .user-name {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin-left: 6px;
+}
 .dropdown-menu-lg {
   width: 300px;
 }
@@ -1223,9 +1265,9 @@ body.fixed-left .side-menu.left {
   overflow: hidden;
 }
 .content-page > .content {
-  margin-bottom: 60px;
+  margin-bottom: 0;
   margin-top: 60px;
-  padding: 20px 5px 15px 5px;
+  padding: 20px 5px 0 5px;
 }
 .button-menu-mobile {
   background: transparent;
@@ -1255,8 +1297,8 @@ body.fixed-left .side-menu.left {
   text-decoration: none;
 }
 #sidebar-menu {
-  padding-bottom: 30px;
-  padding-top: 30px;
+  padding-bottom: 10px;
+  padding-top: 10px;
   width: 100%;
 }
 #sidebar-menu .nav > li > a .badge {
@@ -1279,7 +1321,7 @@ body.fixed-left .side-menu.left {
 #sidebar-menu ul ul a {
   color: #75798B;
   display: block;
-  padding: 10px 20px 10px 65px;
+  padding: 10px 20px 10px 30px;
 }
 #sidebar-menu ul ul a:hover {
   color: #5fbeaa;
@@ -1301,7 +1343,7 @@ body.fixed-left .side-menu.left {
 #sidebar-menu > ul > li > a {
   color: #36404a;
   display: block;
-  padding: 12px 20px;
+  padding: 12px 15px;
   margin: 4px 0px;
   border-left: 3px solid #ffffff;
 }
@@ -1314,10 +1356,10 @@ body.fixed-left .side-menu.left {
 }
 #sidebar-menu ul li a i {
   display: inline-block;
-  font-size: 16px;
-  line-height: 17px;
-  margin-left: 3px;
-  margin-right: 15px;
+  font-size: 18px;
+  line-height: 19px;
+  margin-left: 0;
+  margin-right: 12px;
   text-align: center;
   vertical-align: middle;
   width: 20px;
@@ -1528,8 +1570,8 @@ body.fixed-left .side-menu.left {
   box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, 0.05);
 }
 .user-details {
-  padding: 20px;
-  padding-bottom: 0px;
+  padding: 10px;
+  border-bottom: 1px solid #ebeff2;
   position: relative;
 }
 .user-details img {
@@ -1538,7 +1580,8 @@ body.fixed-left .side-menu.left {
 }
 .user-details .user-info {
   color: #444444;
-  margin-left: 60px;
+  margin-left: 55px;
+  margin-right: 35px;
   position: relative;
   z-index: 99999;
 }
@@ -1549,6 +1592,16 @@ body.fixed-left .side-menu.left {
   font-size: 16px;
   font-weight: 600;
   padding-top: 5px;
+}
+.user-details .user-info .user-name {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.user-details .logout-left-side {
+  position: relative;
+  font-size: 30px;
+  top: -35px;
 }
 #wrapper.right-bar-enabled .right-bar {
   right: 0;
@@ -1767,6 +1820,72 @@ body.fixed-left .side-menu.left {
     margin-left: 0px;
     margin-top: 0px;
   }
+}
+/* ==================
+    Custom Dropdown
+================== */
+ul.dropdown-menu .custom {
+  text-align: center;
+  background: #f05050 !important;
+  color: #FFFFFF !important;
+}
+ul.dropdown-menu .custom:hover {
+  background: #ec2121 !important;
+  color: #FFFFFF !important;
+}
+/* Custom Quick control */
+ul.quick-control li {
+  line-height: 30px;
+}
+ul.quick-control li .name {
+  padding-top: 0 !important;
+}
+.quick-control-btn {
+  position: relative;
+  font-size: 16px;
+  top: -45px;
+  right: 12px;
+}
+/* Linh tinh */
+.back-btn {
+  font-size: 50px;
+}
+.content-header {
+  margin-left: 50px;
+}
+/* Hub list */
+.hubs-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.hubs-list li {
+  float: left;
+  padding: 10px;
+  text-align: center;
+}
+.hubs-list li img {
+  border-radius: 50%;
+  max-width: 100%;
+  height: auto;
+}
+.hubs-list li .hubs-list-name {
+  font-weight: 600;
+  color: #444;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+}
+.hubs-list li .hubs-list-bots {
+  color: #999;
+  font-size: 12px;
+}
+/* Create button */
+.btn-create {
+  position: absolute;
+  top: -15px;
+  right: 30px;
 }
 
 /*# sourceMappingURL=core.css.map */
