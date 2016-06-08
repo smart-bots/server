@@ -16,7 +16,7 @@ class CreateHubsTable extends Migration
             $table->increments('id');
             $table->string('token',50)->unique();
             $table->string('name',100);
-            $table->string('image')->default('resources/assets/dist/img/no-image.png');
+            $table->string('image')->default('public/images/noimage.jpg');
             $table->text('description');
             $table->boolean('status')->default(true);
         });

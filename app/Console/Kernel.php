@@ -41,20 +41,26 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(GlobalSchedule $global_schedule)
     {
-        $global_schedule->command('inspire')->at('23:04');
-
         $hubs = Hub::all();
+
         $schedules = collect([]);
+
         foreach ($hubs as $hub) {
             $schedules = $schedules->merge($hub->schedules()->get());
         }
+
         foreach ($schedules as $schedule) {
-            if (strtotime($schedule->deactivate_after_datetime) <= Carbon::now()->timestamp) {
+
+            if ($schedule->deactivate_after_datetime != null && strtotime($schedule->deactivate_after_datetime) <= Carbon::now()->timestamp) {
                 $schedule->deactivate();
             }
-            if (strtotime($schedule->activate_after) <= Carbon::now()->timestamp) {
+
+            if ($schedule->deactivate_after_datetime != null && strtotime($schedule->activate_after) <= Carbon::now()->timestamp) {
                 $schedule->reactivate();
+                $schedule->activate_after = null;
+                $schedule->save();
             }
+
             if ($schedule->isActivated()) {
                 if ($schedule->type == 1) {
                     $data = Carbon::createFromTimestamp(strtotime($schedule->data));
@@ -64,7 +70,6 @@ class Kernel extends ConsoleKernel
                     $cron[3] = $data->month;
                     $cron[4] = '*';
                     $cron[5] = $data->year;
-                    // dd(implode(' ', $cron));
                     $global_schedule->command('runschedule '.$schedule->id)->cron(implode(' ', $cron));
                 } else if ($schedule->type == 2) {
                     $data = explode('|',$schedule->data);
@@ -186,7 +191,7 @@ class Kernel extends ConsoleKernel
                                 $cron[5] = '*/'.$single_data[1];
                                 break;
                         }
-                        // dd(implode(' ', $cron));
+
                         $global_schedule->command('runschedule '.$schedule->id)->cron(implode(' ', $cron));
                     }
                 }

@@ -160,7 +160,9 @@ return [
         Collective\Html\HtmlServiceProvider::class,
 
         SmartBots\Providers\ViewComposerServiceProvider::class,
-        SmartBots\Providers\BladeServiceProvider::class
+        SmartBots\Providers\BladeServiceProvider::class,
+
+        // 'GrahamCampbell\HTMLMin\HTMLMinServiceProvider'
 
     ],
 
@@ -211,7 +213,9 @@ return [
         'Form'      => Collective\Html\FormFacade::class,
         'Html'      => Collective\Html\HtmlFacade::class,
 
-        'Carbon'    => 'Carbon\Carbon'
+        'Carbon'    => 'Carbon\Carbon',
+
+        // 'HTMLMin' => 'GrahamCampbell\HTMLMin\Facades\HTMLMin'
     ],
 
 ];

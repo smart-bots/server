@@ -7,6 +7,7 @@
 	<script src="{{ asset('public/libs/html5imageupload/html5imageupload.js') }}"></script>
 	<script>
 	$('.dropzone').html5imageupload();
+
 	function renewToken() {
 		var x = 50;
 	    var s = '';
@@ -15,6 +16,39 @@
 	        s+= (r<0.1?Math.floor(r*100):String.fromCharCode(Math.floor(r*26) + (r>0.5?97:65)));
 	    }
 	    $("[name='token']").val(s);
+	}
+
+	function hubDelete() {
+	    swal({
+	        title: "Are you sure?",
+	        text: "To log delete this hub?",
+	        type: "error",
+	        showCancelButton: true,
+	        confirmButtonText: "Yes",
+	        closeOnConfirm: false }, function() {
+	            $.ajax({
+	                url : '{{ route('h::destroy') }}',
+	                type : 'get',
+	                success : function (response)
+	                {
+	                    window.location.href="{{ route('h::index') }}";
+	                }
+	            });
+	        });
+	}
+
+	function hubEdit() {
+		$.ajax({
+		    url : '{{ route('h::edit') }}',
+		    type : 'post',
+		    data : $('[name=hub-edit-form]').serializeArray(),
+		    dataType : 'json',
+		    success : function (response)
+		    {
+		        $('[name=hub-edit-form]').validate(response, ['image']);
+		    }
+		});
+		return false;
 	}
 	</script>
 @endsection
@@ -26,8 +60,8 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
-        <h3 class="m-t-0 header-title"><b>Edit hub's settings</b></h3>
-		{!! Form::open(['route' => 'h::edit','class' => 'form-horizontal']) !!}
+        <h3 class="m-t-0 m-b-15 header-title"><b>Edit hub's settings</b></h3>
+		{!! Form::open(['route' => 'h::edit','name' => 'hub-edit-form', 'class' => 'form-horizontal', 'onsubmit' => 'return hubEdit()']) !!}
 		<div class="box-body">
 			<div class="form-group">
 				{!! Form::label('name', 'Name', ['class' => 'col-sm-2 control-label']) !!}

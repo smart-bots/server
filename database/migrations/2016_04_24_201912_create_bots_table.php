@@ -18,7 +18,7 @@ class CreateBotsTable extends Migration
             $table->foreign('hub_id')->references('id')->on('hubs')->onDelete('cascade');
             $table->string('name',100);
             $table->string('token',10)->unique();
-            $table->string('image')->default('resources/assets/dist/img/no-image.png');
+            $table->string('image')->default('public/images/noimage.jpg');
             $table->text('description');
             $table->tinyInteger('type');
             $table->boolean('status');

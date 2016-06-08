@@ -13,7 +13,7 @@
     @elseif (array_key_exists('sub',$data))
 
     <li class="has_sub">
-      <a href="#" class="waves-effect @if (in_array(request()->url(),array_column($data['sub'],'href'))) active @endif">
+      <a class="waves-effect @if (in_array(request()->url(),array_column($data['sub'],'href'))) active @endif">
         <i class="{{ $data['icon'] }}" aria-hidden="true"></i><span>{{ $title }}</span>
       </a>
       <ul class="list-unstyled">

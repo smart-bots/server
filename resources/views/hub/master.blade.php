@@ -22,7 +22,9 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
+
     @yield('additionHeader')
+
     <link href="{{ asset('public/css/core.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('public/css/components.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('public/css/libs.css') }}" rel="stylesheet" type="text/css"/>
@@ -89,12 +91,14 @@
             </div>
         </div>
     @endif
-    <div class="content-page animated fadeInUp" @if (!session()->has('currentHub')) style="margin-left: 0 !important;" @endif>
+    <div id='outter-page-content'>
+    <div class="content-page animated fadeInUp" @if (!session()->has('currentHub')) style="margin-left: 0 !important;" @endif id="page-content">
         <div class="content">
             <div class="container">
                 @yield('body')
             </div>
         </div>
+    </div>
     </div>
     @if (session()->has('currentHub'))
         @include('hub.partials.right-side-bar')
@@ -120,25 +124,6 @@
 <script src="{{ asset('public/js/jquery.custom.js') }}"></script>
 <script>
     Waves.init();
-
-    function hubDelete() {
-        swal({
-            title: "Are you sure?",
-            text: "To log delete this hub?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes",
-            closeOnConfirm: false }, function() {
-                $.ajax({
-                    url : '{{ route('h::destroy') }}',
-                    type : 'get',
-                    success : function (response)
-                    {
-                        window.location.href="{{ route('h::index') }}";
-                    }
-                });
-            });
-    }
 
     function hubDeactivate() {
         $.ajax({

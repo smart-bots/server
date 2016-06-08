@@ -54,6 +54,19 @@ class MenuComposer {
 						'href' => route('h::s::create')
 					]
 				]
+			],
+			'Automation' => [
+				'icon' => 'ti-bolt',
+				'sub' => [
+					'Automation list' => [
+						'icon' => 'ti-menu-alt',
+						'href' => route('h::a::index')
+					],
+					'Add new automation' => [
+						'icon' => 'ti-plus',
+						'href' => route('h::a::create')
+					]
+				]
 			]
 		]);
 	}

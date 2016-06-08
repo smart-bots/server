@@ -93,6 +93,22 @@
           '</div>'].join(''))
       }
   });
+
+  function memberCreate() {
+    $.ajax({
+        url : '{{ route('h::m::create') }}',
+        type : 'post',
+        data : $('[name=member-create-form]').serializeArray(),
+        dataType : 'json',
+        success : function (response)
+        {
+            $('[name=member-create-form]').validate(response, [], function () {
+                window.location.href = response['href'];
+            });
+        }
+    });
+    return false;
+  }
   </script>
 @endsection
 @section('body')
@@ -103,7 +119,7 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
-          {!! Form::open(['route' => 'h::m::create', 'class' => 'form-horizontal']) !!}
+          {!! Form::open(['route' => 'h::m::create', 'name' => 'member-create-form', 'class' => 'form-horizontal', 'onsubmit' => 'return memberCreate()']) !!}
               <div class="form-group">
                 {!! Form::label('username', 'Members\'s username', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-10">
@@ -168,7 +184,7 @@
                   </table>
                 </div>
               </div>
-              {!! Form::button('<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
+              {!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Add', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
             <!-- /.box-footer -->
           {!! Form::close() !!}
         </div>

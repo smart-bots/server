@@ -59,7 +59,11 @@ class BotController extends Controller
             'higherpermissions.*' => 'exists:members,user_id,hub_id,'.session('currentHub')
         ];
 
-        $this->validate($request, $rules);
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
 
         $bot = new Bot;
         $bot->hub_id      = session('currentHub');
@@ -93,7 +97,8 @@ class BotController extends Controller
             }
         }
 
-        return redirect()->to(route('h::b::index'));
+        $errors = ['success' => 'true', 'href' => route('h::b::index')];
+        return response()->json($errors);
     }
 
     public function edit($id)
@@ -121,7 +126,11 @@ class BotController extends Controller
             'higherpermissions.*' => 'exists:members,user_id,hub_id,'.session('currentHub')
         ];
 
-        $this->validate($request, $rules);
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
 
         $bot = Bot::findOrFail($id);
         $bot->name        = $request->name;
@@ -168,7 +177,8 @@ class BotController extends Controller
             }
         }
 
-        return redirect()->route('h::b::edit',['id' => $id])->withSuccess(true);
+        $errors = ['success' => 'Saved successfully'];
+        return response()->json($errors);
     }
 
     public function control(Request $request)

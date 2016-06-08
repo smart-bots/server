@@ -41,6 +41,10 @@ class Schedule extends Model
     	return $this->status;
     }
 
+    public function isActivatedx():bool {
+        return $this->status;
+    }
+
     public function deactivate()
     {
         $this->status = 0;

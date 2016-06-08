@@ -3,6 +3,7 @@ var app_url = 'http://dev.env/smartbots';
 var
     elixir = require('laravel-elixir'),
     gulp = require('gulp'),
+    htmlmin = require('gulp-htmlmin'),
     gulpif = require('gulp-if');
 
 var vendor_dir = 'resources/assets/vendor/',
@@ -33,7 +34,7 @@ var less = { // LESS file to compile => css
     'moment/moment.js' : 'moment/moment.js',
     'quicksearch/jquery.quicksearch.js' : 'quicksearch/jquery.quicksearch.js',
     'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' : 'bootstrap-datetimepicker/bootstrap-datetimepicker.js',
-    'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css' : 'bootstrap-datetimepicker/bootstrap-datetimepicker.css'
+    'bootstrap-select/dist/js/bootstrap-select.js' : 'bootstrap-select/bootstrap-select.js'
 },
     css = { // CSS file vendored => libs
     'bootstrap/dist/css/bootstrap.css' : 'bootstrap/css/bootstrap.css',
@@ -42,7 +43,9 @@ var less = { // LESS file to compile => css
     'Waves/dist/waves.css' : 'Waves/waves.css',
     'sweetalert/dist/sweetalert.css' : 'sweetalert/sweetalert.css',
     'animate.css/animate.css' : 'animate.css/animate.css',
-    'multiselect/css/multi-select.css' : 'multiselect/css/multi-select.css'
+    'multiselect/css/multi-select.css' : 'multiselect/css/multi-select.css',
+    'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css' : 'bootstrap-datetimepicker/bootstrap-datetimepicker.css',
+    'bootstrap-select/dist/css/bootstrap-select.css' : 'bootstrap-select/bootstrap-select.css'
 },
     assets = { // Assets file & folder vendored => libs
     'bootstrap/dist/fonts' : 'bootstrap/fonts',
@@ -51,12 +54,28 @@ var less = { // LESS file to compile => css
     'multiselect/img' : 'multiselect/img'
 },
     jsx = { // JS (not vendored) files => js
-    'jquery.custom.js' : 'jquery.custom.js',
     'jquery.core.js' : 'jquery.core.js',
     'jquery.app.js' : 'jquery.app.js',
+    'jquery.custom.js' : 'jquery.custom.js'
 };
 
+elixir.extend('compress', function() {
+    new elixir.Task('compress', function() {
+        return gulp.src('./storage/framework/views/*')
+            .pipe(htmlmin({
+                collapseWhitespace:    true,
+                removeAttributeQuotes: true,
+                removeComments:        true,
+                minifyJS:              true,
+            }))
+            .pipe(gulp.dest('./storage/framework/views/'));
+    })
+    .watch('./storage/framework/views/*');
+});
+
 elixir(function(mix) {
+
+    // mix.compress();
 
     for(var key in less) {
         mix.less(key, css_dir+less[key], vendor_dir);

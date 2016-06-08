@@ -37,7 +37,9 @@
     "handlebars": "^4.0.5",
     "moment": "^2.13.0",
     "eonasdan-bootstrap-datetimepicker": "^4.17.37",
-    "quicksearch": "https://github.com/riklomas/quicksearch.git"
+    "quicksearch": "https://github.com/riklomas/quicksearch.git",
+    "jquery.steps": "^1.1.0",
+    "bootstrap-select": "^1.10.0"
   },
   "resolutions": {
     "jquery": "^2.2.4"

@@ -17,7 +17,7 @@
             success : function (response)
             {
 
-                $('[name=login-form]').validate(response, ['remember'], function (response) {
+                $('[name=login-form]').validate(response, ['remember'], function () {
 
                     swal({
                         title: login_success_title,

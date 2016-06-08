@@ -54,6 +54,21 @@
       return false;
     }
 
+    function botCreate() {
+      $.ajax({
+          url : '{{ route('h::b::create') }}',
+          type : 'post',
+          data : $('[name=bot-create-form]').serializeArray(),
+          dataType : 'json',
+          success : function (response)
+          {
+              $('[name=bot-create-form]').validate(response, [], function () {
+                window.location.href = response['href'];
+              });
+          }
+      });
+      return false;
+    }
   </script>
 @endsection
 @section('body')
@@ -65,7 +80,7 @@
     <div class="row">
       <div class="col-sm-12">
         <div class="card-box">
-          {!! Form::open(['route' => 'h::b::create', 'class' => 'form-horizontal']) !!}
+          {!! Form::open(['route' => 'h::b::create', 'name' => 'bot-create-form', 'class' => 'form-horizontal', 'onsubmit' => 'return botCreate()']) !!}
           <div class="form-group">
             {!! Form::label('name', 'Name', ['class' => 'col-sm-2 control-label']) !!}
             <div class="col-sm-10">

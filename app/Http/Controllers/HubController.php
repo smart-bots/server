@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use SmartBots\Http\Requests;
 
+use Validator;
+
 use SmartBots\{
     User,
     Hub,
@@ -35,7 +37,11 @@ class HubController extends Controller
             'description' => 'max:1000'
         ];
 
-        $this->validate($request, $rules);
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
 
 		$newHub = new Hub;
 		$newHub->name        = $request->name;
@@ -61,7 +67,8 @@ class HubController extends Controller
         $newHubPermission->data = 0; // root admin
         $newHubPermission->save();
 
-		return redirect()->to(route('h::index'));
+        $errors = ['success' => 'true', 'href' => route('h::index')];
+		return response()->json($errors);
     }
 
     public function login(Request $request)
@@ -75,9 +82,10 @@ class HubController extends Controller
 
     public function dashboard()
     {
-        if (auth()->user()->can('view',Hub::findOrFail(session('currentHub')))) {
-            return redirect()->route('h::edit');
-        } else { return redirect()->route('h::b::index'); }
+        // if (auth()->user()->can('view',Hub::findOrFail(session('currentHub')))) {
+        //     return redirect()->route('h::edit');
+        // } else { return redirect()->route('h::b::index'); }
+        return view('hub.dashboard');
     }
 
     public function edit()
@@ -94,7 +102,11 @@ class HubController extends Controller
             'description' => 'max:1000'
         ];
 
-        $this->validate($request, $rules);
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
 
 		$hub = Hub::findOrFail(session('currentHub'));
 		$hub->name        = $request->name;
@@ -109,7 +121,7 @@ class HubController extends Controller
 		}
 		$hub->save();
 
-		return view('hub.edit')->withSuccess(true)->withHub($hub);
+		return response()->json(['success' => 'Saved successfully']);
     }
 
     public function botsStatus(Request $request)

@@ -12,7 +12,7 @@ if (typeof jQuery === "undefined") {
  */
 jQuery.fn.extend({
     afterTime: function(sec, callback) {
-        that = $(this);
+        var that = $(this);
         setTimeout(function() {
             callback.call(that);
         }, sec);
@@ -115,18 +115,33 @@ $.fn.pulsate = function() {
 $.fn.scrollT0 = function(t0p = 100, duration = 1000) {
     var pos = this.offset().top - t0p;
     $.scrollTo(pos, duration);
+    return this;
 }
 
 $.fn.focusTo = function(top = 100, duration = 1000) {
     this.scrollT0(top, duration);
     this.focus();
+    return this;
 }
 
-$.fn.validate = function(data, except = [], successCallBack) {
+$.fn.validate = function(data = [], except = [], successCallBack = false, globalErrorCallBack = false) {
 
     // Require Sweetalert, scrollTo
+    var data2 = {};
+    for (var prop in data) {
+        if (prop.indexOf('.') != -1) {
+            var propArr = prop.split('.');
+            var prop2 = propArr[0]+'['+propArr[1]+']['+propArr[2]+']';
+            data2[prop2] = data[prop];
+        } else {
+            data2[prop] = data[prop];
+        }
+    }
+    data = data2;
 
-    var inputs = this.find('input[type!="hidden"]');
+    var duration = 5000;
+
+    var inputs = this.find('input[type!="hidden"]:not(.tt-hint), textarea, select');
 
     except.forEach(function(item, index) {
         inputs = inputs.not('input[name="' + item + '"]');
@@ -134,35 +149,60 @@ $.fn.validate = function(data, except = [], successCallBack) {
 
     inputs = inputs.toArray();
 
-    if (data['success'] == true) { // SUCCESSFULLY
+    if (data['success'] != null) { // SUCCESSFULLY
 
-        successCallBack(data);
-
-    } else if (data['global'] != null) { // Has GLOBAL error
-
-        var errorHtml = ['<div class="alert alert-danger alert-dismissible" style="display: none;" id="error-alert">',
-                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">',
-                    '<span aria-hidden="true">&times;</span>',
-                '</button>',
-                '<i class="fa fa-exclamation-circle m-r-5" aria-hidden="true"></i>&nbsp;',
-                data['global'],
-            '</div>'
-        ].join('');
-
-        if ($('#error-alert').exists()) {
-
-            $('#error-alert').slideUp('slow', 'linear', function() { this.remove();});
-            $(errorHtml).prependTo(this).slideDown('slow','linear').focusTo();
-
+        if (successCallBack != false) {
+            successCallBack();
         } else {
+            var successHtml = ['<div class="alert alert-success alert-dismissible" style="display: none;" id="success-alert">',
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close">',
+                        '<span aria-hidden="true">&times;</span>',
+                    '</button>',
+                    '<i class="fa fa-check m-r-5" aria-hidden="true"></i>&nbsp;',
+                    data['success'],
+                '</div>'
+            ].join('');
 
-            $(errorHtml).prependTo(this).slideDown('slow','linear').focusTo();
+            $(successHtml).prependTo(this).slideDown('slow','linear').focusTo().afterTime(duration, function() {
+                $(this).slideUp('slow','linear', function() {
+                    this.remove()
+                });
+            });
+
+            inputs.forEach(function(item, index) {
+                $(item).closest('.form-group').removeClass('has-error has-success has-warning');
+                $('span[for="' + $(item).attr('name') + '"]', this).remove();
+            })
         }
 
-        inputs.forEach(function(item, index) {
-            $(item).closest('.form-group').removeClass('has-error has-success has-warning');
-            $('span[for="' + $(item).attr('name') + '"]', this).remove();
-        })
+    } else if (data['global'] != null) { // Has GLOBAL error
+        if (globalErrorCallBack != false) {
+            globalErrorCallBack();
+        } else {
+            var errorHtml = ['<div class="alert alert-danger alert-dismissible" style="display: none;" id="error-alert">',
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close">',
+                        '<span aria-hidden="true">&times;</span>',
+                    '</button>',
+                    '<i class="fa fa-exclamation-circle m-r-5" aria-hidden="true"></i>&nbsp;',
+                    data['global'],
+                '</div>'
+            ].join('');
+
+            if ($('#error-alert').exists()) {
+
+                $('#error-alert').slideUp('slow', 'linear', function() { this.remove();});
+                $(errorHtml).prependTo(this).slideDown('slow','linear').focusTo();
+
+            } else {
+
+                $(errorHtml).prependTo(this).slideDown('slow','linear').focusTo();
+            }
+
+            inputs.forEach(function(item, index) {
+                $(item).closest('.form-group').removeClass('has-error has-success has-warning');
+                $('span[for="' + $(item).attr('name') + '"]', this).remove();
+            })
+        }
 
     } else { // Has some error
 
@@ -200,11 +240,7 @@ $.fn.validate = function(data, except = [], successCallBack) {
                         $(this).removeClass("animated shake");
                     });
 
-                if (input_type != 'checkbox') {
-                    input.after(errorHtml);
-                } else {
-                    input.closest('div').append(errorHtml);
-                }
+                input.closest('div:not(.input-group)').append(errorHtml);
 
                 if (focus_to == false) {
                     focus_to = true;

@@ -46,7 +46,11 @@ class MemberController extends Controller
             'hubpermissions.*' => 'between:1,14'
         ];
 
-        $this->validate($request, $rules);
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
 
         $user = User::where('username',$request->username)->firstOrFail();
 
@@ -85,7 +89,8 @@ class MemberController extends Controller
             }
         }
 
-        return redirect()->to(route('h::m::index'));
+        $errors = ['success' => 'true', 'href' => route('h::m::index')];
+        return response()->json($errors);
     }
 
     public function edit($id)
@@ -113,7 +118,11 @@ class MemberController extends Controller
     {
         $rules = ['permissions.*' => 'exists:bots,id,hub_id,'.Hub::findOrFail(session('currentHub'))->id];
 
-		$this->validate($request, $rules);
+		$validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
 
         $member = Member::findOrFail($id);
 
@@ -168,7 +177,8 @@ class MemberController extends Controller
             }
         }
 
-        return redirect()->route('h::m::edit',['id' => $id])->withSuccess(true);
+        $errors = ['success' => 'Saved successfully'];
+        return response()->json($errors);
     }
 
     public function deactivate($id)

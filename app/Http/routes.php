@@ -18,8 +18,7 @@ Route::get('', function () {
 });
 
 Route::get('test', function () {
-	Session::forget('currentHub');
-	// return view('test');
+	//
 });
 
 // Route::auth();
@@ -209,24 +208,28 @@ Route::group([
 				return redirect()->to(route('h::a::index'),301);
 			});
 
-			Route::get('index','Automation@index')->name('::index');
+			Route::get('index','AutomationController@index')->name('::index');
 
-			Route::get('{id}/edit','Automation@edit')->name('::edit')->middleware('can:basic');
+			Route::get('{id}/edit','AutomationController@edit')->name('::edit'); // ->middleware('can:basic');
 
-			Route::group(['middleware' => 'can:createSchedules'], function () {
+			// Route::group(['middleware' => 'can:createSchedules'], function () {
 
-				Route::get('create','Automation@create')->name('::create');
-				Route::post('create','Automation@store')->name('::create');
+			Route::group([], function () {
+
+				Route::get('create','AutomationController@create')->name('::create');
+				Route::post('create','AutomationController@store')->name('::create');
 			});
 
-			Route::group(['middleware' => 'can:higher'], function () {
+			// Route::group(['middleware' => 'can:higher'], function () {
 
-				Route::post('{id}/edit','Automation@update')->name('::edit');
+			Route::group([], function () {
 
-				Route::post('{id}/deactivate','Automation@deactivate')->name('::deactivate');
-				Route::post('{id}/reactivate','Automation@reactivate')->name('::reactivate');
+				Route::post('{id}/edit','AutomationController@update')->name('::edit');
 
-				Route::post('{id}/destroy','Automation@destroy')->name('::destroy');
+				Route::post('{id}/deactivate','AutomationController@deactivate')->name('::deactivate');
+				Route::post('{id}/reactivate','AutomationController@reactivate')->name('::reactivate');
+
+				Route::post('{id}/destroy','AutomationController@destroy')->name('::destroy');
 			});
 
 		});

@@ -56,8 +56,12 @@
   $("[name='higherpermissions[]']").multiSelect(searchableObj);
 
   function memDeactivate(id) {
-      bootbox.confirm("R u sure?", function(result) {
-        if (result == true) {
+    swal({
+      title: "Are you sure?",
+      text: "To deactivate this member?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes"}, function() {
         $.ajax({
             url : '{{ route('h::m::deactivate',$mem['id']) }}',
             type : 'post',
@@ -69,53 +73,73 @@
             success : function (response)
             {
                 $('#memTus').text('Deactivated').removeClass('label-primary').addClass('label-danger');
-                memDeactivateBtn = $('#memDeactivateBtn').attr('id','memReactivateBtn').removeClass('btn-warning').addClass('bg-olive').attr('onclick','memReactivate()');
+                memDeactivateBtn = $('#memDeactivateBtn').attr('id','memReactivateBtn').removeClass('btn-warning').addClass('btn-default').attr('onclick','memReactivate()');
                 memDeactivateBtn.find('i').removeClass('fa-ban').addClass('fa-check-square-o');
-                memDeactivateBtn.find('span').text('Reactivate');
+                memDeactivateBtn.find('span:not(.btn-label)').text('Reactivate');
             }
           });
-        }
       });
     }
 
   function memReactivate(id) {
-    bootbox.confirm("R u sure?", function(result) {
-      if (result == true) {
-      $.ajax({
-          url : '{{ route('h::m::reactivate',$mem['id']) }}',
-          type : 'post',
-          dataType: 'json',
-          data : {
-            _token: '{{ csrf_token() }}',
-            id: id
-          },
-          success : function (response)
-          {
-              $('#memTus').text('Activated').removeClass('label-danger').addClass('label-primary');
-              memReactivateBtn = $('#memReactivateBtn').attr('id','memDeactivateBtn').addClass('btn-warning').removeClass('bg-olive').attr('onclick','memDeactivate()');
-              memReactivateBtn.find('i').addClass('fa-ban').removeClass('fa-check-square-o');
-              memReactivateBtn.find('span').text('Deactivate');
-          }
-        });
-      }
-    });
+    swal({
+      title: "Are you sure?",
+      text: "To reactivate this member?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes"}, function() {
+        $.ajax({
+            url : '{{ route('h::m::reactivate',$mem['id']) }}',
+            type : 'post',
+            dataType: 'json',
+            data : {
+              _token: '{{ csrf_token() }}',
+              id: id
+            },
+            success : function (response)
+            {
+                $('#memTus').text('Activated').removeClass('label-danger').addClass('label-primary');
+                memReactivateBtn = $('#memReactivateBtn').attr('id','memDeactivateBtn').addClass('btn-warning').removeClass('btn-default').attr('onclick','memDeactivate()');
+                memReactivateBtn.find('i').addClass('fa-ban').removeClass('fa-check-square-o');
+                memReactivateBtn.find('span:not(.btn-label)').text('Deactivate');
+            }
+          });
+      });
   }
 
   function memDelete() {
-    bootbox.confirm("R u sure?", function(result) {
-      if (result == true) {
-      $.ajax({
-          url : '{!!  route('h::m::destroy',$mem['id']) !!}',
-          type : 'post',
-          dataType: 'json',
-          data : { _token: '{{ csrf_token() }}' },
-          success : function (response)
-          {
-              window.location.href = '{{ route('h::m::index') }}';
-          }
-        });
-      }
+    swal({
+      title: "Are you sure?",
+      text: "To delete this member?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      closeOnConfirm: false }, function() {
+        $.ajax({
+            url : '{!!  route('h::m::destroy',$mem['id']) !!}',
+            type : 'post',
+            dataType: 'json',
+            data : { _token: '{{ csrf_token() }}' },
+            success : function (response)
+            {
+                window.location.href = '{{ route('h::m::index') }}';
+            }
+          });
+      });
+  }
+
+  function memberEdit() {
+    $.ajax({
+        url : '{{ route('h::m::edit',$mem['id']) }}',
+        type : 'post',
+        data : $('[name=member-edit-form]').serializeArray(),
+        dataType : 'json',
+        success : function (response)
+        {
+            $('[name=member-edit-form]').validate(response);
+        }
     });
+    return false;
   }
 </script>
 @endsection
@@ -127,7 +151,7 @@
     <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
-    {!! Form::open(['route' => ['h::m::edit',$mem['id']], 'files' => true, 'class' => 'form-horizontal']) !!}
+    {!! Form::open(['route' => ['h::m::edit',$mem['id']], 'name' => 'member-edit-form', 'class' => 'form-horizontal', 'onsubmit' => 'return memberEdit()']) !!}
       <div class="box-body">
         <div class="form-group margin-bottom-sm">
         {!! Form::label('status', 'Status',['class' => 'col-sm-2 control-label']) !!}
@@ -214,7 +238,7 @@
         @if ($mem['status'] != 0)
           {!! Form::button('<span class="btn-label"><i class="fa fa-ban" aria-hidden="true"></i></span><span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right m-r-5','id' => 'memDeactivateBtn','onclick' => 'memDeactivate()']) !!}
         @else
-          {!! Form::button('<span class="btn-label"><i class="fa fa-check-square-o" aria-hidden="true"></i></i></span><span>Reactivate</span>', ['type' => 'button', 'class' => 'btn bg-olive pull-right m-r-5','id' => 'memReactivateBtn','onclick' => 'memReactivate()']) !!}
+          {!! Form::button('<span class="btn-label"><i class="fa fa-check-square-o" aria-hidden="true"></i></i></span><span>Reactivate</span>', ['type' => 'button', 'class' => 'btn btn-default pull-right m-r-5','id' => 'memReactivateBtn','onclick' => 'memReactivate()']) !!}
         @endif
     {!! Form::close() !!}
     </div>

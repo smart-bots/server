@@ -7,6 +7,23 @@
   <script src="{{ asset('public/libs/html5imageupload/html5imageupload.js') }}"></script>
   <script>
     $('.dropzone').html5imageupload();
+
+
+    function hubCreate() {
+      $.ajax({
+          url : '{{ route('h::create') }}',
+          type : 'post',
+          data : $('[name=hub-create-form]').serializeArray(),
+          dataType : 'json',
+          success : function (response)
+          {
+              $('[name=hub-create-form]').validate(response, [], function () {
+                window.location.href = response['href'];
+              });
+          }
+      });
+      return false;
+    }
   </script>
 @endsection
 @section('body')
@@ -17,9 +34,8 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
-            <h3 class="m-t-0 header-title"><b>Create new hub</b></h3>
-            <p class="login-box-msg" style="margin-bottom:14px;"></p>
-              {!! Form::open(['route' => 'h::create','class' => 'form-horizontal']) !!}
+            <h3 class="m-t-0 m-b-10 header-title"><b>Create new hub</b></h3>
+              {!! Form::open(['route' => 'h::create','name' => 'hub-create-form','class' => 'form-horizontal', 'onsubmit' => 'return hubCreate()']) !!}
                 <div class="form-group">
                   {!! Form::label('name', 'Name', ['class' => 'col-sm-2 control-label']) !!}
                   <div class="col-sm-10">
