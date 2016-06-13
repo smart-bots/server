@@ -25,10 +25,13 @@ class HasPermission
     public function handle($request, Closure $next, $thing)
     {
         // https://laravel.com/api/5.1/Illuminate/Http/Request.html
+
         $routePrefix = $request->route()->getPrefix();
+
         $routeName = $request->route()->getName();
-        // dd($routePrefix);
-        // dd($routeName);
+
+        // dd($routePrefix,$routeName);
+
         switch ($routeName) {
             case 'h::b::control':
                 $model = Bot::findOrFail($request->id);
@@ -59,10 +62,13 @@ class HasPermission
                 }
                 break;
         }
-        // dd($model);
+
+        // dd($thing,$model);
+
         if ($request->user()->cant($thing,$model)) {
             abort(403);
         }
+
         return $next($request);
     }
 }

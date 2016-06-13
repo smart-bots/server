@@ -18,6 +18,7 @@ class CreateHubsTable extends Migration
             $table->string('name',100);
             $table->string('image')->default('public/images/noimage.jpg');
             $table->text('description');
+            $table->string('timezone')->default('Europe/London');
             $table->boolean('status')->default(true);
         });
     }

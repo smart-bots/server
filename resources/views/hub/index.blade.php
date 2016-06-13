@@ -7,7 +7,7 @@
   function chooseHub(id)
   {
     $.ajax({
-      url : '{{ route('h::login') }}',
+      url : '@route('h::login')',
       type : 'post',
       dataType : 'json',
       data : {
@@ -17,7 +17,7 @@
       success : function (response)
       {
         if (response.error == 0) {
-          window.location.href = '{{ route('h::dashboard') }}';
+          window.location.href = '@route('h::dashboard')';
         };
       }
     });
@@ -25,14 +25,14 @@
 </script>
 @endsection
 @section('body')
-{!! content_header('Hub login', [
+@header('Hub login', [
     'Hub' => '#',
     'Login' => 'active'
-]) !!}
+])
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
-          <a href="{{ route('h::create') }}">
+          <a href="@route('h::create')">
             {!! Form::button('<span class="btn-label"><i class="fa fa-plus"></i></span>New hub', ['class' => 'btn btn-default waves-effect waves-light btn-create']) !!}
           </a>
           <p>
@@ -42,7 +42,7 @@
             @foreach ($hubs as $hub)
               <li>
                 <a href='javascript:chooseHub({{ $hub['id'] }})'>
-                  <img class="img-thumbnail" src="{{ asset($hub['image']) }}">
+                  <img class="img-thumbnail" src="@asset($hub['image'])">
                   <span class="hubs-list-name">{{ $hub['name'] }}</span>
                   <span class="hubs-list-bots">{{ count($hub['bots']) }} bots</span>
                 </a>

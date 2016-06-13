@@ -27,6 +27,7 @@ class CreateSchedulesTable extends Migration
             $table->text('activate_after');
             $table->text('deactivate_after_times');
             $table->text('deactivate_after_datetime');
+            $table->text('last_run_time');
             $table->boolean('status');
             $table->integer('ran_times')->unsigned();
         });

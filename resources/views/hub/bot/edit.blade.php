@@ -1,13 +1,13 @@
 @extends('hub.master')
 @section('title','Edit bot')
 @section('additionHeader')
-  <link rel="stylesheet" href="{{ asset('public/libs/html5imageupload/html5imageupload.css') }}">
-  <link href="{{ asset('public/libs/multiselect/css/multi-select.css') }}" media="screen" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="@asset('public/libs/html5imageupload/html5imageupload.css')">
+  <link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
 @endsection
 @section('additionFooter')
-<script src="{{ asset('public/libs/html5imageupload/html5imageupload.js') }}"></script>
-<script src="{{ asset('public/libs/multiselect/js/jquery.multi-select.js') }}" type="text/javascript"></script>
-<script src="{{ asset('public/libs/quicksearch/jquery.quicksearch.js') }}" type="text/javascript"></script>
+<script src="@asset('public/libs/html5imageupload/html5imageupload.js')"></script>
+<script src="@asset('public/libs/multiselect/js/jquery.multi-select.js')" type="text/javascript"></script>
+<script src="@asset('public/libs/quicksearch/jquery.quicksearch.js')" type="text/javascript"></script>
 <script>
   $('.dropzone').html5imageupload();
 
@@ -58,7 +58,7 @@
       showCancelButton: true,
       confirmButtonText: "Yes"}, function() {
           $.ajax({
-              url : '{{ route('h::b::deactivate',$bot['id']) }}',
+              url : '@route('h::b::deactivate',$bot['id'])',
               type : 'post',
               dataType: 'json',
               data : { _token: '{{ csrf_token() }}' },
@@ -81,7 +81,7 @@
         showCancelButton: true,
         confirmButtonText: "Yes"}, function() {
             $.ajax({
-                url : '{{ route('h::b::reactivate',$bot['id']) }}',
+                url : '@route('h::b::reactivate',$bot['id'])',
                 type : 'post',
                 dataType: 'json',
                 data : { _token: '{{ csrf_token() }}' },
@@ -105,13 +105,13 @@
         confirmButtonText: "Yes",
         closeOnConfirm: false }, function() {
             $.ajax({
-                url : '{{ route('h::b::destroy',$bot['id']) }}',
+                url : '@route('h::b::destroy',$bot['id'])',
                 type : 'post',
                 dataType: 'json',
                 data : { _token: '{{ csrf_token() }}' },
                 success : function (response)
                 {
-                    window.location.href = '{{ route('h::b::index') }}';
+                    window.location.href = '@route('h::b::index')';
                 }
               });
         });
@@ -119,7 +119,7 @@
 
   function botEdit() {
     $.ajax({
-        url : '{{ route('h::b::edit',$bot['id']) }}',
+        url : '@route('h::b::edit',$bot['id'])',
         type : 'post',
         data : $('[name=bot-edit-form]').serializeArray(),
         dataType : 'json',
@@ -133,11 +133,11 @@
 </script>
 @endsection
 @section('body')
-  {!! content_header('Edit bot', [
+  @header('Edit bot', [
       'Hub' => route('h::edit'),
       'Bot' => route('h::b::index'),
       'Edit' => 'active'
-  ]) !!}
+  ])
   <div class="row">
     <div class="col-sm-12">
       <div class="card-box">
@@ -184,7 +184,7 @@
       <div class="form-group">
         {!! Form::label('image', 'Image', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
-          <div class="dropzone image-dropzone" data-image="{{ asset($bot['image']) }}" data-ghost="false" data-canvas="true" data-originalsize="false" data-ajax="false" data-width="200" data-height="200">
+          <div class="dropzone image-dropzone" data-image="@asset($bot['image'])" data-ghost="false" data-canvas="true" data-originalsize="false" data-ajax="false" data-width="200" data-height="200">
             {!! Form::file('image') !!}
           </div>
         </div>

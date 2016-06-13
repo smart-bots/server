@@ -13,6 +13,8 @@ use SmartBots\{
     SchedulePermission
 };
 
+use Carbon;
+
 class ScheduleController extends Controller
 {
 	public function index() {
@@ -31,6 +33,7 @@ class ScheduleController extends Controller
 	public function store(Request $request) {
 
 		// dd($request->toArray());
+		$now = Carbon::now()->setTimezone(Hub::findorfail(session('currentHub'))->timezone)->timestamp;
 
 		$rules = [
 			'name' => 'required|max:100',
@@ -40,10 +43,10 @@ class ScheduleController extends Controller
 			'action.type.*' => 'numeric|between:1,3',
 			'action.bot.*' => 'exists:bots,id',
 			'type' => 'required|numeric|between:1,2',
-			'condition.type' => 'required|numeric|between:1,3',
-			'activate_after' => 'before:'.time(),
+			'condition.type' => 'required|numeric|between:0,2',
+			'activate_after' => 'date|after:'.$now,
 			'deactivate_after_times' => 'numeric',
-			'deactivate_after_datetime' => 'after:'.time(),
+			'deactivate_after_datetime' => 'date|after:'.$now,
 		];
 
 		$validator = Validator::make($request->all(), $rules);
@@ -53,7 +56,7 @@ class ScheduleController extends Controller
 
 		if ($request->type == 1) {
 
-			$rules = ['time' => 'required|after:'.time()];
+			$rules = ['time' => 'required|date|after:'.$now];
 
 			$validator = Validator::make($request->all(), $rules);
 
@@ -129,7 +132,6 @@ class ScheduleController extends Controller
 
 		$schedule = new Schedule;
 
-		$schedule->user_id = 1;
 		$schedule->hub_id = session('currentHub');
 
 		$schedule->name = $request->name;
@@ -145,6 +147,7 @@ class ScheduleController extends Controller
 
 		if ($request->type == 1) {
 			$schedule->data = $request->time;
+			$schedule->status = 1;
 		} else {
 
 			$frequencyData = '';
@@ -169,7 +172,12 @@ class ScheduleController extends Controller
 			$schedule->condition_data = trim($conditionData,'|');
 		}
 
-		$schedule->activate_after = $request->activate_after;
+		if (!empty($schedule->activate_after)) {
+			$schedule->activate_after = $request->activate_after;
+		} else {
+			$schedule->status = 1;
+		}
+
 		$schedule->deactivate_after_times = $request->deactivate_after_times;
 		$schedule->deactivate_after_datetime = $request->deactivate_after_datetime;
 
@@ -178,7 +186,7 @@ class ScheduleController extends Controller
 		$newSchePerm = new SchedulePermission;
 		$newSchePerm->user_id = auth()->user()->id;
 		$newSchePerm->schedule_id = $schedule->id;
-		$newSchePerm->higher = true;
+		$newSchePerm->high = true;
 		$newSchePerm->save();
 
 		return response()->json(['success' => true, 'href' => route('h::s::index')]);
@@ -187,6 +195,6 @@ class ScheduleController extends Controller
 
     public function edit($id) {
     	$schedule = Schedule::findOrFail($id);
-        return view('hub.schedule.edit')->withSchedule($schedule);
+        return view('hub.schedule.edit')->withSche($schedule);
     }
 }

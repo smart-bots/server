@@ -9,15 +9,15 @@
 
         <meta content="noindex, nofollow" name="robots">
 
-        <link href="{{ asset('public/libs/bootstrap/css/bootstrap.css') }}" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('public/libs/font-awesome/css/font-awesome.css') }}" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('public/css/core.css') }}" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('public/css/components.css') }}" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('public/css/libs.css') }}" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('public/css/responsive.css') }}" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('public/libs/animate.css/animate.css') }}" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('public/libs/Waves/waves.css') }}" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('public/libs/sweetalert/sweetalert.css') }}" rel="stylesheet" type="text/css" />
+        <link href="@asset('public/libs/bootstrap/css/bootstrap.css')" rel="stylesheet" type="text/css" />
+        <link href="@asset('public/libs/font-awesome/css/font-awesome.css')" rel="stylesheet" type="text/css" />
+        <link href="@asset('public/css/core.css')" rel="stylesheet" type="text/css" />
+        <link href="@asset('public/css/components.css')" rel="stylesheet" type="text/css" />
+        <link href="@asset('public/css/libs.css')" rel="stylesheet" type="text/css" />
+        <link href="@asset('public/css/responsive.css')" rel="stylesheet" type="text/css" />
+        <link href="@asset('public/libs/animate.css/animate.css')" rel="stylesheet" type="text/css" />
+        <link href="@asset('public/libs/Waves/waves.css')" rel="stylesheet" type="text/css" />
+        <link href="@asset('public/libs/sweetalert/sweetalert.css')" rel="stylesheet" type="text/css" />
 
         <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -54,21 +54,21 @@
         </script>
 
         <!-- jQuery  -->
-        <script src="{{ asset('public/libs/jquery/jquery.js') }}"></script>
-        <script src="{{ asset('public/libs/modernizr/modernizr.js') }}"></script>
-        <script src="{{ asset('public/libs/bootstrap/js/bootstrap.js') }}"></script>
-        <script src="{{ asset('public/libs/detectmobilebrowser/detectmobilebrowser.js') }}"></script>
-        <script src="{{ asset('public/libs/fastclick/fastclick.js') }}"></script>
-        <script src="{{ asset('public/libs/blockUI/jquery.blockUI.js') }}"></script>
-        <script src="{{ asset('public/libs/Waves/waves.js') }}"></script>
-        <script src="{{ asset('public/libs/wow/wow.js') }}"></script>
-        <script src="{{ asset('public/libs/slimscroll/jquery.slimscroll.js') }}"></script>
-        <script src="{{ asset('public/libs/jquery.nicescroll/jquery.nicescroll.js') }}"></script>
-        <script src="{{ asset('public/libs/jquery.scrollTo/jquery.scrollTo.js') }}"></script>
-        <script src="{{ asset('public/libs/sweetalert/sweetalert.js') }}"></script>
-        <script src="{{ asset('public/js/jquery.core.js') }}"></script>
-        <script src="{{ asset('public/js/jquery.app.js') }}"></script>
-        <script src="{{ asset('public/js/jquery.custom.js') }}"></script>
+        <script src="@asset('public/libs/jquery/jquery.js')"></script>
+        <script src="@asset('public/libs/modernizr/modernizr.js')"></script>
+        <script src="@asset('public/libs/bootstrap/js/bootstrap.js')"></script>
+        <script src="@asset('public/libs/detectmobilebrowser/detectmobilebrowser.js')"></script>
+        <script src="@asset('public/libs/fastclick/fastclick.js')"></script>
+        <script src="@asset('public/libs/blockUI/jquery.blockUI.js')"></script>
+        <script src="@asset('public/libs/Waves/waves.js')"></script>
+        <script src="@asset('public/libs/wow/wow.js')"></script>
+        <script src="@asset('public/libs/slimscroll/jquery.slimscroll.js')"></script>
+        <script src="@asset('public/libs/jquery.nicescroll/jquery.nicescroll.js')"></script>
+        <script src="@asset('public/libs/jquery.scrollTo/jquery.scrollTo.js')"></script>
+        <script src="@asset('public/libs/sweetalert/sweetalert.js')"></script>
+        <script src="@asset('public/js/jquery.core.js')"></script>
+        <script src="@asset('public/js/jquery.app.js')"></script>
+        <script src="@asset('public/js/jquery.custom.js')"></script>
 
         <script>
             Waves.init();

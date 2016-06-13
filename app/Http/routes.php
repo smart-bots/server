@@ -1,5 +1,4 @@
 <?php
-use Carbon\Carbon;
 use SmartBots\{
     User,
     Hub,
@@ -18,10 +17,9 @@ Route::get('', function () {
 });
 
 Route::get('test', function () {
-	//
+	$now = Carbon::now()->setTimezone(Hub::findorfail(session('currentHub'))->timezone);
+	dd($now);
 });
-
-// Route::auth();
 
 Route::group([
 	'middleware' => [],
@@ -38,6 +36,7 @@ Route::group([
 ], function () {
 
 	Route::group(['middleware' => ['nonAuthed']], function() {
+
 		Route::get('login','UserController@getLogin')->name('::login');
 		Route::post('login','UserController@postLogin')->name('::login');
 		Route::get('register','UserController@getRegister')->name('::register');
@@ -47,9 +46,11 @@ Route::group([
 	});
 
 	Route::group(['middleware' => ['authed']], function() {
+
 		Route::get('/', function () {
 			return redirect()->to(route('a::edit'),301);
 		});
+
 		Route::get('edit','UserController@edit')->name('::edit');
 		Route::post('edit','UserController@update')->name('::update');
 		Route::get('logout','UserController@logout')->name('::logout');
@@ -148,13 +149,13 @@ Route::group([
 				Route::post('create','BotController@store')->name('::create');
 			});
 
-			Route::group(['middleware' => 'can:basic'], function () {
+			Route::group(['middleware' => 'can:low'], function () {
 
 				Route::get('{id}/edit','BotController@edit')->name('::edit');
 				Route::post('control','BotController@control')->name('::control');
 			});
 
-			Route::group(['middleware' => 'can:higher'], function () {
+			Route::group(['middleware' => 'can:high'], function () {
 
 				Route::post('{id}/edit','BotController@update')->name('::edit');
 
@@ -179,7 +180,7 @@ Route::group([
 
 			Route::get('index','ScheduleController@index')->name('::index');
 
-			Route::get('{id}/edit','ScheduleController@edit')->name('::edit')->middleware('can:basic');
+			Route::get('{id}/edit','ScheduleController@edit')->name('::edit')->middleware('can:low');
 
 			Route::group(['middleware' => 'can:createSchedules'], function () {
 
@@ -187,7 +188,7 @@ Route::group([
 				Route::post('create','ScheduleController@store')->name('::create');
 			});
 
-			Route::group(['middleware' => 'can:higher'], function () {
+			Route::group(['middleware' => 'can:high'], function () {
 
 				Route::post('{id}/edit','ScheduleController@update')->name('::edit');
 
@@ -210,7 +211,7 @@ Route::group([
 
 			Route::get('index','AutomationController@index')->name('::index');
 
-			Route::get('{id}/edit','AutomationController@edit')->name('::edit'); // ->middleware('can:basic');
+			Route::get('{id}/edit','AutomationController@edit')->name('::edit'); // ->middleware('can:low');
 
 			// Route::group(['middleware' => 'can:createSchedules'], function () {
 
@@ -220,7 +221,7 @@ Route::group([
 				Route::post('create','AutomationController@store')->name('::create');
 			});
 
-			// Route::group(['middleware' => 'can:higher'], function () {
+			// Route::group(['middleware' => 'can:high'], function () {
 
 			Route::group([], function () {
 

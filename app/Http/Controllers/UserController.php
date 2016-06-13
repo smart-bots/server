@@ -12,6 +12,8 @@ use SmartBots\User;
 
 use Validator;
 
+use Is;
+
 /**
  * Uses lot of ValidatesRequests trait
  */
@@ -35,7 +37,7 @@ class UserController extends Controller
 
     public function loginWith(Request $request)
     {
-    	return is_email($request->username) ? 'email' : 'username';
+    	return Is::email()->validate($request->username) ? 'email' : 'username';
     }
 
     public function postLogin(Request $request) {
@@ -118,6 +120,7 @@ class UserController extends Controller
 		];
 
         $validator = Validator::make($request->all(), $rules, ['agree_with_terms.required' => trans('register.terms_disagreement')]);
+
         if ($validator->fails()) {
             return response()->json($validator->errors());
         }
@@ -160,7 +163,11 @@ class UserController extends Controller
             'phone' => 'required|numeric|unique:users,id,'.auth()->user()->id
         ];
 
-        $this->validate($request,$rules);
+        $validator = Validator::make($request->all(), $rules, ['agree_with_terms.required' => trans('register.terms_disagreement')]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
 
         $user = auth()->user();
         $user->name = $request->name;
@@ -168,16 +175,15 @@ class UserController extends Controller
         $user->phone = $request->phone;
 
         if (!empty($request->image_values)) {
-            $image_values  = json_decode($request->image_values);
-            $image_name    = str_random(10).'.jpg';
-            $image_base64  = explode(',', $image_values->data);
-            file_put_contents(base_path().env('UPLOAD_IMAGES_FOLDER').'/'.$image_name, base64_decode($image_base64[1]));
-            $user->avatar = env('UPLOAD_IMAGES_FOLDER').'/'.$image_name;
+            if (!empty($request->image_values)) {
+                $user->avatar = upload_base64_image(json_decode($request->image_values)->data);
+            }
         }
 
         $user->save();
 
-        return view('account.edit')->withUser($user)->withSuccess(true);
+        $error = ['success' => 'User profile saved successfully'];
+        return response()->json($error);
     }
 
     public function search($query) {

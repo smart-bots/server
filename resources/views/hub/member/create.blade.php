@@ -5,7 +5,7 @@
 @extends('hub.master')
 @section('title',$title)
 @section('additionHeader')
-  <link href="{{ asset('public/libs/multiselect/css/multi-select.css') }}" media="screen" rel="stylesheet" type="text/css">
+  <link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
 
   <style>
     .table td {
@@ -15,10 +15,10 @@
   </style>
 @endsection
 @section('additionFooter')
-  <script src="{{ asset('public/libs/typeahead.js/typeahead.bundle.js') }}" type="text/javascript"></script>
-  <script src="{{ asset('public/libs/handlebars/handlebars.js') }}" type="text/javascript"></script>
-  <script src="{{ asset('public/libs/multiselect/js/jquery.multi-select.js') }}" type="text/javascript"></script>
-  <script src="{{ asset('public/libs/quicksearch/jquery.quicksearch.js') }}" type="text/javascript"></script>
+  <script src="@asset('public/libs/typeahead.js/typeahead.bundle.js')" type="text/javascript"></script>
+  <script src="@asset('public/libs/handlebars/handlebars.js')" type="text/javascript"></script>
+  <script src="@asset('public/libs/multiselect/js/jquery.multi-select.js')" type="text/javascript"></script>
+  <script src="@asset('public/libs/quicksearch/jquery.quicksearch.js')" type="text/javascript"></script>
 
   <script>
   $("[name='hubpermissions[]']").materialSwitch();
@@ -66,7 +66,7 @@
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     remote: {
-      url: '{{ route('a::search') }}/%Q',
+      url: '@route('a::search')/%Q',
       wildcard: '%Q'
     }
   });
@@ -96,7 +96,7 @@
 
   function memberCreate() {
     $.ajax({
-        url : '{{ route('h::m::create') }}',
+        url : '@route('h::m::create')',
         type : 'post',
         data : $('[name=member-create-form]').serializeArray(),
         dataType : 'json',
@@ -112,10 +112,10 @@
   </script>
 @endsection
 @section('body')
-{!! content_header($title, [
+@header($title, [
     'Hub' => route('h::edit'),
     'Member' => route('h::m::index'),
-    'Create' => 'active']) !!}
+    'Create' => 'active'])
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
@@ -139,7 +139,7 @@
                 </div>
               </div>
               <div class="form-group" >
-                <div class="col-sm-12" style="overflow-x:auto;">
+                <div class="col-sm-12 table-responsive">
                   <table class="table table-bordered table-striped">
                   <thead>
                     <tr>

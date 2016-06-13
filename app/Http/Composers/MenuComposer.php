@@ -41,7 +41,6 @@ class MenuComposer {
 					]
 				]
 			],
-			'divider',
 			'Schedule' => [
 				'icon' => 'ti-bookmark-alt',
 				'sub' => [

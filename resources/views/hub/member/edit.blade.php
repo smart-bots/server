@@ -1,7 +1,7 @@
 @extends('hub.master')
 @section('title','Add new member')
 @section('additionHeader')
-  <link href="{{ asset('public/libs/multiselect/css/multi-select.css') }}" media="screen" rel="stylesheet" type="text/css">
+  <link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
 
   <style>
     .table td {
@@ -11,8 +11,8 @@
   </style>
 @endsection
 @section('additionFooter')
-  <script src="{{ asset('public/libs/multiselect/js/jquery.multi-select.js') }}" type="text/javascript"></script>
-  <script src="{{ asset('public/libs/quicksearch/jquery.quicksearch.js') }}" type="text/javascript"></script>
+  <script src="@asset('public/libs/multiselect/js/jquery.multi-select.js')" type="text/javascript"></script>
+  <script src="@asset('public/libs/quicksearch/jquery.quicksearch.js')" type="text/javascript"></script>
 <script>
   $("[name='hubpermissions[]']").materialSwitch();
   var searchableObj = {
@@ -144,10 +144,10 @@
 </script>
 @endsection
 @section('body')
-  {!! content_header('Hub members', [
+  @header('Hub members', [
     'Hub' => route('h::edit'),
     'Member' => route('h::m::index'),
-    'Edit' => '#']) !!}
+    'Edit' => '#'])
     <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
@@ -188,7 +188,7 @@
           </div>
         </div>
         <div class="form-group">
-          <div class="col-sm-12">
+          <div class="col-sm-12 table-responsive">
             <table class="table table-bordered table-striped margin-bottom-none">
             <thead>
               <tr>

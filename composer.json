@@ -9,7 +9,11 @@
         "laravel/framework": "5.2.*",
         "laravelcollective/html": "5.2.*",
         "nesbot/carbon": "^1.21",
-        "guzzlehttp/guzzle": "~5.3|~6.0"
+        "guzzlehttp/guzzle": "~5.3|~6.0",
+        "respect/validation": "^1.1",
+        "intervention/image": "^2.3",
+        "predis/predis": "^1.1",
+        "camroncade/timezone": "^0.1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

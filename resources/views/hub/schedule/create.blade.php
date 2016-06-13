@@ -1,7 +1,7 @@
 @extends('hub.master')
 @section('title','Add new schedule')
 @section('additionHeader')
-<link rel="stylesheet" href="{{ asset('public/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.css') }}">
+<link rel="stylesheet" href="@asset('public/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.css')">
 <style>
   select {
     width: 125px !important;
@@ -9,16 +9,18 @@
 </style>
 @endsection
 @section('additionFooter')
-<script src="{{ asset('public/libs/typeahead.js/typeahead.bundle.js') }}" type="text/javascript"></script>
-<script src="{{ asset('public/libs/handlebars/handlebars.js') }}" type="text/javascript"></script>
-<script src="{{ asset('public/libs/moment/moment.js') }}" type="text/javascript"></script>
-<script src="{{ asset('public/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.js') }}" type="text/javascript"></script>
+<script src="@asset('public/libs/typeahead.js/typeahead.bundle.js')" type="text/javascript"></script>
+<script src="@asset('public/libs/handlebars/handlebars.js')" type="text/javascript"></script>
+<script src="@asset('public/libs/moment/moment.js')" type="text/javascript"></script>
+<script src="@asset('public/libs/moment/vi.js')" type="text/javascript"></script>
+<script src="@asset('public/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.js')" type="text/javascript"></script>
 <script>
+
   var bot = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     remote: {
-      url: '{{ route('h::b::search') }}/%Q/{{ session('currentHub') }}',
+      url: '@route('h::b::search')/%Q/{{ session('currentHub') }}',
       wildcard: '%Q'
     }
   });
@@ -49,7 +51,7 @@
   $(function () {
     $('[name="action[bot][0]"]').typeahead(null, typeahead_bot_option);
     $('[name="condition[bot][0]"]').typeahead(null, typeahead_bot_option);
-    $('.datetimepicker').datetimepicker({useCurrent: false});
+    $('.datetimepicker').datetimepicker({useCurrent: false, format: 'D-M-Y HH:mm'});
   });
 
   function addAction() {
@@ -221,8 +223,10 @@
     //   i++;
     // });
 
+    $('[name="time"]').val($('[name="time"]').val().split('/').join('-'));
+
     $.ajax({
-      url : '{{ route('h::s::create') }}',
+      url : '@route('h::s::create')',
       type : 'post',
       data : $('[name=create-schedule-form]').serializeArray(),
       dataType : 'json',
@@ -374,7 +378,7 @@
 
         if (response['success'] != null) {
 
-            // window.location.href = '{{ route('h::s::index') }}';
+            window.location.href = '@route('h::s::index')';
 
         } else {
 

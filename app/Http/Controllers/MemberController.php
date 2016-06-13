@@ -42,7 +42,7 @@ class MemberController extends Controller
         $rules = [
             'username' => 'required|exists:users,username',
             'permissions.*' => 'exists:bots,id,hub_id,'.session('currentHub'),
-            'higherpermissions.*' => 'exists:bots,id,hub_id,'.session('currentHub'),
+            'highpermissions.*' => 'exists:bots,id,hub_id,'.session('currentHub'),
             'hubpermissions.*' => 'between:1,14'
         ];
 
@@ -73,10 +73,10 @@ class MemberController extends Controller
             }
         }
 
-        if (is_array($request->higherpermissions)) {
-            foreach ($request->higherpermissions as $user_id)
+        if (is_array($request->highpermissions)) {
+            foreach ($request->highpermissions as $user_id)
             {
-                BotPermission::updateOrCreate(['bot_id' => $bot_id, 'user_id' => $user->id],['higher' => true]);
+                BotPermission::updateOrCreate(['bot_id' => $bot_id, 'user_id' => $user->id],['high' => true]);
             }
         }
         if (is_array($request->hubpermissions)) {
@@ -106,7 +106,7 @@ class MemberController extends Controller
         $perms = BotPermission::where('user_id',$user->id)->whereIn('bot_id',array_pluck($bots,'id'))->get();
         $sBots = array_pluck($perms,'bot_id');
 
-        $perm2s = BotPermission::where('user_id',$user->id)->whereIn('bot_id',array_pluck($bots,'id'))->where('higher',true)->get();
+        $perm2s = BotPermission::where('user_id',$user->id)->whereIn('bot_id',array_pluck($bots,'id'))->where('high',true)->get();
         $sBot2s = array_pluck($perm2s,'bot_id');
 
         $hubperms = HubPermission::where('user_id',$user->id)->where('hub_id',session('currentHub'))->get();
@@ -148,18 +148,18 @@ class MemberController extends Controller
             }
         }
 
-        $botperms = BotPermission::where('user_id',$member->user_id)->whereIn('bot_id',array_pluck($bots,'id'))->where('higher',true)->get();
+        $botperms = BotPermission::where('user_id',$member->user_id)->whereIn('bot_id',array_pluck($bots,'id'))->where('high',true)->get();
 
         $bots_of_user_old = array_pluck($botperms,'bot_id');
 
-        if (count($bots_of_user_old) > count($request->higherpermissions)) { // Xóa bớt
-            $diff = collect($bots_of_user_old)->diff($request->higherpermissions);
-            BotPermission::where('user_id',$member->user_id)->whereIn('bot_id',$diff->all())->where('higher',true)->update(['higher' => false]);
+        if (count($bots_of_user_old) > count($request->highpermissions)) { // Xóa bớt
+            $diff = collect($bots_of_user_old)->diff($request->highpermissions);
+            BotPermission::where('user_id',$member->user_id)->whereIn('bot_id',$diff->all())->where('high',true)->update(['high' => false]);
         } else { // Hoặc thêm
-            $diff = collect($request->higherpermissions)->diff($bots_of_user_old)->toArray();
+            $diff = collect($request->highpermissions)->diff($bots_of_user_old)->toArray();
             foreach ($diff as $bot_id)
             {
-                BotPermission::updateOrCreate(['bot_id' => $bot_id, 'user_id' => $user->id],['higher' => true]);
+                BotPermission::updateOrCreate(['bot_id' => $bot_id, 'user_id' => $user->id],['high' => true]);
             }
         }
 

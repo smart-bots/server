@@ -18,7 +18,7 @@ class CreateSchedulepermissionsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('schedule_id')->unsigned();
             $table->foreign('schedule_id')->references('id')->on('schedules')->onDelete('cascade');
-            $table->boolean('higher')->default(false);
+            $table->boolean('high')->default(false);
         });
     }
 

@@ -8,7 +8,7 @@
             <li class="list-group-item">
                 <a href="#">
                     <div class="avatar">
-                        <img src="{{ asset('public/images/users/avatar-1.jpg') }}" alt="">
+                        <img src="http://dev.env/smartbots/public/storage/STpVhTIjBk.jpg" alt="">
                     </div>
                     <span class="name">Laptop</span>
                     <div class="material-switch pull-right">

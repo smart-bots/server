@@ -4,18 +4,18 @@
     <meta charset="utf-8">
     <meta content="ie=edge" http-equiv="x-ua-compatible">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <link href="{{ asset('favicon.ico') }}" rel="shortcut icon">
+    <link href="@asset('favicon.ico')" rel="shortcut icon">
     <title>
         @yield('title') | SmartBots
     </title>
     <meta content="noindex, nofollow" name="robots">
     <!-- no bots - no hurt -->
-    <link href="{{ asset('public/libs/bootstrap/css/bootstrap.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('public/libs/font-awesome/css/font-awesome.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('public/libs/themify-icons/css/themify-icons.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('public/libs/animate.css/animate.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('public/libs/Waves/waves.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('public/libs/sweetalert/sweetalert.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="@asset('public/libs/bootstrap/css/bootstrap.css')" rel="stylesheet" type="text/css"/>
+    <link href="@asset('public/libs/font-awesome/css/font-awesome.css')" rel="stylesheet" type="text/css"/>
+    <link href="@asset('public/libs/themify-icons/css/themify-icons.css')" rel="stylesheet" type="text/css"/>
+    <link href="@asset('public/libs/animate.css/animate.css')" rel="stylesheet" type="text/css"/>
+    <link href="@asset('public/libs/Waves/waves.css')" rel="stylesheet" type="text/css"/>
+    <link href="@asset('public/libs/sweetalert/sweetalert.css')" rel="stylesheet" type="text/css"/>
     <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -25,10 +25,10 @@
 
     @yield('additionHeader')
 
-    <link href="{{ asset('public/css/core.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('public/css/components.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('public/css/libs.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('public/css/responsive.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="@asset('public/css/core.css')" rel="stylesheet" type="text/css"/>
+    <link href="@asset('public/css/components.css')" rel="stylesheet" type="text/css"/>
+    <link href="@asset('public/css/libs.css')" rel="stylesheet" type="text/css"/>
+    <link href="@asset('public/css/responsive.css')" rel="stylesheet" type="text/css"/>
 </head>
 <body class="fixed-left">
     <div id="wrapper">
@@ -107,34 +107,34 @@
 <script>
     var resizefunc = [];
 </script>
-<script src="{{ asset('public/libs/jquery/jquery.js') }}"></script>
-<script src="{{ asset('public/libs/modernizr/modernizr.js') }}"></script>
-<script src="{{ asset('public/libs/bootstrap/js/bootstrap.js') }}"></script>
-<script src="{{ asset('public/libs/detectmobilebrowser/detectmobilebrowser.js') }}"></script>
-<script src="{{ asset('public/libs/fastclick/fastclick.js') }}"></script>
-<script src="{{ asset('public/libs/blockUI/jquery.blockUI.js') }}"></script>
-<script src="{{ asset('public/libs/Waves/waves.js') }}"></script>
-<script src="{{ asset('public/libs/wow/wow.js') }}"></script>
-<script src="{{ asset('public/libs/slimscroll/jquery.slimscroll.js') }}"></script>
-<script src="{{ asset('public/libs/jquery.nicescroll/jquery.nicescroll.js') }}"></script>
-<script src="{{ asset('public/libs/jquery.scrollTo/jquery.scrollTo.js') }}"></script>
-<script src="{{ asset('public/libs/sweetalert/sweetalert.js') }}"></script>
-<script src="{{ asset('public/js/jquery.core.js') }}"></script>
-<script src="{{ asset('public/js/jquery.app.js') }}"></script>
-<script src="{{ asset('public/js/jquery.custom.js') }}"></script>
+<script src="@asset('public/libs/jquery/jquery.js')"></script>
+<script src="@asset('public/libs/modernizr/modernizr.js')"></script>
+<script src="@asset('public/libs/bootstrap/js/bootstrap.js')"></script>
+<script src="@asset('public/libs/detectmobilebrowser/detectmobilebrowser.js')"></script>
+<script src="@asset('public/libs/fastclick/fastclick.js')"></script>
+<script src="@asset('public/libs/blockUI/jquery.blockUI.js')"></script>
+<script src="@asset('public/libs/Waves/waves.js')"></script>
+<script src="@asset('public/libs/wow/wow.js')"></script>
+<script src="@asset('public/libs/slimscroll/jquery.slimscroll.js')"></script>
+<script src="@asset('public/libs/jquery.nicescroll/jquery.nicescroll.js')"></script>
+<script src="@asset('public/libs/jquery.scrollTo/jquery.scrollTo.js')"></script>
+<script src="@asset('public/libs/sweetalert/sweetalert.js')"></script>
+<script src="@asset('public/js/jquery.core.js')"></script>
+<script src="@asset('public/js/jquery.app.js')"></script>
+<script src="@asset('public/js/jquery.custom.js')"></script>
 <script>
     Waves.init();
 
     function hubDeactivate() {
         $.ajax({
-            url : '{{ route('h::deactivate') }}',
+            url : '@route('h::deactivate')',
             type : 'get',
             success : function (response)
             {
                 hubStatus = $('#hubStatus').attr('onclick','hubReactivate()');
                 hubStatus.find('i').removeClass('text-custom').addClass('text-danger');
                 hubStatus.find('span').text('Deactivated');
-                if (window.location.href == '{{ route('h::edit') }}') {
+                if (window.location.href == '@route('h::edit')') {
                     hubDeactivateBtn = $('#hubDeactivateBtn').attr('id','hubReactivateBtn').removeClass('btn-warning').addClass('btn-default').attr('onclick','hubReactivate()');
                     hubDeactivateBtn.find('i').removeClass('fa-ban').addClass('fa-check-square-o');
                     hubDeactivateBtn.find('span').text('Reactivate');
@@ -145,14 +145,14 @@
 
     function hubReactivate() {
         $.ajax({
-            url : '{{ route('h::reactivate') }}',
+            url : '@route('h::reactivate')',
             type : 'get',
             success : function (response)
             {
                 hubStatus = $('#hubStatus').attr('onclick','hubDeactivate()');
                 hubStatus.find('i').addClass('text-success').removeClass('text-custom');
                 hubStatus.find('span').text('Activated');
-                if (window.location.href == '{{ route('h::edit') }}') {
+                if (window.location.href == '@route('h::edit')') {
                     hubReactivateBtn = $('#hubReactivateBtn').attr('id','hubDeactivateBtn').addClass('btn-warning').removeClass('btn-default').attr('onclick','hubDeactivate()');
                     hubReactivateBtn.find('i').addClass('fa-ban').removeClass('fa-check-square-o');
                     hubReactivateBtn.find('span').text('Deactivate');
@@ -171,11 +171,11 @@
             confirmButtonText: "Yes",
             closeOnConfirm: false }, function() {
                 $.ajax({
-                    url : '{{ route('h::logout') }}',
+                    url : '@route('h::logout')',
                     type : 'get',
                     success : function (response)
                     {
-                        window.location.href="{{ route('h::index') }}";
+                        window.location.href="@route('h::index')";
                     }
                 });
             });
@@ -190,7 +190,7 @@
             confirmButtonText: "Yes",
             closeOnConfirm: false }, function() {
                 $.ajax({
-                    url : '{{ route('a::logout') }}',
+                    url : '@route('a::logout')',
                     type : 'get',
                     success : function (response)
                     {

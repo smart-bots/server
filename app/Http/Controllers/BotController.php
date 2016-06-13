@@ -24,6 +24,7 @@ class BotController extends Controller
         } else {
             $bots = auth()->user()->botsOf(session('currentHub'))->sortByDesc('id');
         }
+
         // Lấy trạng thái của bot (truestatus)
         for ($i=0;$i<count($bots);$i++) {
             if ($bots[$i]['true'] == 0) {
@@ -56,7 +57,7 @@ class BotController extends Controller
             'token' => 'required|size:10|unique:bots,token',
             // Kiểm tra xem user's id được add có phải là member của hub không
             'permissions.*' => 'exists:members,user_id,hub_id,'.session('currentHub'),
-            'higherpermissions.*' => 'exists:members,user_id,hub_id,'.session('currentHub')
+            'highpermissions.*' => 'exists:members,user_id,hub_id,'.session('currentHub')
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -75,11 +76,9 @@ class BotController extends Controller
         $bot->true        = 1;
 
 		if (!empty($request->image_values)) {
-			$image_values  = json_decode($request->image_values);
-			$image_name    = str_random(10).'.jpg';
-			$image_base64  = explode(',', $image_values->data);
-			file_put_contents(base_path().env('UPLOAD_IMAGES_FOLDER').'/'.$image_name, base64_decode($image_base64[1]));
-			$bot->image = env('UPLOAD_IMAGES_FOLDER').'/'.$image_name;
+            if (!empty($request->image_values)) {
+                $bot->image = upload_base64_image(json_decode($request->image_values)->data);
+            }
 		}
 
         $bot->save();
@@ -91,9 +90,9 @@ class BotController extends Controller
                 $newPerm->save();
             }
         }
-        if (is_array($request->higherpermissions)) {
-            foreach ($request->higherpermissions as $user_id) {
-                BotPermission::updateOrCreate(['bot_id' => $bot->id, 'user_id' => $user_id],['higher' => true]);
+        if (is_array($request->highpermissions)) {
+            foreach ($request->highpermissions as $user_id) {
+                BotPermission::updateOrCreate(['bot_id' => $bot->id, 'user_id' => $user_id],['high' => true]);
             }
         }
 
@@ -111,7 +110,7 @@ class BotController extends Controller
         }
         $perms = BotPermission::where('bot_id',$id)->get();
         $sUsers = array_pluck($perms,'user_id');
-        $perm2s = BotPermission::where('bot_id',$id)->where('higher',true)->get();
+        $perm2s = BotPermission::where('bot_id',$id)->where('high',true)->get();
         $sUser2s = array_pluck($perm2s,'user_id');
         return view('hub.bot.edit')->withBot($bot)->withUsers($nUsers)->withSelected($sUsers)->withSelected2($sUser2s);
     }
@@ -123,7 +122,7 @@ class BotController extends Controller
             'description' => 'max:1000',
             'image' => 'image',
             'permissions.*' => 'exists:members,user_id,hub_id,'.session('currentHub'),
-            'higherpermissions.*' => 'exists:members,user_id,hub_id,'.session('currentHub')
+            'highpermissions.*' => 'exists:members,user_id,hub_id,'.session('currentHub')
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -163,17 +162,17 @@ class BotController extends Controller
             }
         }
 
-        $botperms = BotPermission::where('bot_id',$id)->where('higher',true)->get();
+        $botperms = BotPermission::where('bot_id',$id)->where('high',true)->get();
         $users_of_bot_old = array_pluck($botperms,'user_id');
 
-        if (count($users_of_bot_old) > count($request->higherpermissions)) { // Xóa bớt
-            $diff = collect($users_of_bot_old)->diff($request->higherpermissions);
-            BotPermission::whereIn('user_id',$diff->all())->where('bot_id',$id)->where('higher',true)->update(['higher' => false]);
+        if (count($users_of_bot_old) > count($request->highpermissions)) { // Xóa bớt
+            $diff = collect($users_of_bot_old)->diff($request->highpermissions);
+            BotPermission::whereIn('user_id',$diff->all())->where('bot_id',$id)->where('high',true)->update(['high' => false]);
         } else { // Hoặc thêm
-            $diff = collect($request->higherpermissions)->diff($users_of_bot_old)->toArray();
+            $diff = collect($request->highpermissions)->diff($users_of_bot_old)->toArray();
             foreach ($diff as $user_id)
             {
-                BotPermission::updateOrCreate(['bot_id' => $id, 'user_id' => $user_id],['higher' => true]);
+                BotPermission::updateOrCreate(['bot_id' => $id, 'user_id' => $user_id],['high' => true]);
             }
         }
 

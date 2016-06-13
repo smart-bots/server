@@ -1,17 +1,17 @@
 @extends('hub.master')
 @section('title','Create new hub')
 @section('additionHeader')
-  <link rel="stylesheet" href="{{ asset('public/libs/html5imageupload/html5imageupload.css') }}">
+  <link rel="stylesheet" href="@asset('public/libs/html5imageupload/html5imageupload.css')">
 @endsection
 @section('additionFooter')
-  <script src="{{ asset('public/libs/html5imageupload/html5imageupload.js') }}"></script>
+  <script src="@asset('public/libs/html5imageupload/html5imageupload.js')"></script>
   <script>
     $('.dropzone').html5imageupload();
 
 
     function hubCreate() {
       $.ajax({
-          url : '{{ route('h::create') }}',
+          url : '@route('h::create')',
           type : 'post',
           data : $('[name=hub-create-form]').serializeArray(),
           dataType : 'json',
@@ -27,10 +27,10 @@
   </script>
 @endsection
 @section('body')
-{!! content_header('Create new hub', [
+@header('Create new hub', [
     'Hub' => '#',
     'Create' => 'active'
-]) !!}
+])
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
@@ -54,6 +54,12 @@
                     <div class="dropzone image-dropzone" data-ghost="false" data-canvas="true" data-originalsize="false" data-ajax="false" data-width="200" data-height="200">
                       {!! Form::file('image') !!}
                     </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  {!! Form::label('timezone', 'Timezone', ['class' => 'col-sm-2 control-label']) !!}
+                  <div class="col-sm-10">
+                    {!! Timezone::selectForm(null, null, array('class' => 'form-control', 'name' => 'timezone')) !!}
                   </div>
                 </div>
                 {!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Create', ['type' => 'submit', 'class' => 'btn btn-default pull-right btn-flat']) !!}

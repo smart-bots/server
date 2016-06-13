@@ -12,52 +12,57 @@ var vendor_dir = 'resources/assets/vendor/',
     css_dir = 'public/css/';
 
 var less = { // LESS file to compile => css
-    'components.less' : 'components.css',
-    'core.less' : 'core.css',
-    'libs.less' : 'libs.css',
-    'responsive.less' : 'responsive.css'
-},
+        'components.less' : 'components.css',
+        'core.less' : 'core.css',
+        'libs.less' : 'libs.css',
+        'responsive.less' : 'responsive.css'
+    },
+
     js = { // JS file vendored => libs
-    'jquery/dist/jquery.js' : 'jquery/jquery.js',
-    'bootstrap/dist/js/bootstrap.js' : 'bootstrap/js/bootstrap.js',
-    'jquery.scrollTo/jquery.scrollTo.js' : 'jquery.scrollTo/jquery.scrollTo.js',
-    'jquery.nicescroll/jquery.nicescroll.min.js' : 'jquery.nicescroll/jquery.nicescroll.js',
-    'slimscroll/jquery.slimscroll.js' : 'slimscroll/jquery.slimscroll.js',
-    'fastclick/lib/fastclick.js' : 'fastclick/fastclick.js',
-    'blockUI/jquery.blockUI.js' : 'blockUI/jquery.blockUI.js',
-    'Waves/dist/waves.js' : 'Waves/waves.js',
-    'wow/dist/wow.js' : 'wow/wow.js',
-    'sweetalert/dist/sweetalert.min.js' : 'sweetalert/sweetalert.js',
-    'multiselect/js/jquery.multi-select.js' : 'multiselect/js/jquery.multi-select.js',
-    'typeahead.js/dist/typeahead.bundle.js' : 'typeahead.js/typeahead.bundle.js',
-    'handlebars/handlebars.js' : 'handlebars/handlebars.js',
-    'moment/moment.js' : 'moment/moment.js',
-    'quicksearch/jquery.quicksearch.js' : 'quicksearch/jquery.quicksearch.js',
-    'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' : 'bootstrap-datetimepicker/bootstrap-datetimepicker.js',
-    'bootstrap-select/dist/js/bootstrap-select.js' : 'bootstrap-select/bootstrap-select.js'
-},
+        'jquery/dist/jquery.js' : 'jquery/jquery.js',
+        'bootstrap/dist/js/bootstrap.js' : 'bootstrap/js/bootstrap.js',
+        'jquery.scrollTo/jquery.scrollTo.js' : 'jquery.scrollTo/jquery.scrollTo.js',
+        'jquery.nicescroll/jquery.nicescroll.min.js' : 'jquery.nicescroll/jquery.nicescroll.js',
+        'slimscroll/jquery.slimscroll.js' : 'slimscroll/jquery.slimscroll.js',
+        'fastclick/lib/fastclick.js' : 'fastclick/fastclick.js',
+        'blockUI/jquery.blockUI.js' : 'blockUI/jquery.blockUI.js',
+        'Waves/dist/waves.js' : 'Waves/waves.js',
+        'wow/dist/wow.js' : 'wow/wow.js',
+        'sweetalert/dist/sweetalert.min.js' : 'sweetalert/sweetalert.js',
+        'multiselect/js/jquery.multi-select.js' : 'multiselect/js/jquery.multi-select.js',
+        'typeahead.js/dist/typeahead.bundle.js' : 'typeahead.js/typeahead.bundle.js',
+        'handlebars/handlebars.js' : 'handlebars/handlebars.js',
+        'moment/moment.js' : 'moment/moment.js',
+        'moment/locale/vi.js' : 'moment/vi.js',
+        'quicksearch/jquery.quicksearch.js' : 'quicksearch/jquery.quicksearch.js',
+        'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' : 'bootstrap-datetimepicker/bootstrap-datetimepicker.js',
+        'bootstrap-select/dist/js/bootstrap-select.js' : 'bootstrap-select/bootstrap-select.js'
+    },
+
     css = { // CSS file vendored => libs
-    'bootstrap/dist/css/bootstrap.css' : 'bootstrap/css/bootstrap.css',
-    'font-awesome/css/font-awesome.css' : 'font-awesome/css/font-awesome.css',
-    'themify-icons/css/themify-icons.css' : 'themify-icons/css/themify-icons.css',
-    'Waves/dist/waves.css' : 'Waves/waves.css',
-    'sweetalert/dist/sweetalert.css' : 'sweetalert/sweetalert.css',
-    'animate.css/animate.css' : 'animate.css/animate.css',
-    'multiselect/css/multi-select.css' : 'multiselect/css/multi-select.css',
-    'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css' : 'bootstrap-datetimepicker/bootstrap-datetimepicker.css',
-    'bootstrap-select/dist/css/bootstrap-select.css' : 'bootstrap-select/bootstrap-select.css'
-},
+        'bootstrap/dist/css/bootstrap.css' : 'bootstrap/css/bootstrap.css',
+        'font-awesome/css/font-awesome.css' : 'font-awesome/css/font-awesome.css',
+        'themify-icons/css/themify-icons.css' : 'themify-icons/css/themify-icons.css',
+        'Waves/dist/waves.css' : 'Waves/waves.css',
+        'sweetalert/dist/sweetalert.css' : 'sweetalert/sweetalert.css',
+        'animate.css/animate.css' : 'animate.css/animate.css',
+        'multiselect/css/multi-select.css' : 'multiselect/css/multi-select.css',
+        'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css' : 'bootstrap-datetimepicker/bootstrap-datetimepicker.css',
+        'bootstrap-select/dist/css/bootstrap-select.css' : 'bootstrap-select/bootstrap-select.css'
+    },
+
     assets = { // Assets file & folder vendored => libs
-    'bootstrap/dist/fonts' : 'bootstrap/fonts',
-    'font-awesome/fonts' : 'font-awesome/fonts',
-    'themify-icons/fonts' : 'themify-icons/fonts',
-    'multiselect/img' : 'multiselect/img'
-},
+        'bootstrap/dist/fonts' : 'bootstrap/fonts',
+        'font-awesome/fonts' : 'font-awesome/fonts',
+        'themify-icons/fonts' : 'themify-icons/fonts',
+        'multiselect/img' : 'multiselect/img'
+    },
+
     jsx = { // JS (not vendored) files => js
-    'jquery.core.js' : 'jquery.core.js',
-    'jquery.app.js' : 'jquery.app.js',
-    'jquery.custom.js' : 'jquery.custom.js'
-};
+        'jquery.core.js' : 'jquery.core.js',
+        'jquery.app.js' : 'jquery.app.js',
+        'jquery.custom.js' : 'jquery.custom.js'
+    };
 
 elixir.extend('compress', function() {
     new elixir.Task('compress', function() {

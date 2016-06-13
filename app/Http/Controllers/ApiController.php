@@ -13,9 +13,11 @@ class ApiController extends Controller
 {
 
 	public function up($token,$bot_token,$status,$hard = 0) {
+
         // $status là trạng thái của bot được hub gửi
         // nếu $hard được gán nghĩa là thay đổi cứng (server phải thay đổi theo)
-        // http://localhost/smartbots/api/BqkbCjdsOIicxLwQo5CT7e9gBKxbcHM9hHJs4JH19UlnsntCmx/up/abcabcabc1/0/1
+        // http://dev.env/smartbots/api/BqkbCjdsOIicxLwQo5CT7e9gBKxbcHM9hHJs4JH19UlnsntCmx/up/abcabcabc1/0/1
+
         if (Hub::where('token',$token)->firstOrFail()->hasBotToken($bot_token))
         {
             $bot = Bot::where('token',$bot_token)->firstOrFail();
@@ -42,7 +44,7 @@ class ApiController extends Controller
         }
     }
     public function down($token) {
-        // http://localhost/smartbots/api/BqkbCjdsOIicxLwQo5CT7e9gBKxbcHM9hHJs4JH19UlnsntCmx/down
+        // http://dev.env/smartbots/api/BqkbCjdsOIicxLwQo5CT7e9gBKxbcHM9hHJs4JH19UlnsntCmx/down
         $bots = Hub::where('token',$token)->firstOrFail()->bots()->activated()->where('true',0)->get();
         $nBots = ["c" => count($bots)];
         for ($i=0; $i < count($bots); $i++) {

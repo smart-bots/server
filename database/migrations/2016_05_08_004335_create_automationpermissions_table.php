@@ -18,7 +18,7 @@ class CreateAutomationpermissionsTable extends Migration
         //     $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         //     $table->integer('automation_id')->unsigned();
         //     $table->foreign('automation_id')->references('id')->on('automations')->onDelete('cascade');
-        //     $table->boolean('higher')->default(false);
+        //     $table->boolean('high')->default(false);
         // });
     }
 

@@ -1,10 +1,10 @@
 @extends('hub.master')
 @section('title','Hub edit')
 @section('additionHeader')
-	<link rel="stylesheet" href="{{ asset('public/libs/html5imageupload/html5imageupload.css') }}">
+	<link rel="stylesheet" href="@asset('public/libs/html5imageupload/html5imageupload.css')">
 @endsection
 @section('additionFooter')
-	<script src="{{ asset('public/libs/html5imageupload/html5imageupload.js') }}"></script>
+	<script src="@asset('public/libs/html5imageupload/html5imageupload.js')"></script>
 	<script>
 	$('.dropzone').html5imageupload();
 
@@ -27,11 +27,11 @@
 	        confirmButtonText: "Yes",
 	        closeOnConfirm: false }, function() {
 	            $.ajax({
-	                url : '{{ route('h::destroy') }}',
+	                url : '@route('h::destroy')',
 	                type : 'get',
 	                success : function (response)
 	                {
-	                    window.location.href="{{ route('h::index') }}";
+	                    window.location.href="@route('h::index')";
 	                }
 	            });
 	        });
@@ -39,7 +39,7 @@
 
 	function hubEdit() {
 		$.ajax({
-		    url : '{{ route('h::edit') }}',
+		    url : '@route('h::edit')',
 		    type : 'post',
 		    data : $('[name=hub-edit-form]').serializeArray(),
 		    dataType : 'json',
@@ -53,10 +53,10 @@
 	</script>
 @endsection
 @section('body')
-{!! content_header('Hub edit', [
+@header('Hub edit', [
     'Hub' => '#',
     'Edit' => 'active'
-]) !!}
+])
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
@@ -84,7 +84,7 @@
 			<div class="form-group">
 				{!! Form::label('image', 'Image', ['class' => 'col-sm-2 control-label']) !!}
 				<div class="col-sm-10">
-					<div class="dropzone image-dropzone" data-image="{{ asset($hub['image']) }}" data-ghost="false" data-canvas="true" data-originalsize="false" data-ajax="false" data-width="200" data-height="200">
+					<div class="dropzone image-dropzone" data-image="@asset($hub['image'])" data-ghost="false" data-canvas="true" data-originalsize="false" data-ajax="false" data-width="200" data-height="200">
 						{!! Form::file('image') !!}
 					</div>
 				</div>
@@ -94,6 +94,12 @@
 				<div class="col-sm-10">
 					{!! Form::textarea('description', $hub['description'], ['class' => 'form-control']) !!}
 				</div>
+			</div>
+			<div class="form-group">
+			  {!! Form::label('timezone', 'Timezone', ['class' => 'col-sm-2 control-label']) !!}
+			  <div class="col-sm-10">
+			    {!! Timezone::selectForm($hub['timezone'], null, array('class' => 'form-control', 'name' => 'timezone')) !!}
+			  </div>
 			</div>
 			{!! Form::button('<i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;&nbsp;Save', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
 			{!! Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;&nbsp;Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'hubDelete()']) !!}

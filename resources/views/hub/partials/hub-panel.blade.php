@@ -1,6 +1,6 @@
 <div class="user-details">
     <div class="pull-left">
-        <img src="{{ asset($hub_panel->image) }}" alt="" class="thumb-md img-circle">
+        <img src="@asset($hub_panel->image)" alt="" class="thumb-md img-circle">
     </div>
     <div class="user-info">
         <div class="dropdown">

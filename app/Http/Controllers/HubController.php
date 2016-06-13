@@ -33,8 +33,9 @@ class HubController extends Controller
 
     public function store(Request $request) {
         $rules = [
-            'name'  => 'required|max:100',
-            'description' => 'max:1000'
+            'name'        => 'required|max:100',
+            'description' => 'max:1000',
+            'timezone'    => 'required|timezone'
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -43,28 +44,27 @@ class HubController extends Controller
             return response()->json($validator->errors());
         }
 
-		$newHub = new Hub;
-		$newHub->name        = $request->name;
-		$newHub->description = $request->description;
-		$newHub->token         = str_random(50);
+        $newHub              = new Hub;
+        $newHub->name        = $request->name;
+        $newHub->description = $request->description;
+        $newHub->token       = str_random(50);
+        $newHub->timezone    = $request->timezone;
+
 		if (!empty($request->image_values)) {
-			$image_values  = json_decode($request->image_values);
-			$image_name    = str_random(10).'.jpg';
-			$image_base64  = explode(',', $image_values->data);
-			file_put_contents(base_path().env('UPLOAD_IMAGES_FOLDER').'/'.$image_name, base64_decode($image_base64[1]));
-			$newHub->image = env('UPLOAD_IMAGES_FOLDER').'/'.$image_name;
+            $newHub->image = upload_base64_image(json_decode($request->image_values)->data);
 		}
+
 		$newHub->save();
 
-        $newMember = new Member;
+        $newMember          = new Member;
         $newMember->user_id = auth()->user()->id;
-        $newMember->hub_id = $newHub->id;
+        $newMember->hub_id  = $newHub->id;
         $newMember->save();
 
-        $newHubPermission = new HubPermission;
+        $newHubPermission          = new HubPermission;
         $newHubPermission->user_id = auth()->user()->id;
-        $newHubPermission->hub_id = $newHub->id;
-        $newHubPermission->data = 0; // root admin
+        $newHubPermission->hub_id  = $newHub->id;
+        $newHubPermission->data    = 0; // root admin
         $newHubPermission->save();
 
         $errors = ['success' => 'true', 'href' => route('h::index')];
@@ -85,6 +85,7 @@ class HubController extends Controller
         // if (auth()->user()->can('view',Hub::findOrFail(session('currentHub')))) {
         //     return redirect()->route('h::edit');
         // } else { return redirect()->route('h::b::index'); }
+
         return view('hub.dashboard');
     }
 
@@ -97,9 +98,10 @@ class HubController extends Controller
     public function update(Request $request)
     {
         $rules = [
-            'name'  => 'required|max:100',
-            'token'   => 'required|size:50|unique:hubs,id,'.session('currentHub'),
-            'description' => 'max:1000'
+            'name'        => 'required|max:100',
+            'token'       => 'required|size:50|unique:hubs,id,'.session('currentHub'),
+            'description' => 'max:1000',
+            'timezone'    => 'required|timezone'
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -108,21 +110,22 @@ class HubController extends Controller
             return response()->json($validator->errors());
         }
 
-		$hub = Hub::findOrFail(session('currentHub'));
-		$hub->name        = $request->name;
-		$hub->description = $request->description;
-		$hub->token   = $request->token;
-		if (!empty($request->image_values)) {
-			$image_values  = json_decode($request->image_values);
-			$image_name    = str_random(10).'.jpg';
-			$image_base64  = explode(',', $image_values->data);
-			file_put_contents(base_path().env('UPLOAD_IMAGES_FOLDER').'/'.$image_name, base64_decode($image_base64[1]));
-			$hub->image = env('UPLOAD_IMAGES_FOLDER').'/'.$image_name;
-		}
+        $hub              = Hub::findOrFail(session('currentHub'));
+        $hub->name        = $request->name;
+        $hub->description = $request->description;
+        $hub->token       = $request->token;
+        $hub->timezone    = $request->timezone;
+
+        if (!empty($request->image_values)) {
+            $hub->image = upload_base64_image(json_decode($request->image_values)->data);
+        }
+
 		$hub->save();
 
 		return response()->json(['success' => 'Saved successfully']);
     }
+
+    // Get bot status
 
     public function botsStatus(Request $request)
     {

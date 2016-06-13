@@ -22,8 +22,8 @@ class HubPolicy
         //
     }
 
-    public function doAnything(User $user, Hub $hub) { // is Root admin?
-        return HubPermission::where('user_id',$user->id)->where('hub_id',$hub->id)->whereIn('data',[0])->exists();
+    public function doAnything(User $user, Hub $hub) {
+        return HubPermission::where('user_id',$user->id)->where('hub_id',$hub->id)->where('data',0)->exists();
     }
 
     public function view(User $user, Hub $hub) {

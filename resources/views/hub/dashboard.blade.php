@@ -7,10 +7,10 @@
 
 @endsection
 @section('body')
-{!! content_header('Dashboard', [
+@header('Dashboard', [
     'Hub' => '#',
     'Dashboard' => 'active'
-]) !!}
+])
 <div class="row">
     <div class="col-lg-4">
         <div class="card-box">

@@ -212,6 +212,79 @@
     $('[name="condition[bot][0]"]').typeahead(null, typeahead_bot_option);
   }
 
+  function scheduleDeactivate(id) {
+    swal({
+      title: "Are you sure?",
+      text: "To deactivate this schedule?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes"}, function() {
+        $.ajax({
+            url : '{{ route('h::s::deactivate',$sche['id']) }}',
+            type : 'post',
+            dataType: 'json',
+            data : {
+              _token: '{{ csrf_token() }}',
+              id: id
+            },
+            success : function (response)
+            {
+                $('#scheduleTus').text('Deactivated').removeClass('label-primary').addClass('label-danger');
+                scheduleDeactivateBtn = $('#scheduleDeactivateBtn').attr('id','scheduleReactivateBtn').removeClass('btn-warning').addClass('btn-default').attr('onclick','scheduleReactivate()');
+                scheduleDeactivateBtn.find('i').removeClass('fa-ban').addClass('fa-check-square-o');
+                scheduleDeactivateBtn.find('span:not(.btn-label)').text('Reactivate');
+            }
+          });
+      });
+    }
+
+  function scheduleReactivate(id) {
+    swal({
+      title: "Are you sure?",
+      text: "To reactivate this schedule?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes"}, function() {
+        $.ajax({
+            url : '{{ route('h::s::reactivate',$sche['id']) }}',
+            type : 'post',
+            dataType: 'json',
+            data : {
+              _token: '{{ csrf_token() }}',
+              id: id
+            },
+            success : function (response)
+            {
+                $('#scheduleTus').text('Activated').removeClass('label-danger').addClass('label-primary');
+                scheduleReactivateBtn = $('#scheduleReactivateBtn').attr('id','scheduleDeactivateBtn').addClass('btn-warning').removeClass('btn-default').attr('onclick','scheduleDeactivate()');
+                scheduleReactivateBtn.find('i').addClass('fa-ban').removeClass('fa-check-square-o');
+                scheduleReactivateBtn.find('span:not(.btn-label)').text('Deactivate');
+            }
+          });
+      });
+  }
+
+  function scheduleDelete() {
+    swal({
+      title: "Are you sure?",
+      text: "To delete this schedule?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      closeOnConfirm: false }, function() {
+        $.ajax({
+            url : '{!!  route('h::s::destroy',$sche['id']) !!}',
+            type : 'post',
+            dataType: 'json',
+            data : { _token: '{{ csrf_token() }}' },
+            success : function (response)
+            {
+                window.location.href = '{{ route('h::s::index') }}';
+            }
+          });
+      });
+  }
+
   function createSchedule() {
 
     // var i = 0;
@@ -426,6 +499,15 @@
     });
     return false;
   }
+  $('.datetimepicker').datetimepicker();
+  <?php
+    $data = explode('|',$sche['data']);
+    $i=0;
+    foreach ($data as $single_data) {
+      echo 'changeFrequency('.$i.');';
+      $i++;
+    }
+  ?>
 </script>
 @endsection
 @section('body')
@@ -436,29 +518,56 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
-    {!! Form::open(['route' => 'h::s::create', 'class' => 'form-horizontal', 'name' => 'create-schedule-form', 'onsubmit' => 'return createSchedule()']) !!}
+    {!! Form::open(['route' => ['h::s::edit',$sche['id']], 'class' => 'form-horizontal', 'name' => 'edit-schedule-form', 'onsubmit' => 'return editSchedule()']) !!}
+      <div class="form-group">
+        {!! Form::label('status', 'Status', ['class' => 'col-sm-2 control-label']) !!}
+        <div class="col-sm-10">
+          <?php
+            switch ($sche['status']) {
+              case 0:
+                echo '<h4><span class="label label-danger" id="scheduleTus">Deactivated</span></h4>';
+                break;
+              case 1:
+                echo '<h4><span class="label label-primary" id="scheduleTus">Activated</span></h4>';
+                break;
+            }
+          ?>
+        </div>
+      </div>
       <div class="form-group">
         {!! Form::label('name', 'Name', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
-          {!! Form::text('name', old('name'), ['class' => 'form-control']) !!}
+          {!! Form::text('name', $sche['name'], ['class' => 'form-control']) !!}
         </div>
       </div>
       <div class="form-group">
         {!! Form::label('description', 'Description', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
-          {!! Form::textarea('description', old('description'), ['class' => 'form-control']) !!}
+          {!! Form::textarea('description', $sche['description'], ['class' => 'form-control']) !!}
         </div>
       </div>
       <div class="form-group">
         {!! Form::label('action', 'Action', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
-          <div id="actions" data-count="1">
-            <div class="input-group">
-              <div class="input-group-btn">
-                {!! Form::select('action[type][0]', ['1' => 'Toggle', '2' => 'Turn on', '3' => 'Turn off'], null, ['class' => 'form-control', 'style' => 'margin-top: -5px']) !!}
+          <?php
+            $schedule_actions = explode('|',$sche->action);
+          ?>
+          <div id="actions" data-count="{{ count($schedule_actions) }}">
+            <?php
+              for($i=0; $i<count($schedule_actions); $i++) {
+
+                $schedule_actions[$i] = explode(',',$schedule_actions[$i]);
+
+            ?>
+              <div class="input-group">
+                <div class="input-group-btn">
+                  {!! Form::select('action[type]['.$i.']', ['1' => 'Toggle', '2' => 'Turn on', '3' => 'Turn off'], $schedule_actions[$i][0], ['class' => 'form-control', 'style' => 'margin-top: -5px']) !!}
+                </div>
+                {!! Form::text('action[bot]['.$i.']', $schedule_actions[$i][1], ['class' => 'form-control b-left-0']) !!}
               </div>
-              {!! Form::text('action[bot][0]', null, ['class' => 'form-control b-left-0']) !!}
-            </div>
+            <?php
+              }
+            ?>
           </div>
           {!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Add action', ['class' => 'btn btn-default pull-right','onclick' => 'addAction()']) !!}
         </div>
@@ -466,16 +575,53 @@
       <div class="form-group">
         {!! Form::label('type', 'Type', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
-          {!! Form::select('type', ['1' => 'One time', '2' => 'Repeat'], old('type'), ['class' => 'form-control', 'onChange' => 'changeType()', 'style' => 'width: 100% !important']) !!}
+          {!! Form::select('type', ['1' => 'One time', '2' => 'Repeat'], $sche['type'], ['class' => 'form-control', 'onChange' => 'changeType()', 'style' => 'width: 100% !important']) !!}
         </div>
       </div>
       <div id="data">
+        @if ($sche['type'] == 1)
         <div class="form-group">
           {!! Form::label('time', 'Time', ['class' => 'col-sm-2 control-label']) !!}
           <div class="col-sm-10">
-            {!! Form::text('time', old('time'), ['class' => 'form-control datetimepicker']) !!}
+            {!! Form::text('time', $sche['time'], ['class' => 'form-control datetimepicker']) !!}
           </div>
         </div>
+        @else
+        <div class="form-group">
+          {!! Form::label('frequency', 'Frequency', ['class' => 'col-sm-2 control-label']) !!}
+          <div class="col-sm-10">
+            <?php
+            $data = explode('|',$sche['data']);
+            ?>
+            <div id="frequencies" data-count="1" class="m-b-5">
+            <?php
+              $i=0;
+              foreach ($data as $single_data) {
+                $single_data = explode(',',$single_data);
+            ?>
+              <div class="input-group m-t-5">
+                <span class="input-group-addon">Every</span>
+                {!! Form::text('frequency[value]['.$i.']', $single_data[1], ['class' => 'form-control b-right-0']) !!}
+                <div class="input-group-btn">
+                  {!! Form::select('frequency[unit]['.$i.']', ['1' => 'minute(s)', '2' => 'hour(s)', '3' => 'day(s)', '4' => 'week(s)', '5' => 'month(s)', '6' => 'year(s)'], $single_data[0], ['class' => 'form-control', 'onChange' => 'changeFrequency('.$i.')']) !!}
+                </div>
+                @if (isset($single_data[2]) && $single_data[2] != null)
+                  <span class="input-group-addon b-left-0 b-right-0" id="fre-at-text-0">At</span>
+                  {!! Form::text('frequency[at]['.$i.']', $single_data[2], ['id' => 'fre-at-input-0', 'class' => 'form-control datetimepicker']) !!}
+                @else
+                  <span class="input-group-addon b-left-0 b-right-0" id="fre-at-text-0" style="display: none">At</span>
+                  {!! Form::text('frequency[at]['.$i.']', null, ['id' => 'fre-at-input-0', 'class' => 'form-control datetimepicker', 'readonly' => 'readonly', 'style' => 'display: none']) !!}
+                @endif
+              </div>
+            <?php
+              $i++;
+              }
+            ?>
+            </div>
+          {!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Add frequency', ['class' => 'btn btn-default pull-right', 'onclick' => 'addFrequency()']) !!}
+          </div>
+        </div>'
+        @endif
       </div>
       <div class="form-group">
         {!! Form::label('condition', 'Condition', ['class' => 'col-sm-2 control-label']) !!}
@@ -491,7 +637,7 @@
       <div class="form-group">
         {!! Form::label('activate_after', 'Activate after', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
-          {!! Form::text('activate_after', old('activate_after'), ['class' => 'form-control datetimepicker']) !!}
+          {!! Form::text('activate_after', $sche['activate_after'], ['class' => 'form-control datetimepicker']) !!}
           <span class="help-block m-b-0">
             Leave blank to activate immediately
           </span>
@@ -501,18 +647,24 @@
         {!! Form::label('deactivate_after', 'Deactivate after', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
           <div class="input-group">
-            {!! Form::text('deactivate_after_times', old('deactivate_after_times'), ['class' => 'form-control']) !!}
+            {!! Form::text('deactivate_after_times', $sche['deactivate_after_times'], ['class' => 'form-control']) !!}
             <span class="input-group-addon b-left-0 b-right-0">
               time(s) or
             </span>
-            {!! Form::text('deactivate_after_datetime', old('deactivate_after_datetime'), ['class' => 'form-control datetimepicker']) !!}
+            {!! Form::text('deactivate_after_datetime', $sche['deactivate_after_datetime'], ['class' => 'form-control datetimepicker']) !!}
           </div>
           <span class="help-block m-b-0">
             Leave blank to avoid (infinitive loop or deactivate manually)
           </span>
         </div>
       </div>
-      {!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Add', ['type' => 'submit', 'class' => 'btn btn-primary  waves-effect waves-light']) !!}
+      {!! Form::button('<span class="btn-label"><i class="fa fa-floppy-o" aria-hidden="true"></i></span>Save', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
+      {!! Form::button('<span class="btn-label"><i class="fa fa-trash" aria-hidden="true"></i></span>Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'scheduleDelete()']) !!}</a>
+      @if ($sche['status'] != 0)
+        {!! Form::button('<span class="btn-label"><i class="fa fa-ban" aria-hidden="true"></i></span><span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right m-r-5','id' => 'scheduleDeactivateBtn','onclick' => 'scheduleDeactivate()']) !!}
+      @else
+        {!! Form::button('<span class="btn-label"><i class="fa fa-check-square-o" aria-hidden="true"></i></i></span><span>Reactivate</span>', ['type' => 'button', 'class' => 'btn btn-default pull-right m-r-5','id' => 'scheduleReactivateBtn','onclick' => 'scheduleReactivate()']) !!}
+      @endif
     {!! Form::close() !!}
   </div>
 </div>
