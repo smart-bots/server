@@ -12,7 +12,7 @@ use SmartBots\Bot;
 class ApiController extends Controller
 {
 
-	public function up($token,$bot_token,$status,$hard = 0) {
+    public function up($token,$bot_token,$status,$hard = 0) {
 
         // $status là trạng thái của bot được hub gửi
         // nếu $hard được gán nghĩa là thay đổi cứng (server phải thay đổi theo)

@@ -114,4 +114,23 @@ class HubPolicy
             || ($user->member($hub->id)->isActivated()
                 && HubPermission::where('user_id',$user->id)->where('hub_id',$hub->id)->where('data',14)->exists());
     }
+
+    public function createEvents(User $user, Hub $hub) {
+        return $this->doAnything($user,$hub)
+            || ($user->member($hub->id)->isActivated()
+                && HubPermission::where('user_id',$user->id)->where('hub_id',$hub->id)->where('data',15)->exists());
+    }
+
+    public function viewAllEvents(User $user, Hub $hub) {
+        return $this->doAnything($user,$hub)
+            || ($user->member($hub->id)->isActivated()
+                && ($this->editDeleteAllEvents($user,$hub)
+                    || HubPermission::where('user_id',$user->id)->where('hub_id',$hub->id)->where('data',16)->exists()));
+    }
+
+    public function editDeleteAllEvents(User $user, Hub $hub) {
+        return $this->doAnything($user,$hub)
+            || ($user->member($hub->id)->isActivated()
+                && HubPermission::where('user_id',$user->id)->where('hub_id',$hub->id)->where('data',17)->exists());
+    }
 }

@@ -24,7 +24,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
-        //
         $router->pattern('id', '[0-9]+');
 
         parent::boot($router);
@@ -40,7 +39,6 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->mapWebRoutes($router);
 
-        //
     }
 
     /**

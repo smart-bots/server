@@ -28,7 +28,7 @@ class HubController extends Controller
     }
 
     public function create() {
-    	return view('hub.create');
+        return view('hub.create');
     }
 
     public function store(Request $request) {
@@ -50,11 +50,11 @@ class HubController extends Controller
         $newHub->token       = str_random(50);
         $newHub->timezone    = $request->timezone;
 
-		if (!empty($request->image_values)) {
+        if (!empty($request->image_values)) {
             $newHub->image = upload_base64_image(json_decode($request->image_values)->data);
-		}
+        }
 
-		$newHub->save();
+        $newHub->save();
 
         $newMember          = new Member;
         $newMember->user_id = auth()->user()->id;
@@ -68,7 +68,7 @@ class HubController extends Controller
         $newHubPermission->save();
 
         $errors = ['success' => 'true', 'href' => route('h::index')];
-		return response()->json($errors);
+        return response()->json($errors);
     }
 
     public function login(Request $request)
@@ -120,9 +120,9 @@ class HubController extends Controller
             $hub->image = upload_base64_image(json_decode($request->image_values)->data);
         }
 
-		$hub->save();
+        $hub->save();
 
-		return response()->json(['success' => 'Saved successfully']);
+        return response()->json(['success' => 'Saved successfully']);
     }
 
     // Get bot status
@@ -135,7 +135,7 @@ class HubController extends Controller
             if ($bots[$i]['true'] == 0) {
                 $status = 2;
             } else {
-            	$status = $bots[$i]['status'];
+                $status = $bots[$i]['status'];
             }
             $bots2[$bots[$i]['id']] = $status;
         }
@@ -144,14 +144,14 @@ class HubController extends Controller
 
     public function deactivate()
     {
-    	$hub = Hub::findOrFail(session('currentHub'))->deactivate();
-    	return response()->json(['error' => 0]);
+        $hub = Hub::findOrFail(session('currentHub'))->deactivate();
+        return response()->json(['error' => 0]);
     }
 
     public function reactivate()
     {
-    	$hub = Hub::findOrFail(session('currentHub'))->reactivate();
-    	return response()->json(['error' => 0]);
+        $hub = Hub::findOrFail(session('currentHub'))->reactivate();
+        return response()->json(['error' => 0]);
     }
 
     public function logout()
@@ -164,6 +164,6 @@ class HubController extends Controller
     {
         Hub::destroy(session('currentHub'));
         $this->logout();
-   		return response()->json(['error' => 0]);
+        return response()->json(['error' => 0]);
     }
 }

@@ -131,7 +131,10 @@ $.fn.validate = function(data = [], except = [], successCallBack = false, global
     for (var prop in data) {
         if (prop.indexOf('.') != -1) {
             var propArr = prop.split('.');
-            var prop2 = propArr[0]+'['+propArr[1]+']['+propArr[2]+']';
+            var prop2 = propArr[0];
+            for (i = 1; i < propArr.length; i++) {
+                prop2 += '['+propArr[i]+']';
+            }
             data2[prop2] = data[prop];
         } else {
             data2[prop] = data[prop];

@@ -48,7 +48,7 @@
   };
 
   $("[name='permissions[]']").multiSelect(searchableObj);
-  $("[name='higherpermissions[]']").multiSelect(searchableObj);
+  $("[name='highpermissions[]']").multiSelect(searchableObj);
 
   function botDeactivate() {
     swal({
@@ -209,16 +209,16 @@
           </div>
         </div>
         <div class="form-group">
-          {!! Form::label('permissions', 'Permissions', ['class' => 'col-sm-2 control-label']) !!}
+          {!! Form::label('permissions', 'Low permissions', ['class' => 'col-sm-2 control-label']) !!}
           <div class="col-sm-10">
             {!! Form::select('permissions[]', $users, $selected, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
             <span class="help-block margin-bottom-none">Users can manage this bot</span>
           </div>
         </div>
         <div class="form-group">
-          {!! Form::label('higherpermissions', 'Higher permissions', ['class' => 'col-sm-2 control-label']) !!}
+          {!! Form::label('highpermissions', 'High permissions', ['class' => 'col-sm-2 control-label']) !!}
           <div class="col-sm-10">
-            {!! Form::select('higherpermissions[]', $users, $selected2, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+            {!! Form::select('highpermissions[]', $users, $selected2, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
             <span class="help-block margin-bottom-none">Users can manage this bot</span>
           </div>
         </div>

@@ -107,21 +107,23 @@
 <script>
     var resizefunc = [];
 </script>
-<script src="@asset('public/libs/jquery/jquery.js')"></script>
-<script src="@asset('public/libs/modernizr/modernizr.js')"></script>
-<script src="@asset('public/libs/bootstrap/js/bootstrap.js')"></script>
-<script src="@asset('public/libs/detectmobilebrowser/detectmobilebrowser.js')"></script>
-<script src="@asset('public/libs/fastclick/fastclick.js')"></script>
-<script src="@asset('public/libs/blockUI/jquery.blockUI.js')"></script>
-<script src="@asset('public/libs/Waves/waves.js')"></script>
-<script src="@asset('public/libs/wow/wow.js')"></script>
-<script src="@asset('public/libs/slimscroll/jquery.slimscroll.js')"></script>
-<script src="@asset('public/libs/jquery.nicescroll/jquery.nicescroll.js')"></script>
-<script src="@asset('public/libs/jquery.scrollTo/jquery.scrollTo.js')"></script>
-<script src="@asset('public/libs/sweetalert/sweetalert.js')"></script>
-<script src="@asset('public/js/jquery.core.js')"></script>
-<script src="@asset('public/js/jquery.app.js')"></script>
-<script src="@asset('public/js/jquery.custom.js')"></script>
+<script type="text/javascript" src="@asset('public/libs/jquery/jquery.js')"></script>
+<script type="text/javascript" src="@asset('public/libs/raven-js/raven.js')"></script>
+<script>Raven.config('https://fbc910700f1a485c9fc08c38fc8cbec1@app.getsentry.com/83304').install()</script>
+<script type="text/javascript" src="@asset('public/libs/modernizr/modernizr.js')"></script>
+<script type="text/javascript" src="@asset('public/libs/bootstrap/js/bootstrap.js')"></script>
+<script type="text/javascript" src="@asset('public/libs/detectmobilebrowser/detectmobilebrowser.js')"></script>
+<script type="text/javascript" src="@asset('public/libs/fastclick/fastclick.js')"></script>
+<script type="text/javascript" src="@asset('public/libs/blockUI/jquery.blockUI.js')"></script>
+<script type="text/javascript" src="@asset('public/libs/Waves/waves.js')"></script>
+<script type="text/javascript" src="@asset('public/libs/wow/wow.js')"></script>
+<script type="text/javascript" src="@asset('public/libs/slimscroll/jquery.slimscroll.js')"></script>
+<script type="text/javascript" src="@asset('public/libs/jquery.nicescroll/jquery.nicescroll.js')"></script>
+<script type="text/javascript" src="@asset('public/libs/jquery.scrollTo/jquery.scrollTo.js')"></script>
+<script type="text/javascript" src="@asset('public/libs/sweetalert/sweetalert.js')"></script>
+<script type="text/javascript" src="@asset('public/js/jquery.core.js')"></script>
+<script type="text/javascript" src="@asset('public/js/jquery.app.js')"></script>
+<script type="text/javascript" src="@asset('public/js/jquery.custom.js')"></script>
 <script>
     Waves.init();
 

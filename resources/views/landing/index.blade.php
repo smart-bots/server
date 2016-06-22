@@ -15,29 +15,35 @@
     <meta name="description" content="The Smartbots System">
     <meta name="author" content="">
 
-    <link href="{{ asset('public/landing/css/bootstrap.min.css') }}" rel="stylesheet">
-
-    <link href="{{ asset('public/landing/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Arvo:400,700' rel='stylesheet' type='text/css'>
-    <link href="{{ asset('public/landing/css/general.css') }}" rel="stylesheet">
+    <link href="@asset('public/libs/bootstrap/css/bootstrap.css')" rel="stylesheet" type="text/css"/>
+    <link href="@asset('public/libs/font-awesome/css/font-awesome.css')" rel="stylesheet" type="text/css"/>
 
+    <link href="{{ asset('public/landing/css/general.css') }}" rel="stylesheet">
     <link href="{{ asset('public/landing/css/custom.css') }}" rel="stylesheet">
 	<link href="{{ asset('public/landing/css/owl.carousel.css') }}" rel="stylesheet">
     <link href="{{ asset('public/landing/css/owl.theme.css') }}" rel="stylesheet">
 	<link href="{{ asset('public/landing/css/style.css') }}" rel="stylesheet">
-	<link href="{{ asset('public/landing/css/animate.css') }}" rel="stylesheet">
-
+	<link href="@asset('public/libs/animate.css/animate.css')" rel="stylesheet" type="text/css"/>
 	<link rel="stylesheet" href="{{ asset('public/landing/css/magnific-popup.css') }}">
 
-	<script src="{{ asset('public/landing/js/modernizr-2.8.3.min.js') }}"></script>  <!-- Modernizr /-->
+	<style>
+	.tick {
+		position: relative;
+		width: 10px;
+		height: 10px;
+		line-height: 10px;
+	}
+	</style>
+
+	<script src="{{ asset('public/landing/js/modernizr-2.8.3.min.js') }}"></script>
 	<!--[if IE 9]>
 		<script src="{{ asset('public/landing/js/PIE_IE9.js') }}"></script>
 	<![endif]-->
 	<!--[if lt IE 9]>
 		<script src="{{ asset('public/landing/js/PIE_IE678.js') }}"></script>
 	<![endif]-->
-
 	<!--[if lt IE 9]>
 		<script src="{{ asset('public/landing/js/html5shiv.js') }}"></script>
 	<![endif]-->
@@ -330,12 +336,12 @@
 	<div  class="content-section-c ">
 		<div class="container">
 			<div class="row">
-			<div class="col-md-6 col-md-offset-3 text-center white">
-				<h2>Get Live Updates</h2>
-				<p class="lead" style="margin-top:0">If you would like to receive news and special offers please send us your email address below</p>
-			 </div>
-			<div class="col-md-6 col-md-offset-3 text-center">
-				<div class="mockup-content">
+				<div class="col-md-6 col-md-offset-3 text-center white">
+					<h2>Get Live Updates</h2>
+					<p class="lead" style="margin-top:0">If you would like to receive news and special offers please send us your email address below</p>
+				 </div>
+				<div class="col-md-6 col-md-offset-3 text-center">
+					<div class="mockup-content">
 						<div class="morph-button wow pulse morph-button-inflow morph-button-inflow-1">
 							<button type="button "><span>Subscribe to our Newsletter</span></button>
 							<div class="morph-content">
@@ -350,8 +356,8 @@
 								</div>
 							</div>
 						</div>
+					</div>
 				</div>
-			</div>
 			</div>
 		</div>
 	</div>
@@ -371,7 +377,7 @@
 						<label for="InputName">Your Name</label>
 						<div class="input-group">
 							<input type="text" class="form-control" name="InputName" id="InputName" placeholder="Enter Name" required>
-							<span class="input-group-addon"><i class="glyphicon glyphicon-ok form-control-feedback"></i></span>
+							<span class="input-group-addon"><i class="glyphicon glyphicon-ok form-control-feedback tick"></i></span>
 						</div>
 					</div>
 
@@ -379,7 +385,7 @@
 						<label for="InputEmail">Your Email</label>
 						<div class="input-group">
 							<input type="email" class="form-control" id="InputEmail" name="InputEmail" placeholder="Enter Email" required  >
-							<span class="input-group-addon"><i class="glyphicon glyphicon-ok form-control-feedback"></i></span>
+							<span class="input-group-addon"><i class="glyphicon glyphicon-ok form-control-feedback tick"></i></span>
 						</div>
 					</div>
 
@@ -387,7 +393,7 @@
 						<label for="InputMessage">Message</label>
 						<div class="input-group">
 							<textarea name="InputMessage" id="InputMessage" class="form-control" rows="5" required></textarea>
-							<span class="input-group-addon"><i class="glyphicon glyphicon-ok form-control-feedback"></i></span>
+							<span class="input-group-addon"><i class="glyphicon glyphicon-ok form-control-feedback tick"></i></span>
 						</div>
 					</div>
 					<input type="submit" name="submit" id="submit" value="Submit" class="btn wow tada btn-embossed btn-primary pull-right">
@@ -397,8 +403,6 @@
 			</div>
 		</div>
 	</div>
-
-
 
     <footer>
       <div class="container">
@@ -416,26 +420,25 @@
     </footer>
 
     <script src="{{ asset('public/landing/js/jquery-1.10.2.js') }}"></script>
-    <script src="{{ asset('public/landing/js/bootstrap.js') }}"></script>
-	<script src="{{ asset('public/landing/js/owl.carousel.js') }}"></script>
-	<script src="{{ asset('public/landing/js/script.js') }}"></script>
-	<script src="{{ asset('public/landing/js/stickUp.min.js') }}"></script>
+    <script type="text/javascript" src="@asset('public/libs/raven-js/raven.js')"></script>
+    <script>Raven.config('https://fbc910700f1a485c9fc08c38fc8cbec1@app.getsentry.com/83304').install()</script>
+    <script type="text/javascript" src="@asset('public/libs/bootstrap/js/bootstrap.js')"></script>
+	<script type="text/javascript" src="{{ asset('public/landing/js/owl.carousel.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('public/landing/js/script.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('public/landing/js/stickUp.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('public/landing/js/jquery.corner.js') }}"></script>
+	<script type="text/javascript" src="@asset('public/libs/wow/wow.js')"></script>
+	<script type="text/javascript" src="{{ asset('public/landing/js/classie.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('public/landing/js/uiMorphingButton_inflow.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('public/landing/js/jquery.magnific-popup.js') }}"></script>
+
 	<script type="text/javascript">
 	  jQuery(function($) {
 		$(document).ready( function() {
 		  $('.navbar-default').stickUp();
-
+		  new WOW().init();
 		});
 	  });
-
 	</script>
-	<script type="text/javascript" src="{{ asset('public/landing/js/jquery.corner.js') }}"></script>
-	<script src="{{ asset('public/landing/js/wow.min.js') }}"></script>
-	<script>
-	 new WOW().init();
-	</script>
-	<script src="{{ asset('public/landing/js/classie.js') }}"></script>
-	<script src="{{ asset('public/landing/js/uiMorphingButton_inflow.js') }}"></script>
-	<script src="{{ asset('public/landing/js/jquery.magnific-popup.js') }}"></script>
 </body>
 </html>

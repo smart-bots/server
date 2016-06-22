@@ -4,6 +4,8 @@ namespace SmartBots\Console\Commands;
 
 use Illuminate\Console\Command;
 
+use Carbon;
+
 use SmartBots\{
     User,
     Hub,
@@ -24,7 +26,7 @@ class RunSmartSchedule extends Command
      *
      * @var string
      */
-    protected $signature = 'smartschedule:run {schedule_id : The # of schedule}';
+    protected $signature = 'smartschedule:run {schedule_id : The # of schedule} {--t|time= : running time}';
 
     /**
      * The console command description.
@@ -52,6 +54,8 @@ class RunSmartSchedule extends Command
     public function handle()
     {
         $schedule_id = $this->argument('schedule_id');
+
+        $time = $this->option('time');
 
         $schedule = Schedule::findOrFail($schedule_id);
 
@@ -159,12 +163,52 @@ class RunSmartSchedule extends Command
                     $schedule->ran_times++;
                     $this->info('Increase ran times of schedule #'.$schedule_id.'...');
 
-                    if ($schedule->ran_times >= $schedule->deactivate_after_times) {
+                    if ($schedule->deactivate_after_times != 0 && $schedule->ran_times >= $schedule->deactivate_after_times) {
                         $schedule->status = 0;
                         $schedule->ran_times = 0;
                         $schedule->deactivate_after_datetime = '';
-                        $schedule->deactivate_after_times = '';
+                        $schedule->deactivate_after_times = 0;
                         $this->info('Deactivate schedule #'.$schedule_id.' because it reach the limit');
+
+                    } else {
+
+                        $data = explode('|',$schedule->data);
+                        $next_time = explode('|',$schedule->next_run_time);
+
+                        for ($i=0; $i<count($data); $i++) {
+
+                            if ($time = $next_time[$i]) {
+
+                                $xdata = explode(',',$data[$i]);
+
+                                switch ($xdata[0]) {
+                                    case 1:
+                                        $next_time[$i] = (int)$next_time[$i] + (int)$xdata[1]*60;
+                                        break;
+                                    case 2:
+                                        $next_time[$i] = (int)$next_time[$i] + (int)$xdata[1]*60*60;
+                                        break;
+                                    case 3:
+                                        $next_time[$i] = (int)$next_time[$i] + (int)$xdata[1]*60*60*24;
+                                        break;
+                                    case 4:
+                                        $next_time[$i] = (int)$next_time[$i] + (int)$xdata[1]*60*60*24*7;
+                                        break;
+                                    case 5:
+                                        $tmp = Carbon::createFromTimestamp($next_time[$i]);
+                                        $tmp->addMonth($xdata[1]);
+                                        $next_time[$i] = $tmp->timestamp;
+                                        break;
+                                    case 6:
+                                        $tmp = Carbon::createFromTimestamp($next_time[$i]);
+                                        $tmp->addYear($xdata[1]);
+                                        $next_time[$i] = $tmp->timestamp;
+                                        break;
+                                }
+                            }
+                        }
+
+                        $schedule->next_run_time = implode('|', $next_time);
                     }
 
                     $schedule->save();

@@ -67,6 +67,7 @@ class BladeServiceProvider extends ServiceProvider
             // dd($expression);
             return "<?php echo trans$expression; ?>";
         });
+
         //------------------------------------------------------------------
 
         Blade::directive('header', function ($expression) {

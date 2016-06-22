@@ -16,7 +16,7 @@ use SmartBots\{
 
 class BotController extends Controller
 {
-	public function index()
+    public function index()
     {
         // Lấy tất cả bot của hub
         if (auth()->user()->can('viewControlAllBots',Hub::findOrFail(session('currentHub')))) {
@@ -25,20 +25,12 @@ class BotController extends Controller
             $bots = auth()->user()->botsOf(session('currentHub'))->sortByDesc('id');
         }
 
-        // Lấy trạng thái của bot (truestatus)
-        for ($i=0;$i<count($bots);$i++) {
-            if ($bots[$i]['true'] == 0) {
-                $bots[$i]['truestatus'] = 2;
-            } else {
-            	$bots[$i]['truestatus'] = $bots[$i]['status'];
-            }
-        }
         return view('hub.bot.index')->withBots($bots);
     }
 
     public function create()
     {
-        //Lấy tất cả user của hub (chủ yếu là lấy member) trừ owner của hub ra
+        //Lấy tất cả user của hub (member)
         $users = Hub::findOrFail(session('currentHub'))->users()->orderBy('id','DESC')->get();
         $nUsers = [];
         foreach ($users as $user) {
@@ -75,13 +67,20 @@ class BotController extends Controller
         $bot->status      = 0;
         $bot->true        = 1;
 
-		if (!empty($request->image_values)) {
+        if (!empty($request->image_values)) {
             if (!empty($request->image_values)) {
                 $bot->image = upload_base64_image(json_decode($request->image_values)->data);
             }
-		}
+        }
 
         $bot->save();
+
+        $newBotPerm = new BotPermission;
+        $newBotPerm->user_id = auth()->user()->id;
+        $newBotPerm->bot_id = $bot->id;
+        $newBotPerm->high = true;
+        $newBotPerm->save();
+
         if (is_array($request->permissions)) {
             foreach ($request->permissions as $user_id) {
                 $newPerm = new BotPermission;
@@ -135,13 +134,13 @@ class BotController extends Controller
         $bot->name        = $request->name;
         $bot->description = $request->description;
 
-		if (!empty($request->image_values)) {
-			$image_values  = json_decode($request->image_values);
-			$image_name    = str_random(10).'.jpg';
-			$image_base64  = explode(',', $image_values->data);
-			file_put_contents(base_path().env('UPLOAD_IMAGES_FOLDER').'/'.$image_name, base64_decode($image_base64[1]));
-			$bot->image = env('UPLOAD_IMAGES_FOLDER').'/'.$image_name;
-		}
+        if (!empty($request->image_values)) {
+            $image_values  = json_decode($request->image_values);
+            $image_name    = str_random(10).'.jpg';
+            $image_base64  = explode(',', $image_values->data);
+            file_put_contents(base_path().env('UPLOAD_IMAGES_FOLDER').'/'.$image_name, base64_decode($image_base64[1]));
+            $bot->image = env('UPLOAD_IMAGES_FOLDER').'/'.$image_name;
+        }
 
         $bot->save();
 
@@ -192,14 +191,14 @@ class BotController extends Controller
 
     public function deactivate($id)
     {
-    	Bot::findOrFail($id)->deactivate();
-    	return response()->json(['error' => 0]);
+        Bot::findOrFail($id)->deactivate();
+        return response()->json(['error' => 0]);
     }
 
     public function reactivate($id)
     {
-    	Bot::findOrFail($id)->reactivate();
-    	return response()->json(['error' => 0]);
+        Bot::findOrFail($id)->reactivate();
+        return response()->json(['error' => 0]);
     }
 
     public function destroy($id)

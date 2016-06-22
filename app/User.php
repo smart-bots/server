@@ -7,8 +7,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     protected $table = 'users';
+
     protected $fillable = ['username','name', 'email','phone','password','avatar'];
+
     protected $hidden = ['password', 'remember_token'];
+
     public $timestamps = false;
 
     public function members() {
@@ -23,12 +26,29 @@ class User extends Authenticatable
         return $this->hasMany('SmartBots\SchedulePermission','user_id');
     }
 
-    public function highpermissions() {
-        return $this->hasMany('SmartBots\HighPermission','user_id');
+    public function automationpermissions() {
+        return $this->hasMany('SmartBots\AutomationPermission','user_id');
+    }
+
+    public function eventpermissions() {
+        return $this->hasMany('SmartBots\EventPermission','user_id');
+    }
+
+    public function hubpermissions() {
+        return $this->hasMany('SmartBots\HubPermission','user_id');
     }
 
     public function hubs() {
         return $this->belongsToMany('SmartBots\Hub','members');
+    }
+
+    public function bots() {
+        $botpermissions = $this->botpermissions;
+        $bots = collect([]);
+        foreach ($botpermissions as $botpermission) {
+            $bots = $bots->push($botpermission->bot);
+        }
+        return $bots;
     }
 
     public function schedules() {
@@ -40,13 +60,22 @@ class User extends Authenticatable
         return $schedules;
     }
 
-    public function bots() {
-        $botpermissions = $this->botpermissions;
-        $bots = collect([]);
-        foreach ($botpermissions as $botpermission) {
-            $bots = $bots->push($botpermission->bot);
+    public function automations() {
+        $automationpermissions = $this->automationpermissions;
+        $automations = collect([]);
+        foreach ($automationpermissions as $automationpermission) {
+            $automations = $automations->push($automationpermission->automation);
         }
-        return $bots;
+        return $automations;
+    }
+
+    public function events() {
+        $eventpermissions = $this->eventpermissions;
+        $events = collect([]);
+        foreach ($eventpermissions as $eventpermission) {
+            $events = $events->push($eventpermission->event);
+        }
+        return $events;
     }
 
     public function botsOf($hub_id) {
@@ -69,6 +98,28 @@ class User extends Authenticatable
             }
         }
         return $schedules;
+    }
+
+    public function automationsOf($hub_id) {
+        $automationpermissions = $this->automationpermissions;
+        $automations = collect([]);
+        foreach ($automationpermissions as $automationpermission) {
+            if ($automationpermission->automation->isOf($hub_id)) {
+                $automations = $automations->push($automationpermission->automation);
+            }
+        }
+        return $automations;
+    }
+
+    public function eventsOf($hub_id) {
+        $eventpermissions = $this->eventpermissions;
+        $events = collect([]);
+        foreach ($eventpermissions as $eventpermission) {
+            if ($eventpermission->event->isOf($hub_id)) {
+                $events = $events->push($eventpermission->event);
+            }
+        }
+        return $events;
     }
 
     public function isOf($hub_id) {

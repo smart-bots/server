@@ -1,11 +1,3 @@
-/*
-Theme: Flatfy Theme
-Author: Andrea Galanti
-Bootstrap Version 
-Build: 1.0
-http://www.andreagalanti.it
-*/
-
 $(window).load(function() { 
 	//Preloader 
 	$('#status').delay(300).fadeOut(); 

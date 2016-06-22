@@ -15,4 +15,8 @@ class LandingController extends Controller
     public function contact(Request $request) {
 
     }
+
+    public function index() {
+        return view('landing.index');
+    }
 }

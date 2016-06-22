@@ -89,7 +89,7 @@
                   <img class="img-thumbnail" src="@asset($bot['image'])">
                   <span class="hubs-list-name" href="@route('h::b::edit',$bot['id'])">{{ $bot['name'] }}</span>
                   <center>
-                  <input type="checkbox" class="bot" id="{{ $bot['id'] }}" @if ($bot['status'] == 1) checked @endif @if ($bot['status'] == 2) disabled @endif>
+                  <input type="checkbox" class="bot" id="{{ $bot['id'] }}" @if ($bot->realStatus() == 1) checked @endif @if ($bot->realStatus() == 2) disabled @endif>
                   </center>
                 </a>
               </li>

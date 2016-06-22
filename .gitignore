@@ -2,5 +2,7 @@
 /node_modules
 /storage
 /resources/assets/vendor
-public/upload
+/resources/views/vendor
+/resources/lang/vendor
+public/storage
 .env

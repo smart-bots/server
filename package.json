@@ -1,14 +1,42 @@
 {
   "private": true,
+  "name": "smartbots",
+  "version": "1.0.0",
+  "description": "The Smart Bots System's server",
+  "main": "server.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "express": "^4.14.0",
+    "ioredis": "^2.1.0",
+    "socket.io": "^1.4.6"
+  },
+  "devDependencies": {
+    "bower": "^1.7.9",
+	"gulp": "^3.9.1",
+    "gulp-htmlmin": "^2.0.0",
+	"laravel-elixir": "^5.0.0",
+	"bootstrap-sass": "^3.3.0",
+  },
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
     "prod": "gulp --production",
     "dev": "gulp watch"
   },
-  "devDependencies": {
-    "gulp": "^3.9.1",
-	"bower": "^1.7.9",
-	"gulp-htmlmin": "^2.0.0",
-    "laravel-elixir": "^5.0.0",
-    "bootstrap-sass": "^3.3.0"
-  }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smart-bots/server.git"
+  },
+  "author": [
+    "Huỳnh Đức Duy <h2dvnnet@gmail.com>",
+    "Trần Tuấn Anh <yorkittran@gmail.com>",
+    "Tống Xuân Bảo <baotongxuan@gmail.com>"
+  ],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/smart-bots/server/issues"
+  },
+  "homepage": "https://github.com/smart-bots/server#readme"
 }

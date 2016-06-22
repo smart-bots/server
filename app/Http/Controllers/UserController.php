@@ -21,31 +21,31 @@ use Is;
 class UserController extends Controller
 {
 
-	public $redirectAfterLogin = 'h::index'; // Route
+    public $redirectAfterLogin = 'h::index'; // Route
 
     public $redirectAfterLogout = 'a::login';
 
-	public $guard = null;
+    public $guard = null;
 
-	public $maxLoginAttempts = 5;
+    public $maxLoginAttempts = 5;
 
-	public $lockoutTime = 60;
+    public $lockoutTime = 60;
 
     public function getLogin() {
-    	return view('account.login');
+        return view('account.login');
     }
 
     public function loginWith(Request $request)
     {
-    	return Is::email()->validate($request->username) ? 'email' : 'username';
+        return Is::email()->validate($request->username) ? 'email' : 'username';
     }
 
     public function postLogin(Request $request) {
 
-    	$rules = [
+        $rules = [
             'username' => 'required|between:6,255',
             'password' => 'required|between:6,255',
-		];
+        ];
 
         $messenges = [
         ];
@@ -74,7 +74,7 @@ class UserController extends Controller
 
             $seconds = $this->secondsRemainingOnLockout($request);
 
-	        $error = ['global' => trans('login.throttle',['second' => $seconds])];
+            $error = ['global' => trans('login.throttle',['second' => $seconds])];
 
             return response()->json($error);
         }
@@ -85,9 +85,9 @@ class UserController extends Controller
 
         if (auth()->guard($this->guard)->attempt($credentials, $request->has('remember'))) {
 
-	        if ($isUsingThrottles) {
-	            $this->clearLoginAttempts($request);
-	        }
+            if ($isUsingThrottles) {
+                $this->clearLoginAttempts($request);
+            }
             // Success
             $error = ['success' => true, 'href' => route($this->redirectAfterLogin)];
 
@@ -104,20 +104,20 @@ class UserController extends Controller
     }
 
     public function getRegister() {
-    	return view('account.register');
+        return view('account.register');
     }
 
     public function postRegister(Request $request) {
 
-		$rules = [
-			'agree_with_terms'      => 'required',
-			'username'              => 'required|between:6,255|unique:users',
-			'name'                  => 'required|between:6,255',
-			'email'                 => 'required|email|unique:users',
-			'phone'                 => 'required|numeric|unique:users',
-			'password'              => 'required|between:6,255|confirmed',
-			'password_confirmation' => 'required'
-		];
+        $rules = [
+            'agree_with_terms'      => 'required',
+            'username'              => 'required|between:6,255|unique:users',
+            'name'                  => 'required|between:6,255',
+            'email'                 => 'required|email|unique:users',
+            'phone'                 => 'required|numeric|unique:users',
+            'password'              => 'required|between:6,255|confirmed',
+            'password_confirmation' => 'required'
+        ];
 
         $validator = Validator::make($request->all(), $rules, ['agree_with_terms.required' => trans('register.terms_disagreement')]);
 
@@ -125,20 +125,20 @@ class UserController extends Controller
             return response()->json($validator->errors());
         }
 
-		$newUser = new User;
-		$newUser->username = $request->username;
-		$newUser->name     = $request->name;
-		$newUser->email    = $request->email;
-		$newUser->phone    = $request->phone;
-		$newUser->password = bcrypt($request->password);
-		$newUser->save();
+        $newUser = new User;
+        $newUser->username = $request->username;
+        $newUser->name     = $request->name;
+        $newUser->email    = $request->email;
+        $newUser->phone    = $request->phone;
+        $newUser->password = bcrypt($request->password);
+        $newUser->save();
 
         $error = ['success' => true];
         return response()->json($error);
     }
 
     public function getForgot() {
-    	return view('account.forgot');
+        return view('account.forgot');
     }
 
     public function postForgot(Request $request) {
@@ -146,7 +146,7 @@ class UserController extends Controller
     }
 
     public function logout() {
-    	auth()->guard($this->guard)->logout();
+        auth()->guard($this->guard)->logout();
         session()->flush();
         return response()->json(['href' => route($this->redirectAfterLogout)]);
     }

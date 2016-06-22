@@ -10,7 +10,8 @@ use SmartBots\{
     Bot,
     Member,
     Schedule,
-    Automation
+    Automation,
+    Event
 };
 
 class HasPermission
@@ -36,10 +37,19 @@ class HasPermission
             case 'h::b::control':
                 $model = Bot::findOrFail($request->id);
                 break;
+            case 'h::e::fire':
+                $model = Event::findOrFail($request->id);
+                break;
             case 'h::b::create':
                 $model = Hub::findOrFail(session('currentHub'));
                 break;
             case 'h::s::create':
+                $model = Hub::findOrFail(session('currentHub'));
+                break;
+            case 'h::a::create':
+                $model = Hub::findOrFail(session('currentHub'));
+                break;
+            case 'h::e::create':
                 $model = Hub::findOrFail(session('currentHub'));
                 break;
             default:
@@ -55,6 +65,9 @@ class HasPermission
                         break;
                     case 'hub/automation':
                         $model = Automation::findOrFail($request->route('id'));
+                        break;
+                    case 'hub/event':
+                        $model = Event::findOrFail($request->route('id'));
                         break;
                     case '/hub':
                         $model = Hub::findOrFail(session('currentHub'));

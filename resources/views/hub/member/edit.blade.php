@@ -53,7 +53,7 @@
 
   $("[name='permissions[]']").multiSelect(searchableObj);
 
-  $("[name='higherpermissions[]']").multiSelect(searchableObj);
+  $("[name='highpermissions[]']").multiSelect(searchableObj);
 
   function memDeactivate(id) {
     swal({
@@ -182,9 +182,9 @@
           </div>
         </div>
         <div class="form-group">
-          {!! Form::label('username', 'Members\'s higher-permissions', ['class' => 'col-sm-2 control-label']) !!}
+          {!! Form::label('username', 'Members\'s high-permissions', ['class' => 'col-sm-2 control-label']) !!}
           <div class="col-sm-10">
-            {!! Form::select('higherpermissions[]', $bots, $selected2, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+            {!! Form::select('highpermissions[]', $bots, $selected2, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
           </div>
         </div>
         <div class="form-group">

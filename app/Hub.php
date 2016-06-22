@@ -7,24 +7,35 @@ use Illuminate\Database\Eloquent\Model;
 class Hub extends Model
 {
     protected $table = 'hubs';
+
     protected $fillable = ['token','name','image','description','status','timezone'];
+
     protected $hidden = [];
+
     public $timestamps = false;
 
+    public function hubpermissions() {
+        return $this->hasMany('SmartBots\HubPermission','hub_id');
+    }
+
     public function bots() {
-    	return $this->hasMany('SmartBots\Bot','hub_id');
+        return $this->hasMany('SmartBots\Bot','hub_id');
     }
 
     public function members() {
-    	return $this->hasMany('SmartBots\Member','hub_id');
-    }
-
-    public function highpermissions() {
-        return $this->hasMany('SmartBots\HighPermission','hub_id');
+        return $this->hasMany('SmartBots\Member','hub_id');
     }
 
     public function schedules() {
         return $this->hasMany('SmartBots\Schedule','hub_id');
+    }
+
+    public function automations() {
+        return $this->hasMany('SmartBots\Automation','hub_id');
+    }
+
+    public function events() {
+        return $this->hasMany('SmartBots\Event','hub_id');
     }
 
     public function users() {
@@ -32,7 +43,7 @@ class Hub extends Model
     }
 
     public function isActivated():bool {
-    	return $this->status;
+        return $this->status;
     }
 
     public function scopeActivated($query) {

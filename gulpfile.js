@@ -19,7 +19,9 @@ var less = { // LESS file to compile => css
     },
 
     js = { // JS file vendored => libs
-        'jquery/dist/jquery.js' : 'jquery/jquery.js',
+        'jquery/dist/jquery.js' : 'jquery/jquery.js', // 2
+        'jquery-legacy/dist/jquery.js' : 'jquery-legacy/jquery.js', // 1
+        'jquery-modern/dist/jquery.js' : 'jquery-modern/jquery.js', // 3
         'bootstrap/dist/js/bootstrap.js' : 'bootstrap/js/bootstrap.js',
         'jquery.scrollTo/jquery.scrollTo.js' : 'jquery.scrollTo/jquery.scrollTo.js',
         'jquery.nicescroll/jquery.nicescroll.min.js' : 'jquery.nicescroll/jquery.nicescroll.js',
@@ -36,7 +38,11 @@ var less = { // LESS file to compile => css
         'moment/locale/vi.js' : 'moment/vi.js',
         'quicksearch/jquery.quicksearch.js' : 'quicksearch/jquery.quicksearch.js',
         'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' : 'bootstrap-datetimepicker/bootstrap-datetimepicker.js',
-        'bootstrap-select/dist/js/bootstrap-select.js' : 'bootstrap-select/bootstrap-select.js'
+        'bootstrap-select/dist/js/bootstrap-select.js' : 'bootstrap-select/bootstrap-select.js',
+        'raven-js/dist/raven.js' : 'raven-js/raven.js',
+        'amcharts3/amcharts/amchart.js' : 'amcharts/amcharts.js',
+        'amcharts3/amcharts/amchart.js' : 'amcharts/serial.js',
+        'socket.io-client/socket.io.js' : 'socket.io/socket.io.js'
     },
 
     css = { // CSS file vendored => libs

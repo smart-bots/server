@@ -7,13 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class SchedulePermission extends Model
 {
     protected $table = 'schedulepermissions';
-    protected $fillable = ['user_id','schedule_id','higher'];
+
+    protected $fillable = ['user_id','schedule_id','high'];
+
     protected $hidden = [];
+
     public $timestamps = false;
+
     public function schedule() {
-    	return $this->belongsTo('SmartBots\Schedule','schedule_id');
+        return $this->belongsTo('SmartBots\Schedule','schedule_id');
     }
+
     public function user() {
-    	return $this->belongsTo('SmartBots\User','user_id');
+        return $this->belongsTo('SmartBots\User','user_id');
     }
 }

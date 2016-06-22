@@ -164,7 +164,23 @@ return [
 
         Intervention\Image\ImageServiceProvider::class,
 
-        'Camroncade\Timezone\TimezoneServiceProvider'
+        'Camroncade\Timezone\TimezoneServiceProvider',
+
+        // Barryvdh\Debugbar\ServiceProvider::class,
+
+        'Barryvdh\TranslationManager\ManagerServiceProvider',
+
+        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
+
+        'Laracasts\Generators\GeneratorsServiceProvider',
+
+        Spatie\Backup\BackupServiceProvider::class,
+
+        // Themsaid\MailPreview\MailPreviewServiceProvider::class,
+
+        Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
+
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
     ],
 
@@ -219,7 +235,12 @@ return [
 
         'Is'         => 'Respect\Validation\Validator',
 
-        'Image'      => Intervention\Image\Facades\Image::class
+        'Image'      => Intervention\Image\Facades\Image::class,
+
+        'Sentry'     => Sentry\SentryLaravel\SentryFacade::class,
+
+        // 'Debugbar' => Barryvdh\Debugbar\Facade::class,
+
     ],
 
 ];

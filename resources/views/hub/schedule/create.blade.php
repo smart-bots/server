@@ -2,6 +2,7 @@
 @section('title','Add new schedule')
 @section('additionHeader')
 <link rel="stylesheet" href="@asset('public/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.css')">
+<link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
 <style>
   select {
     width: 125px !important;
@@ -14,6 +15,8 @@
 <script src="@asset('public/libs/moment/moment.js')" type="text/javascript"></script>
 <script src="@asset('public/libs/moment/vi.js')" type="text/javascript"></script>
 <script src="@asset('public/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.js')" type="text/javascript"></script>
+<script src="@asset('public/libs/multiselect/js/jquery.multi-select.js')" type="text/javascript"></script>
+<script src="@asset('public/libs/quicksearch/jquery.quicksearch.js')" type="text/javascript"></script>
 <script>
 
   var bot = new Bloodhound({
@@ -48,10 +51,48 @@
     }
   };
 
+  var searchableObj = {
+      selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
+      selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
+      afterInit: function (ms) {
+          var that = this,
+              $selectableSearch = that.$selectableUl.prev(),
+              $selectionSearch = that.$selectionUl.prev(),
+              selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+              selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+          that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+              .on('keydown', function (e) {
+                  if (e.which === 40) {
+                      that.$selectableUl.focus();
+                      return false;
+                  }
+              });
+
+          that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+              .on('keydown', function (e) {
+                  if (e.which == 40) {
+                      that.$selectionUl.focus();
+                      return false;
+                  }
+              });
+      },
+      afterSelect: function () {
+          this.qs1.cache();
+          this.qs2.cache();
+      },
+      afterDeselect: function () {
+          this.qs1.cache();
+          this.qs2.cache();
+      }
+  };
+
   $(function () {
     $('[name="action[bot][0]"]').typeahead(null, typeahead_bot_option);
     $('[name="condition[bot][0]"]').typeahead(null, typeahead_bot_option);
     $('.datetimepicker').datetimepicker({useCurrent: false, format: 'D-M-Y HH:mm'});
+    $("[name='permissions[]']").multiSelect(searchableObj);
+    $("[name='highpermissions[]']").multiSelect(searchableObj);
   });
 
   function addAction() {
@@ -83,6 +124,8 @@
         '</div>'
       ].join(''));
 
+      $('#just-for-repeat').html('');
+
     } else {
 
       $('#data').html([
@@ -105,9 +148,36 @@
         '</div>'
       ].join(''));
 
+      $('#just-for-repeat').html([
+      '<div class="form-group">',
+        '{!! Form::label('activate_after', 'Activate after', ['class' => 'col-sm-2 control-label']) !!}',
+        '<div class="col-sm-10">',
+          '{!! Form::text('activate_after', old('activate_after'), ['class' => 'form-control datetimepicker']) !!}',
+          '<span class="help-block m-b-0">',
+            'Leave blank to activate immediately',
+          '</span>',
+        '</div>',
+      '</div>',
+      '<div class="form-group">',
+        '{!! Form::label('deactivate_after', 'Deactivate after', ['class' => 'col-sm-2 control-label']) !!}',
+        '<div class="col-sm-10">',
+          '<div class="input-group">',
+            '{!! Form::text('deactivate_after_times', old('deactivate_after_times'), ['class' => 'form-control']) !!}',
+            '<span class="input-group-addon b-left-0 b-right-0">',
+              'time(s) or',
+            '</span>',
+            '{!! Form::text('deactivate_after_datetime', old('deactivate_after_datetime'), ['class' => 'form-control datetimepicker']) !!}',
+          '</div>',
+          '<span class="help-block m-b-0">',
+            'Leave blank to avoid (infinitive loop or deactivate manually)',
+          '</span>',
+        '</div>',
+      '</div>'
+      ].join(''));
+
     }
 
-    $('.datetimepicker').datetimepicker({useCurrent: false});
+    $('.datetimepicker').datetimepicker({useCurrent: false, format: 'D-M-Y HH:mm'});
   }
 
   function changeFrequency(id) {
@@ -170,7 +240,7 @@
       '</div>',
       ].join(''));
 
-    $('.datetimepicker').datetimepicker({useCurrent: false});
+    $('.datetimepicker').datetimepicker({useCurrent: false, format: 'D-M-Y HH:mm'});
   }
 
   function changeCondition() {
@@ -183,7 +253,7 @@
             '{!! Form::select('condition[state][0]', ['0' => 'is turned on', '1' => 'is turned off'], null, ['class' => 'form-control','style' => 'margin-top: -5px;']) !!}',
           '</div>',
         '</div>'
-      ].join(''));
+      ].join('')).attr('data-count',1);
 
       $('#add-condition-btn').html('{!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Add condition', ['class' => 'btn btn-default pull-right m-t-5','onclick' => 'addCondition()']) !!}');
 
@@ -193,7 +263,7 @@
 
     } else {
 
-      $('#conditions').html('');
+      $('#conditions').html('').attr('data-count',0);
       $('#add-condition-btn').html('');
       $('#condMethod').html('');
 
@@ -202,28 +272,31 @@
 
   function addCondition() {
 
+    var num = $('#conditions').attr('data-count');
+
+    $('#conditions').attr('data-count',parseInt(num)+1);
+
     $('#conditions').append([
         '<div class="input-group m-t-5">',
-          '{!! Form::text('condition[bot][0]', null, ['class' => 'form-control b-right-0']) !!}',
+          '<input type="text" name="condition[bot]['+num+']" class="form-control b-right-0">',
           '<div class="input-group-btn">',
-            '{!! Form::select('condition[state][0]', ['0' => 'is turned on', '1' => 'is turned off'], null, ['class' => 'form-control','style' => 'margin-top: -5px;']) !!}',
+            '<select class="form-control" style="margin-top: -5px;" name="condition[state]['+num+']">',
+              '<option value="0">is turned on</option>',
+              '<option value="1">is turned off</option>',
+            '</select>',
           '</div>',
         '</div>'
       ].join(''));
 
-    $('[name="condition[bot][0]"]').typeahead(null, typeahead_bot_option);
+    $('[name="condition[bot]['+num+']"]').typeahead(null, typeahead_bot_option);
   }
 
   function createSchedule() {
 
-    // var i = 0;
-    // var action_types = $('[name="action[type][0]"]').toArray();
-    // action_types.forEach( function(element, index) {
-    //   $(element).attr('name','action[type]['+i+']');
-    //   i++;
-    // });
 
-    $('[name="time"]').val($('[name="time"]').val().split('/').join('-'));
+    // if ($('[name="time"]').exists()) {
+    //   $('[name="time"]').val($('[name="time"]').val().split('/').join('-'));
+    // }
 
     $.ajax({
       url : '@route('h::s::create')',
@@ -488,32 +561,24 @@
             {!! Form::select('condition[type]', ['0' => 'Off', '1' => 'Work if', '2' => 'Not work if'], null, ['class' => 'form-control', 'onChange' => 'changeCondition()']) !!}
             <span id="condMethod"></span>
           </div>
-          <div id='conditions'></div>
+          <div id='conditions' data-count="0"></div>
           <div id='add-condition-btn'></div>
         </div>
       </div>
+      <div id="just-for-repeat">
+      </div>
       <div class="form-group">
-        {!! Form::label('activate_after', 'Activate after', ['class' => 'col-sm-2 control-label']) !!}
+        {!! Form::label('permissions', 'Low permissions', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
-          {!! Form::text('activate_after', old('activate_after'), ['class' => 'form-control datetimepicker']) !!}
-          <span class="help-block m-b-0">
-            Leave blank to activate immediately
-          </span>
+          {!! Form::select('permissions[]', $users, old('permissions'), ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+          <span class="help-block margin-bottom-none">Users can view/control this bot</span>
         </div>
       </div>
       <div class="form-group">
-        {!! Form::label('deactivate_after', 'Deactivate after', ['class' => 'col-sm-2 control-label']) !!}
+        {!! Form::label('highpermissions', 'High permissions', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
-          <div class="input-group">
-            {!! Form::text('deactivate_after_times', old('deactivate_after_times'), ['class' => 'form-control']) !!}
-            <span class="input-group-addon b-left-0 b-right-0">
-              time(s) or
-            </span>
-            {!! Form::text('deactivate_after_datetime', old('deactivate_after_datetime'), ['class' => 'form-control datetimepicker']) !!}
-          </div>
-          <span class="help-block m-b-0">
-            Leave blank to avoid (infinitive loop or deactivate manually)
-          </span>
+          {!! Form::select('highpermissions[]', $users, old('highpermissions'), ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+          <span class="help-block margin-bottom-none">Users can edit/delete this bot</span>
         </div>
       </div>
       {!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Add', ['type' => 'submit', 'class' => 'btn btn-primary  waves-effect waves-light']) !!}

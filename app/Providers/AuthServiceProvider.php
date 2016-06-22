@@ -14,8 +14,11 @@ use SmartBots\Policies\BotPolicy;
 use SmartBots\Schedule;
 use SmartBots\Policies\SchedulePolicy;
 
-// use SmartBots\Automation;
-// use SmartBots\Policies\AutomationPolicy;
+use SmartBots\Automation;
+use SmartBots\Policies\AutomationPolicy;
+
+use SmartBots\Event;
+use SmartBots\Policies\EventPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -29,7 +32,8 @@ class AuthServiceProvider extends ServiceProvider
         Hub::class => HubPolicy::class,
         Bot::class => BotPolicy::class,
         Schedule::class => SchedulePolicy::class,
-        // Automation::class => AutomationPolicy::class,
+        Automation::class => AutomationPolicy::class,
+        Event::class => EventPolicy::class,
     ];
 
     /**

@@ -1,216 +1,138 @@
+<?php
+  use SmartBots\Bot;
+?>
 @extends('hub.master')
-@section('title','Edit schedule')
+@section('title','View schedule')
 @section('additionHeader')
-<link rel="stylesheet" href="{{ asset('public/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.css') }}">
+<link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
 <style>
-  select {
-    width: 125px !important;
+  .action-item:first-child {
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 15px;
+    color: #fff;
   }
+
+  .action-item {
+    margin-top: 5px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 15px;
+    color: #fff;
+  }
+
+  .action-image {
+    margin: 2px 5px;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #edf0f0;
+  }
+
+  .action-bot {
+    font-weight: 600;
+  }
+
+  .cond-item:first-child {
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 15px;
+    color: #fff;
+  }
+
+  .cond-item {
+    margin-top: 5px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 15px;
+    color: #fff;
+  }
+
+  .cond-image {
+    margin: 2px 5px;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #edf0f0;
+  }
+
+  .condd {
+    font-weight: 600;
+  }
+
+  .data {
+    font-size: 16px;
+  }
+
+  .fre-item:first-child {
+    padding: 6px 16px;
+    border-radius: 5px;
+    font-size: 15px;
+    color: #555;
+    background-color: #eee;
+  }
+
+  .fre-item {
+    margin-top: 5px;
+    padding: 6px 16px;
+    border-radius: 5px;
+    font-size: 15px;
+    color: #555;
+    background-color: #eee;
+  }
+
+  .fre-value, .fre-unit, .fre-at {
+    font-weight: 600;
+  }
+
+  .deac-or {
+    font-weight: 600;
+  }
+
 </style>
 @endsection
 @section('additionFooter')
-<script src="{{ asset('public/libs/typeahead.js/typeahead.bundle.js') }}" type="text/javascript"></script>
-<script src="{{ asset('public/libs/handlebars/handlebars.js') }}" type="text/javascript"></script>
-<script src="{{ asset('public/libs/moment/moment.js') }}" type="text/javascript"></script>
-<script src="{{ asset('public/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.js') }}" type="text/javascript"></script>
+<script src="@asset('public/libs/multiselect/js/jquery.multi-select.js')" type="text/javascript"></script>
+<script src="@asset('public/libs/quicksearch/jquery.quicksearch.js')" type="text/javascript"></script>
 <script>
-  var bot = new Bloodhound({
-    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-    queryTokenizer: Bloodhound.tokenizers.whitespace,
-    remote: {
-      url: '{{ route('h::b::search') }}/%Q/{{ session('currentHub') }}',
-      wildcard: '%Q'
-    }
-  });
+  var searchableObj = {
+      selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
+      selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
+      afterInit: function (ms) {
+          var that = this,
+              $selectableSearch = that.$selectableUl.prev(),
+              $selectionSearch = that.$selectionUl.prev(),
+              selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+              selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
 
-  var typeahead_bot_option = {
-    name: 'bot',
-    display: 'id',
-    source: bot,
-    templates: {
-      empty: [
-      '<div class="tt-no-result">',
-      'No result',
-      '</div>'
-      ].join(''),
-      suggestion: Handlebars.compile([
-        '<div class="">',
-          '<div class="pull-left">',
-              '<img src="@{{ image }}" alt="" class="user-mini-ava">',
-          '</div>',
-          '<div>',
-              '<strong>@{{ name }}</strong>',
-              '<p class="m-0">@{{ id }}</p>',
-          '</div>',
-        '</div>'].join(''))
-    }
+          that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+              .on('keydown', function (e) {
+                  if (e.which === 40) {
+                      that.$selectableUl.focus();
+                      return false;
+                  }
+              });
+
+          that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+              .on('keydown', function (e) {
+                  if (e.which == 40) {
+                      that.$selectionUl.focus();
+                      return false;
+                  }
+              });
+      },
+      afterSelect: function () {
+          this.qs1.cache();
+          this.qs2.cache();
+      },
+      afterDeselect: function () {
+          this.qs1.cache();
+          this.qs2.cache();
+      }
   };
 
   $(function () {
-    $('[name="action[bot][0]"]').typeahead(null, typeahead_bot_option);
-    $('[name="condition[bot][0]"]').typeahead(null, typeahead_bot_option);
-    $('.datetimepicker').datetimepicker({useCurrent: false});
+    $("[name='permissions[]']").multiSelect(searchableObj);
+    $("[name='highpermissions[]']").multiSelect(searchableObj);
   });
-
-  function addAction() {
-    var num = $('#actions').attr('data-count');
-
-    $('#actions').attr('data-count',parseInt(num)+1);
-
-    $('#actions').append([
-      '<div class="input-group m-t-5">',
-        '<div class="input-group-btn">',
-          '<select class="form-control" style="margin-top: -5px" name="action[type]['+num+']"><option value="1">Toggle</option><option value="2">Turn on</option><option value="3">Turn off</option></select>',
-        '</div>',
-        '<input class="form-control b-left-0" name="action[bot]['+num+']" type="text">',
-      '</div>'
-      ].join(''));
-
-    $('[name="action[bot]['+num+']"]').typeahead(null, typeahead_bot_option);
-  }
-
-  function changeType() {
-
-    if ($('[name=type]').val() == '1') {
-      $('#data').html([
-        '<div class="form-group">',
-          '{!! Form::label('time', 'Time', ['class' => 'col-sm-2 control-label']) !!}',
-          '<div class="col-sm-10">',
-            '{!! Form::text('time', old('time'), ['class' => 'form-control datetimepicker']) !!}',
-          '</div>',
-        '</div>'
-      ].join(''));
-
-    } else {
-
-      $('#data').html([
-        '<div class="form-group">',
-          '{!! Form::label('frequency', 'Frequency', ['class' => 'col-sm-2 control-label']) !!}',
-          '<div class="col-sm-10">',
-            '<div id="frequencies" data-count="1" class="m-b-5">',
-              '<div class="input-group">',
-                '<span class="input-group-addon">Every</span>',
-                '{!! Form::text('frequency[value][0]', 1, ['class' => 'form-control b-right-0']) !!}',
-                '<div class="input-group-btn">',
-                  '{!! Form::select('frequency[unit][0]', ['1' => 'minute(s)', '2' => 'hour(s)', '3' => 'day(s)', '4' => 'week(s)', '5' => 'month(s)', '6' => 'year(s)'], null, ['class' => 'form-control', 'onChange' => 'changeFrequency(0)']) !!}',
-                '</div>',
-                '<span class="input-group-addon b-left-0 b-right-0" id="fre-at-text-0" style="display: none">At</span>',
-                '{!! Form::text('frequency[at][0]', null, ['id' => 'fre-at-input-0', 'class' => 'form-control datetimepicker', 'readonly' => 'readonly', 'style' => 'display: none']) !!}',
-              '</div>',
-            '</div>',
-          '{!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Add frequency', ['class' => 'btn btn-default pull-right', 'onclick' => 'addFrequency()']) !!}',
-          '</div>',
-        '</div>'
-      ].join(''));
-
-    }
-
-    $('.datetimepicker').datetimepicker({useCurrent: false});
-  }
-
-  function changeFrequency(id) {
-    var dtpicker = $('[name="frequency[at]['+id+']"]');
-    switch ($('[name="frequency[unit]['+id+']"]').val()) {
-      case "1":
-        dtpicker.attr('readonly','readonly').val('');
-        $('#fre-at-text-'+id).hide();
-        $('#fre-at-input-'+id).hide();
-        break;
-      case "2":
-        dtpicker.removeAttr('readonly').data("DateTimePicker").format('mm');
-        $('#fre-at-text-'+id).show();
-        $('#fre-at-input-'+id).show();
-        break;
-      case "3":
-        dtpicker.removeAttr('readonly').data("DateTimePicker").format('HH:mm');
-        $('#fre-at-text-'+id).show();
-        $('#fre-at-input-'+id).show();
-        break;
-      case "4":
-        dtpicker.removeAttr('readonly').data("DateTimePicker").format('dddd HH:mm');
-        $('#fre-at-text-'+id).show();
-        $('#fre-at-input-'+id).show();
-        break;
-      case "5":
-        dtpicker.removeAttr('readonly').data("DateTimePicker").format('D HH:mm');
-        $('#fre-at-text-'+id).show();
-        $('#fre-at-input-'+id).show();
-        break;
-      case "6":
-        dtpicker.removeAttr('readonly').data("DateTimePicker").format('MMMM D HH:mm');
-        $('#fre-at-text-'+id).show();
-        $('#fre-at-input-'+id).show();
-        break;
-    }
-  }
-
-  function addFrequency() {
-    var num = $('#frequencies').attr('data-count');
-
-    $('#frequencies').attr('data-count',parseInt(num)+1);
-
-    $('#frequencies').append([
-      '<div class="input-group m-t-10">',
-        '<span class="input-group-addon">Every</span>',
-        '<input class="form-control b-right-0" name="frequency[value]['+num+']" type="text" value="1">',
-        '<div class="input-group-btn">',
-          '<select class="form-control" onchange="changeFrequency('+num+')" name="frequency[unit]['+num+']">',
-            '<option value="1">minute(s)</option>',
-            '<option value="2">hour(s)</option>',
-            '<option value="3">day(s)</option>',
-            '<option value="4">week(s)</option>',
-            '<option value="5">month(s)</option>',
-            '<option value="6">year(s)</option>',
-          '</select>',
-        '</div>',
-        '<span class="input-group-addon b-left-0 b-right-0" id="fre-at-text-'+num+'" style="display: none">At</span>',
-        '<input class="form-control datetimepicker" readonly name="frequency[at]['+num+']" type="text" id="fre-at-input-'+num+'" style="display: none">',
-      '</div>',
-      ].join(''));
-
-    $('.datetimepicker').datetimepicker({useCurrent: false});
-  }
-
-  function changeCondition() {
-
-    if ($('[name="condition[type]"]').val() != "0") {
-      $('#conditions').html([
-        '<div class="input-group m-t-10">',
-          '{!! Form::text('condition[bot][0]', null, ['class' => 'form-control b-right-0']) !!}',
-          '<div class="input-group-btn">',
-            '{!! Form::select('condition[state][0]', ['0' => 'is turned on', '1' => 'is turned off'], null, ['class' => 'form-control','style' => 'margin-top: -5px;']) !!}',
-          '</div>',
-        '</div>'
-      ].join(''));
-
-      $('#add-condition-btn').html('{!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Add condition', ['class' => 'btn btn-default pull-right m-t-5','onclick' => 'addCondition()']) !!}');
-
-      $('#condMethod').html('{!! Form::select('condition[method]', ['1' => 'And', '2' => 'Or'], null, ['class' => 'form-control b-left-0']) !!}');
-
-      $('[name="condition[bot][0]"]').typeahead(null, typeahead_bot_option);
-
-    } else {
-
-      $('#conditions').html('');
-      $('#add-condition-btn').html('');
-      $('#condMethod').html('');
-
-    }
-  }
-
-  function addCondition() {
-
-    $('#conditions').append([
-        '<div class="input-group m-t-5">',
-          '{!! Form::text('condition[bot][0]', null, ['class' => 'form-control b-right-0']) !!}',
-          '<div class="input-group-btn">',
-            '{!! Form::select('condition[state][0]', ['0' => 'is turned on', '1' => 'is turned off'], null, ['class' => 'form-control','style' => 'margin-top: -5px;']) !!}',
-          '</div>',
-        '</div>'
-      ].join(''));
-
-    $('[name="condition[bot][0]"]').typeahead(null, typeahead_bot_option);
-  }
 
   function scheduleDeactivate(id) {
     swal({
@@ -285,250 +207,40 @@
       });
   }
 
-  function createSchedule() {
-
-    // var i = 0;
-    // var action_types = $('[name="action[type][0]"]').toArray();
-    // action_types.forEach( function(element, index) {
-    //   $(element).attr('name','action[type]['+i+']');
-    //   i++;
-    // });
-
+  function scheEdit() {
     $.ajax({
-      url : '{{ route('h::s::create') }}',
-      type : 'post',
-      data : $('[name=create-schedule-form]').serializeArray(),
-      dataType : 'json',
-      success : function (response)
-      {
-        var response2 = {};
-        for (var prop in response) {
-            if (prop.indexOf('.') != -1) {
-                var propArr = prop.split('.');
-                var prop2 = propArr[0]+'['+propArr[1]+']['+propArr[2]+']';
-                response2[prop2] = response[prop];
-            } else {
-                response2[prop] = response[prop];
-            }
+        url : '@route('h::s::edit',$sche['id'])',
+        type : 'post',
+        data : $('[name=sche-edit-form]').serializeArray(),
+        dataType : 'json',
+        success : function (response)
+        {
+            $('[name=sche-edit-form]').validate(response);
         }
-        response = response2;
-
-        var action_inputs = $('[name=create-schedule-form]').find('[name^="action[type]"]').toArray();
-
-        var action_error = false;
-
-        action_inputs.forEach(function (item,index) {
-
-          var input = $(item),
-              input_field = input.closest('.form-group');
-
-          var num = input.attr('name').replace(/^\D+|\D+$/g, "");
-
-          $('[name=create-schedule-form]').find('span[for="action['+num+']"]').remove();
-
-          if (response['action[type]['+num+']'] != null || response['action[bot]['+num+']'] != null) {
-
-            action_error = true;
-
-            var errorHtml = ['<span class="help-block" for="action['+num+']">',
-                      'This field is invalid',
-                  '</span>'].join('');
-
-            input_field
-                .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-                    $(this).removeClass("animated shake");
-                });
-
-            input.closest('.input-group').after(errorHtml);
-          }
-        });
-
-        if (action_error == true) {
-          $('[name=create-schedule-form]').find('[name^="action[type][0]"]').closest('.form-group').removeClass('has-success has-warning animated shake').addClass('has-error animated shake');
-        } else {
-          $('[name=create-schedule-form]').find('[name^="action[type][0]"]').closest('.form-group').removeClass('has-error has-warning animated shake').addClass('has-success');
-        }
-
-        // This is for frequency
-
-        var frequency_inputs = $('[name=create-schedule-form]').find('[name^="frequency[value]"]').toArray();
-
-        var frequency_error = false;
-
-        frequency_inputs.forEach(function (item,index) {
-
-          var input = $(item),
-              input_field = input.closest('.form-group');
-
-          var num = input.attr('name').replace(/^\D+|\D+$/g, "");
-
-          $('[name=create-schedule-form]').find('span[for="frequency['+num+']"]').remove();
-
-          if (response['frequency[value]['+num+']'] != null || response['frequency[unit]['+num+']'] != null || response['frequency[at]['+num+']'] != null) {
-
-            frequency_error = true;
-
-            var errorHtml = ['<span class="help-block" for="frequency['+num+']">',
-                      'This field is invalid',
-                  '</span>'].join('');
-
-            input_field
-                .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-                    $(this).removeClass("animated shake");
-                });
-
-            input.closest('.input-group').after(errorHtml);
-          }
-        });
-
-        if (frequency_error) {
-          $('[name=create-schedule-form]').find('[name^="frequency[value][0]"]').closest('.form-group').removeClass('has-success has-warning animated shake').addClass('has-error animated shake');
-        } else {
-          $('[name=create-schedule-form]').find('[name^="frequency[value][0]"]').closest('.form-group').removeClass('has-error has-warning animated shake').addClass('has-success');
-        }
-
-        // This is for condition
-
-        var condition_inputs = $('[name=create-schedule-form]').find('[name^="condition[bot]"]').toArray();
-
-        var condition_error = false;
-
-        var condition_type = $('[name=create-schedule-form]').find('[name^="condition[type]"]');
-
-        if (response['condition[type'] != null || response['condition[method]']) {
-          condition_error = true;
-
-          var errorHtml = ['<span class="help-block" for="condition['+num+']">',
-                      'This field is invalid',
-                  '</span>'].join('');
-
-          $('[name=create-schedule-form]').find('[name="condition[type]"]').closest('.form-group').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-                    $(this).removeClass("animated shake");
-                });
-
-          $('[name=create-schedule-form]').find('[name="condition[type]"]').closest('.input-group').after(errorHtml);
-        }
-
-        condition_inputs.forEach(function (item,index) {
-
-          var input = $(item),
-              input_field = input.closest('.form-group');
-
-          var num = input.attr('name').replace(/^\D+|\D+$/g, "");
-
-          $('[name=create-schedule-form]').find('span[for="condition['+num+']"]').remove();
-
-          if (response['condition[bot]['+num+']'] != null || response['condition[state]['+num+']'] != null) {
-
-            condition_error = true;
-
-            var errorHtml = ['<span class="help-block" for="condition['+num+']">',
-                      'This field is invalid',
-                  '</span>'].join('');
-
-            input_field
-                .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-                    $(this).removeClass("animated shake");
-                });
-
-            input.closest('.input-group').after(errorHtml);
-          }
-        });
-
-        if (condition_error) {
-          $('[name=create-schedule-form]').find('[name^="condition[bot][0]"]').closest('.form-group').removeClass('has-success has-warning animated shake').addClass('has-error animated shake');
-        } else {
-          $('[name=create-schedule-form]').find('[name^="condition[bot][0]"]').closest('.form-group').removeClass('has-error has-warning animated shake').addClass('has-success');
-        }
-
-        var inputs = $('[name=create-schedule-form]').find('input:visible:not(.tt-hint), select:visible, textarea:visible').not('[name^=action]').not('[name^=frequency]').not('[name^=condition]');
-
-        inputs = inputs.toArray();
-
-        if (response['success'] != null) {
-
-            // window.location.href = '{{ route('h::s::index') }}';
-
-        } else {
-
-          $('#error-alert').slideUp('slow','linear', function() {
-              this.remove()
-          });
-
-          var focus_to = false;
-
-          inputs.forEach(function(item, index) {
-
-              var input = $(item),
-                  input_name = input.attr('name'),
-                  input_error = response[input.attr('name')],
-                  input_field = input.closest('.form-group'),
-                  input_type = input.attr('type');
-
-              $('[name=create-schedule-form]').find('span[for="' + input_name + '"]').remove();
-
-              input_field.removeClass('has-error has-success has-warning animated shake');
-
-              if (input_error == null) {
-
-                  input_field.addClass('has-success');
-
-              } else {
-
-                  var errorHtml = ['<span class="help-block" for="' + input_name + '">',
-                      input_error,
-                  '</span>'].join('');
-
-                  input_field
-                      .addClass('has-error animated shake')
-                      .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-                          $(this).removeClass("animated shake");
-                      });
-
-                  input.closest('div:not(.input-group)').append(errorHtml);
-
-                  if (focus_to == false) {
-                      focus_to = true;
-                      input.focusTo();
-                  }
-              }
-          });
-
-        }
-      }
     });
     return false;
   }
-  $('.datetimepicker').datetimepicker();
-  <?php
-    $data = explode('|',$sche['data']);
-    $i=0;
-    foreach ($data as $single_data) {
-      echo 'changeFrequency('.$i.');';
-      $i++;
-    }
-  ?>
 </script>
 @endsection
 @section('body')
-{!! content_header('Edit schedule', [
+{!! content_header('View schedule', [
     'Hub' => route('h::edit'),
-    'Schadule' => route('h::s::index'),
-    'Edit' => 'active']) !!}
+    'Schedule' => route('h::s::index'),
+    'View' => 'active']) !!}
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
-    {!! Form::open(['route' => ['h::s::edit',$sche['id']], 'class' => 'form-horizontal', 'name' => 'edit-schedule-form', 'onsubmit' => 'return editSchedule()']) !!}
+    {!! Form::open(['route' => ['h::s::edit',$sche['id']], 'name' => 'sche-edit-form', 'class' => 'form-horizontal', 'onsubmit' => 'return scheEdit()']) !!}
       <div class="form-group">
         {!! Form::label('status', 'Status', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
           <?php
             switch ($sche['status']) {
               case 0:
-                echo '<h4><span class="label label-danger" id="scheduleTus">Deactivated</span></h4>';
+                echo '<h4 class="m-t-5"><span class="label label-danger" id="scheduleTus">Deactivated</span></h4>';
                 break;
               case 1:
-                echo '<h4><span class="label label-primary" id="scheduleTus">Activated</span></h4>';
+                echo '<h4 class="m-t-5"><span class="label label-primary" id="scheduleTus">Activated</span></h4>';
                 break;
             }
           ?>
@@ -537,127 +249,205 @@
       <div class="form-group">
         {!! Form::label('name', 'Name', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
-          {!! Form::text('name', $sche['name'], ['class' => 'form-control']) !!}
+          <p class="m-t-5 data">{{ $sche['name'] }}</p>
         </div>
       </div>
+      @if (!empty($sche['description']))
       <div class="form-group">
         {!! Form::label('description', 'Description', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
-          {!! Form::textarea('description', $sche['description'], ['class' => 'form-control']) !!}
+          <p class="m-t-5 data">{{ $sche['description'] }}</p>
         </div>
       </div>
+      @endif
       <div class="form-group">
         {!! Form::label('action', 'Action', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
-          <?php
-            $schedule_actions = explode('|',$sche->action);
-          ?>
-          <div id="actions" data-count="{{ count($schedule_actions) }}">
-            <?php
-              for($i=0; $i<count($schedule_actions); $i++) {
+        <?php
+          $schedule_actions = explode('|',$sche->action);
 
-                $schedule_actions[$i] = explode(',',$schedule_actions[$i]);
+          for($i=0; $i<count($schedule_actions); $i++) {
 
-            ?>
-              <div class="input-group">
-                <div class="input-group-btn">
-                  {!! Form::select('action[type]['.$i.']', ['1' => 'Toggle', '2' => 'Turn on', '3' => 'Turn off'], $schedule_actions[$i][0], ['class' => 'form-control', 'style' => 'margin-top: -5px']) !!}
-                </div>
-                {!! Form::text('action[bot]['.$i.']', $schedule_actions[$i][1], ['class' => 'form-control b-left-0']) !!}
-              </div>
-            <?php
+              $schedule_actions[$i] = explode(',',$schedule_actions[$i]);
+
+              $bot = Bot::findOrFail($schedule_actions[$i][1]);
+              switch ($schedule_actions[$i][0]) {
+                case 1:
+                  $action_class = 'bg-custom';
+                  $action_text = 'Turn on';
+                  break;
+                case 2:
+                  $action_class = 'bg-danger';
+                  $action_text = 'Turn off';
+                  break;
+                case 3:
+                  $action_class = 'bg-primary';
+                  $action_text = 'Toggle';
+                  break;
               }
-            ?>
-          </div>
-          {!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Add action', ['class' => 'btn btn-default pull-right','onclick' => 'addAction()']) !!}
+              echo '<div class="action-item '.$action_class.'">
+                <span class="action-type">'.$action_text.'</span>
+                <img class="img-circle action-image" src="'.asset($bot->image).'"></img>
+                <span class="action-bot">'.$bot->name.'<span>
+              </div>';
+          }
+        ?>
         </div>
       </div>
       <div class="form-group">
         {!! Form::label('type', 'Type', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
-          {!! Form::select('type', ['1' => 'One time', '2' => 'Repeat'], $sche['type'], ['class' => 'form-control', 'onChange' => 'changeType()', 'style' => 'width: 100% !important']) !!}
+          <p class="m-t-5 data"><?php
+            switch ($sche['type']) {
+              case 1:
+                echo 'One time';
+                break;
+              case 2:
+                echo 'Repeat';
+                break;
+          } ?></p>
         </div>
       </div>
-      <div id="data">
-        @if ($sche['type'] == 1)
-        <div class="form-group">
-          {!! Form::label('time', 'Time', ['class' => 'col-sm-2 control-label']) !!}
-          <div class="col-sm-10">
-            {!! Form::text('time', $sche['time'], ['class' => 'form-control datetimepicker']) !!}
-          </div>
-        </div>
-        @else
-        <div class="form-group">
-          {!! Form::label('frequency', 'Frequency', ['class' => 'col-sm-2 control-label']) !!}
-          <div class="col-sm-10">
-            <?php
-            $data = explode('|',$sche['data']);
-            ?>
-            <div id="frequencies" data-count="1" class="m-b-5">
-            <?php
-              $i=0;
-              foreach ($data as $single_data) {
-                $single_data = explode(',',$single_data);
-            ?>
-              <div class="input-group m-t-5">
-                <span class="input-group-addon">Every</span>
-                {!! Form::text('frequency[value]['.$i.']', $single_data[1], ['class' => 'form-control b-right-0']) !!}
-                <div class="input-group-btn">
-                  {!! Form::select('frequency[unit]['.$i.']', ['1' => 'minute(s)', '2' => 'hour(s)', '3' => 'day(s)', '4' => 'week(s)', '5' => 'month(s)', '6' => 'year(s)'], $single_data[0], ['class' => 'form-control', 'onChange' => 'changeFrequency('.$i.')']) !!}
-                </div>
-                @if (isset($single_data[2]) && $single_data[2] != null)
-                  <span class="input-group-addon b-left-0 b-right-0" id="fre-at-text-0">At</span>
-                  {!! Form::text('frequency[at]['.$i.']', $single_data[2], ['id' => 'fre-at-input-0', 'class' => 'form-control datetimepicker']) !!}
-                @else
-                  <span class="input-group-addon b-left-0 b-right-0" id="fre-at-text-0" style="display: none">At</span>
-                  {!! Form::text('frequency[at]['.$i.']', null, ['id' => 'fre-at-input-0', 'class' => 'form-control datetimepicker', 'readonly' => 'readonly', 'style' => 'display: none']) !!}
-                @endif
-              </div>
-            <?php
-              $i++;
-              }
-            ?>
-            </div>
-          {!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Add frequency', ['class' => 'btn btn-default pull-right', 'onclick' => 'addFrequency()']) !!}
-          </div>
-        </div>'
-        @endif
-      </div>
+      @if ($sche['type'] == 1)
       <div class="form-group">
-        {!! Form::label('condition', 'Condition', ['class' => 'col-sm-2 control-label']) !!}
+        {!! Form::label('time', 'Time', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
-          <div class="input-group">
-            {!! Form::select('condition[type]', ['0' => 'Off', '1' => 'Work if', '2' => 'Not work if'], null, ['class' => 'form-control', 'onChange' => 'changeCondition()']) !!}
-            <span id="condMethod"></span>
-          </div>
-          <div id='conditions'></div>
-          <div id='add-condition-btn'></div>
+          <p class="m-t-5 data">{{ $sche['data'] }}</p>
         </div>
       </div>
+      @else
+      <div class="form-group">
+        {!! Form::label('frequency', 'Run', ['class' => 'col-sm-2 control-label']) !!}
+        <div class="col-sm-10">
+          <?php
+          $data = explode('|',$sche['data']);
+            foreach ($data as $single_data) {
+              $single_data = explode(',',$single_data);
+              echo '<div class="fre-item"><span>Every </span>
+              <span class="fre-value">'.$single_data[1].' </span>';
+              switch ($single_data[0]) {
+                case 1;
+                  $freUnit = 'minute(s)';
+                  break;
+                case 2;
+                  $freUnit = 'hour(s)';
+                  break;
+                case 3;
+                  $freUnit = 'day(s)';
+                  break;
+                case 4;
+                  $freUnit = 'week(s)';
+                  break;
+                case 5;
+                  $freUnit = 'month(s)';
+                  break;
+                case 6;
+                  $freUnit = 'year(s)';
+                  break;
+              }
+              echo '<span class="fre-unit">'.$freUnit.' </span>';
+              if (isset($single_data[2]) && $single_data[2] != null) {
+                echo "<span>at </span>";
+                echo '<span class="fre-at">'.$single_data[2].'</span>';
+              }
+              echo '</div>';
+            }
+          ?>
+        </div>
+      </div>
+      @endif
+      @if ($sche->condition_type != 0)
+        <?php
+          switch ($sche->condition_type) {
+            case 1:
+              $condition_text = 'Work if';
+              break;
+            case 2:
+              $condition_text = 'Not work if';
+          }
+
+          switch ($sche->condition_method) {
+            case 1:
+              $condition_text .= ' all true';
+              break;
+            case 2:
+              $condition_text .= ' one true';
+          }
+        ?>
+      <div class="form-group">
+        {!! Form::label('condition', $condition_text, ['class' => 'col-sm-2 control-label']) !!}
+        <div class="col-sm-10">
+          <?php
+            $conditions = explode('|',$sche->condition_data);
+            foreach ($conditions as $single_condition) {
+
+              switch ($single_condition[1]) {
+                case 0;
+                  $condd = 'is turned off';
+                  $cond_class = 'bg-danger';
+                  break;
+                case 1:
+                  $condd = 'is turned on';
+                  $cond_class = 'bg-custom';
+                  break;
+              }
+
+              echo '<div class="cond-item '.$cond_class.'">';
+
+              $single_condition = explode(',',$single_condition);
+              $bot = Bot::findOrFail($single_condition[0]);
+
+              echo '<img class="img-circle cond-image" src="'.asset($bot->image).'"></img>
+              <span class="cond-bot">'.$bot->name.'</span>
+              <span class="condd">'.$condd.'</span>';
+              echo '</div>';
+            }
+          ?>
+        </div>
+      </div>
+      @endif
+      @if (!empty($sche['activate_after']))
       <div class="form-group">
         {!! Form::label('activate_after', 'Activate after', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
-          {!! Form::text('activate_after', $sche['activate_after'], ['class' => 'form-control datetimepicker']) !!}
-          <span class="help-block m-b-0">
-            Leave blank to activate immediately
-          </span>
+          <p class="m-t-5 data">{{ $sche['activate_after'] }}</p>
         </div>
       </div>
+      @endif
+      @if (!empty($sche['deactivate_after_times']) || !empty($sche['deactivate_after_datetime']))
       <div class="form-group">
         {!! Form::label('deactivate_after', 'Deactivate after', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
-          <div class="input-group">
-            {!! Form::text('deactivate_after_times', $sche['deactivate_after_times'], ['class' => 'form-control']) !!}
-            <span class="input-group-addon b-left-0 b-right-0">
-              time(s) or
-            </span>
-            {!! Form::text('deactivate_after_datetime', $sche['deactivate_after_datetime'], ['class' => 'form-control datetimepicker']) !!}
-          </div>
-          <span class="help-block m-b-0">
-            Leave blank to avoid (infinitive loop or deactivate manually)
-          </span>
+          <p class="m-t-5 data">
+          @if (!empty($sche['deactivate_after_times']) && !empty($sche['deactivate_after_datetime']))
+            {{ $sche['deactivate_after_times'] }} time(s)
+            <span class="deac-or"> or </span>
+            {{ $sche['deactivate_after_datetime'] }}
+          @else
+            @if (!empty($sche['deactivate_after_times']))
+              {{ $sche['deactivate_after_times'] }}
+            @else
+              {{ $sche['deactivate_after_datetime'] }}
+            @endif
+          @endif
+          </p>
         </div>
       </div>
+      <div class="form-group">
+        {!! Form::label('permissions', 'Low permissions', ['class' => 'col-sm-2 control-label']) !!}
+        <div class="col-sm-10">
+          {!! Form::select('permissions[]', $users, $selected, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+          <span class="help-block margin-bottom-none">Users can manage this bot</span>
+        </div>
+      </div>
+      <div class="form-group">
+        {!! Form::label('highpermissions', 'High permissions', ['class' => 'col-sm-2 control-label']) !!}
+        <div class="col-sm-10">
+          {!! Form::select('highpermissions[]', $users, $selected2, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+          <span class="help-block margin-bottom-none">Users can manage this bot</span>
+        </div>
+      </div>
+      @endif
       {!! Form::button('<span class="btn-label"><i class="fa fa-floppy-o" aria-hidden="true"></i></span>Save', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
       {!! Form::button('<span class="btn-label"><i class="fa fa-trash" aria-hidden="true"></i></span>Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'scheduleDelete()']) !!}</a>
       @if ($sche['status'] != 0)

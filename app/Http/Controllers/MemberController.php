@@ -34,7 +34,17 @@ class MemberController extends Controller
         foreach ($bots as $bot) {
             $nBots[$bot['id']] = $bot['name'];
         }
-        return view('hub.member.create')->withBots($nBots);
+
+        $sches = Hub::findOrFail(session('currentHub'))->schedules()->orderBy('id','DESC')->get()->toArray();
+        $nSches = [];
+        foreach ($sches as $sche) {
+            $nSches[$bot['id']] = $sche['name'];
+        }
+
+        $nAutos = [];
+        $nEvents = [];
+
+        return view('hub.member.create')->withBots($nBots)->withSchedules($nSches)->withAutomations($nAutos)->withEvents($nEvents);
     }
 
     public function store(Request $request)
@@ -79,6 +89,7 @@ class MemberController extends Controller
                 BotPermission::updateOrCreate(['bot_id' => $bot_id, 'user_id' => $user->id],['high' => true]);
             }
         }
+
         if (is_array($request->hubpermissions)) {
             foreach ($request->hubpermissions as $data) {
                 $newperm = new HubPermission;
@@ -116,9 +127,10 @@ class MemberController extends Controller
 
     public function update(Request $request, $id)
     {
+
         $rules = ['permissions.*' => 'exists:bots,id,hub_id,'.Hub::findOrFail(session('currentHub'))->id];
 
-		$validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             return response()->json($validator->errors());
@@ -183,14 +195,14 @@ class MemberController extends Controller
 
     public function deactivate($id)
     {
-    	$mem = Member::findOrFail($id)->deactivate();
-    	return response()->json(['error' => 0]);
+        $mem = Member::findOrFail($id)->deactivate();
+        return response()->json(['error' => 0]);
     }
 
     public function reactivate($id)
     {
-    	$mem = Member::findOrFail($id)->reactivate();
-    	return response()->json(['error' => 0]);
+        $mem = Member::findOrFail($id)->reactivate();
+        return response()->json(['error' => 0]);
     }
 
     public function destroy($id)

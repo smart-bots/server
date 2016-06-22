@@ -48,7 +48,7 @@
     };
 
     $("[name='permissions[]']").multiSelect(searchableObj);
-    $("[name='higherpermissions[]']").multiSelect(searchableObj);
+    $("[name='highpermissions[]']").multiSelect(searchableObj);
 
     function verifyToken() {
       return false;
@@ -125,17 +125,17 @@
                 </div>
               </div>
             </div>
-            <div class="form-group{{ $errors->has('permissions') ? ' has-error' : '' }}">
-              {!! Form::label('permissions', 'Permissions', ['class' => 'col-sm-2 control-label']) !!}
+            <div class="form-group">
+              {!! Form::label('permissions', 'Low permissions', ['class' => 'col-sm-2 control-label']) !!}
               <div class="col-sm-10">
                 {!! Form::select('permissions[]', $users, old('permissions'), ['class' => 'form-control', 'multiple' => 'multiple']) !!}
                 <span class="help-block margin-bottom-none">Users can view/control this bot</span>
               </div>
             </div>
-            <div class="form-group{{ $errors->has('higherpermissions') ? ' has-error' : '' }}">
-              {!! Form::label('higherpermissions', 'Higher permissions', ['class' => 'col-sm-2 control-label']) !!}
+            <div class="form-group">
+              {!! Form::label('highpermissions', 'High permissions', ['class' => 'col-sm-2 control-label']) !!}
               <div class="col-sm-10">
-                {!! Form::select('higherpermissions[]', $users, old('higherpermissions'), ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+                {!! Form::select('highpermissions[]', $users, old('highpermissions'), ['class' => 'form-control', 'multiple' => 'multiple']) !!}
                 <span class="help-block margin-bottom-none">Users can edit/delete this bot</span>
               </div>
             </div>

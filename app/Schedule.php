@@ -6,13 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Schedule extends Model
 {
-	protected $table = 'schedules';
-    protected $fillable = ['hub_id','name', 'description','action','type','data','condition','activate_after','deactivate_after','status','ran_times'];
+    protected $table = 'schedules';
+
+    protected $fillable = ['hub_id','name', 'description','action','type','data','condition','activate_after','deactivate_after','status','ran_times','next_run_time'];
+
     protected $hidden = [];
+
     public $timestamps = false;
 
     public function user() {
-    	return $this->belongsTo('SmartBots\User','user_id');
+        return $this->belongsTo('SmartBots\User','user_id');
     }
 
     public function schedulepermissions() {
@@ -20,7 +23,7 @@ class Schedule extends Model
     }
 
     public function hub() {
-    	return $this->belongsTo('SmartBots\Hub','hub_id');
+        return $this->belongsTo('SmartBots\Hub','hub_id');
     }
 
     public function users() {
@@ -38,7 +41,7 @@ class Schedule extends Model
     }
 
     public function isActivated():bool {
-    	return $this->status;
+        return $this->status;
     }
 
     public function isActivatedx():bool {

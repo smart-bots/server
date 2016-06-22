@@ -6,9 +6,9 @@ use SmartBots\User;
 
 class UserMenuComposer {
 
-	public function compose($view) {
-		$user = auth()->user();
-		$view->withUser($user);
-	}
+    public function compose($view) {
+        $user = auth()->user();
+        $view->withUser($user);
+    }
 
 }
