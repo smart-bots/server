@@ -52,6 +52,7 @@ class Kernel extends HttpKernel
         'authed' => \SmartBots\Http\Middleware\Authenticated::class,
         'nonAuthed' => \SmartBots\Http\Middleware\NonAuthenticated::class,
         'hubLogedIn' => \SmartBots\Http\Middleware\HubLogedIn::class,
-        'can' => \SmartBots\Http\Middleware\HasPermission::class
+        'can' => \SmartBots\Http\Middleware\HasPermission::class,
+        'verified' => \SmartBots\Http\Middleware\Verified::class
     ];
 }

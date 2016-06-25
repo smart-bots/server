@@ -4,18 +4,7 @@ namespace SmartBots\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use SmartBots\{
-    User,
-    Hub,
-    Bot,
-    Member,
-    Schedule,
-    Automation,
-    HubPermission,
-    BotPermission,
-    SchedulePermission,
-    AutomationPermission
-};
+use SmartBots\Hub;
 
 use Carbon;
 

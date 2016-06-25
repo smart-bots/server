@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         Commands\Inspire::class,
         Commands\RunSmartSchedule::class,
         Commands\SmartScheduleRunner::class,
+        Commands\TwilioSetup::class,
     ];
 
     /**

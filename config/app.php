@@ -182,6 +182,8 @@ return [
 
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
+        Propaganistas\LaravelPhone\LaravelPhoneServiceProvider::class
+
     ],
 
     /*

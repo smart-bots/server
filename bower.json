@@ -45,7 +45,8 @@
     "themify-icons": "^0.1.2",
     "typeahead.js": "^0.11.1",
     "wow": "^1.1.2",
-    "Waves": "waves#^0.7.5"
+    "Waves": "waves#^0.7.5",
+    "intl-tel-input": "^9.0.1"
   },
   "resolutions": {
     "jquery": "2.2.4"

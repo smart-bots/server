@@ -9,7 +9,7 @@ use Session;
 class NonAuthenticated
 {
     /**
-     * Handle an incoming request.
+     * Check if user is not authenticated
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next

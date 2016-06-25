@@ -17,10 +17,11 @@ use SmartBots\{
 class HasPermission
 {
     /**
-     * Handle an incoming request.
+     * Check if user has a right permission to access route
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
+     * @param  string    $thing
      * @return mixed
      */
     public function handle($request, Closure $next, $thing)

@@ -51,9 +51,7 @@
       }
   };
 
-  $("[name='permissions[]']").multiSelect(searchableObj);
-
-  $("[name='highpermissions[]']").multiSelect(searchableObj);
+  $("[name^='permissions']").multiSelect(searchableObj);
 
   function memDeactivate(id) {
     swal({
@@ -170,21 +168,57 @@
       </div>
         {!! Form::hidden('id', $mem['id']) !!}
         <div class="form-group">
-          {!! Form::label('username', 'Members\'s username', ['class' => 'col-sm-2 control-label']) !!}
+          {!! Form::label('username', 'Username', ['class' => 'col-sm-2 control-label']) !!}
           <div class="col-sm-10">
-            {!! Form::text('username', $username, ['class' => 'form-control', 'readonly' => 'readonly']) !!}
+            {!! Form::text('username', $username, ['class' => 'form-control']) !!}
           </div>
         </div>
         <div class="form-group">
-          {!! Form::label('username', 'Members\'s permissions', ['class' => 'col-sm-2 control-label']) !!}
+          {!! Form::label('username', 'Bot low permissions', ['class' => 'col-sm-2 control-label']) !!}
           <div class="col-sm-10">
-            {!! Form::select('permissions[]', $bots, $selected, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+            {!! Form::select('permissions[bot][low][]', $bots, $sltd_bot_low, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
           </div>
         </div>
         <div class="form-group">
-          {!! Form::label('username', 'Members\'s high-permissions', ['class' => 'col-sm-2 control-label']) !!}
+          {!! Form::label('username', 'Bot high permissions', ['class' => 'col-sm-2 control-label']) !!}
           <div class="col-sm-10">
-            {!! Form::select('highpermissions[]', $bots, $selected2, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+            {!! Form::select('permissions[bot][high][]', $bots, $sltd_bot_high, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+          </div>
+        </div>
+        <div class="form-group">
+          {!! Form::label('username', 'Schedule low permissions', ['class' => 'col-sm-2 control-label']) !!}
+          <div class="col-sm-10">
+            {!! Form::select('permissions[schedule][low][]', $schedules, $sltd_schedule_low, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+          </div>
+        </div>
+        <div class="form-group">
+          {!! Form::label('username', 'Schedule high permissions', ['class' => 'col-sm-2 control-label']) !!}
+          <div class="col-sm-10">
+            {!! Form::select('permissions[schedule][high][]', $schedules, $sltd_schedule_high, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+          </div>
+        </div>
+        <div class="form-group">
+          {!! Form::label('username', 'Event low permissions', ['class' => 'col-sm-2 control-label']) !!}
+          <div class="col-sm-10">
+            {!! Form::select('permissions[event][low][]', $events, $sltd_event_low, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+          </div>
+        </div>
+        <div class="form-group">
+          {!! Form::label('username', 'Event high permissions', ['class' => 'col-sm-2 control-label']) !!}
+          <div class="col-sm-10">
+            {!! Form::select('permissions[event][high][]', $events, $sltd_event_high, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+          </div>
+        </div>
+        <div class="form-group">
+          {!! Form::label('username', 'Automation low permissions', ['class' => 'col-sm-2 control-label']) !!}
+          <div class="col-sm-10">
+            {!! Form::select('permissions[automation][low][]', $automations, $sltd_automation_low, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+          </div>
+        </div>
+        <div class="form-group">
+          {!! Form::label('username', 'Automation high permissions', ['class' => 'col-sm-2 control-label']) !!}
+          <div class="col-sm-10">
+            {!! Form::select('permissions[automation][high][]', $automations, $sltd_automation_high, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
           </div>
         </div>
         <div class="form-group">
@@ -216,6 +250,12 @@
               <td>{!! Form::checkbox('hubpermissions[]', 6, in_array(6,$hubperms)) !!}</td>
               <td>{!! Form::checkbox('hubpermissions[]', 7, in_array(7,$hubperms)) !!}</td>
               <td>{!! Form::checkbox('hubpermissions[]', 8, in_array(8,$hubperms)) !!}</td>
+            </tr>
+            <tr>
+              <td class="text-left">Events</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 15, in_array(15,$hubperms)) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 16, in_array(16,$hubperms)) !!}</td>
+              <td>{!! Form::checkbox('hubpermissions[]', 17, in_array(17,$hubperms)) !!}</td>
             </tr>
             <tr>
               <td class="text-left">Automations</td>

@@ -243,7 +243,7 @@ $.fn.validate = function(data = [], except = [], successCallBack = false, global
                         $(this).removeClass("animated shake");
                     });
 
-                input.closest('div:not(.input-group)').append(errorHtml);
+                input.closest('div:not(.input-group):not(.intl-tel-input)').append(errorHtml);
 
                 if (focus_to == false) {
                     focus_to = true;

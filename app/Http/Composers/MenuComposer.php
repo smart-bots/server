@@ -79,10 +79,6 @@ class MenuComposer {
                         'href' => route('h::e::create')
                     ]
                 ]
-            ],
-            'Chart' => [
-                'icon' => 'ti-bar-chart',
-                'href' => '#'
             ]
         ]);
     }

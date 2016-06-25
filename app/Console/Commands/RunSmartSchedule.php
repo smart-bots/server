@@ -7,16 +7,8 @@ use Illuminate\Console\Command;
 use Carbon;
 
 use SmartBots\{
-    User,
-    Hub,
     Bot,
-    Member,
-    Schedule,
-    Automation,
-    HubPermission,
-    BotPermission,
-    SchedulePermission,
-    AutomationPermission
+    Schedule
 };
 
 class RunSmartSchedule extends Command
@@ -55,7 +47,11 @@ class RunSmartSchedule extends Command
     {
         $schedule_id = $this->argument('schedule_id');
 
-        $time = $this->option('time');
+        if (!empty($this->option('time'))) {
+            $time = $this->option('time');
+        } else {
+            $time = Carbon::now()->timestamp;
+        }
 
         $schedule = Schedule::findOrFail($schedule_id);
 
@@ -72,7 +68,7 @@ class RunSmartSchedule extends Command
                 for ($i=0; $i<count($schedule_conditions); $i++) {
 
                     $schedule_conditions[$i] = explode(',',$schedule_conditions[$i]);
-                    $return_conditions[] = Bot::findOrFail($schedule_conditions[$i][0])->realStatus() == $schedule_conditions[$i][1];
+                    $return_conditions[]     = Bot::findOrFail($schedule_conditions[$i][0])->realStatus() == $schedule_conditions[$i][1];
 
                 }
 
@@ -164,10 +160,10 @@ class RunSmartSchedule extends Command
                     $this->info('Increase ran times of schedule #'.$schedule_id.'...');
 
                     if ($schedule->deactivate_after_times != 0 && $schedule->ran_times >= $schedule->deactivate_after_times) {
-                        $schedule->status = 0;
-                        $schedule->ran_times = 0;
+                        $schedule->status                    = 0;
+                        $schedule->ran_times                 = 0;
                         $schedule->deactivate_after_datetime = '';
-                        $schedule->deactivate_after_times = 0;
+                        $schedule->deactivate_after_times    = 0;
                         $this->info('Deactivate schedule #'.$schedule_id.' because it reach the limit');
 
                     } else {

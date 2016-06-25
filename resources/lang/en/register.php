@@ -6,7 +6,6 @@ return [
     'username' => 'Username',
     'name' => 'Name',
     'email' => 'Email address',
-    'phone' => 'Phone number',
     'password' => 'Your password',
     'password_confirmation' => 'Retype your password',
     'agree_to' => 'I agree to the',

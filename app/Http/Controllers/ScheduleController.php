@@ -5,6 +5,7 @@ namespace SmartBots\Http\Controllers;
 use Illuminate\Http\Request;
 
 use SmartBots\Http\Requests;
+
 use Validator;
 
 use SmartBots\{
@@ -17,46 +18,62 @@ use Carbon;
 
 class ScheduleController extends Controller
 {
+    /**
+     * Listing all the schedule that user can see
+     * @return Illuminate\Contracts\View\View
+     */
     public function index() {
+
         if (auth()->user()->can('viewAllSchedules',Hub::findOrFail(session('currentHub')))) {
             $schedules = Hub::findOrFail(session('currentHub'))->schedules()->orderBy('id','DESC')->get();
         } else {
             $schedules = auth()->user()->schedulesOf(session('currentHub'))->sortByDesc('id');
         }
+
         return view('hub.schedule.index')->withSchedules($schedules);
     }
 
+    /**
+     * Show up schedule create form
+     * @return Illuminate\Contracts\View\View
+     */
     public function create() {
-        //Lấy tất cả user của hub (member)
+
         $users = Hub::findOrFail(session('currentHub'))->users()->orderBy('id','DESC')->get();
         $nUsers = [];
+
         foreach ($users as $user) {
             $nUsers[$user['id']] = $user['username'];
         }
+
         return view('hub.schedule.create')->withUsers($nUsers);
     }
 
+    /**
+     * Handle a request to create new schedule
+     * @param  Request $request
+     * @return Illuminate\Http\JsonResponse
+     */
     public function store(Request $request) {
 
-        // dd($request->toArray());
+
         $now = Carbon::now()->setTimezone(Hub::findorfail(session('currentHub'))->timezone);
         $now->second = 0;
 
         $rules = [
-            'name' => 'required|max:100',
-            'description' => 'max:1000',
-            'action.type.0' => 'required|numeric|between:1,3',
-            'action.bot.0' => 'required|exists:bots,id', // Thiếu check permission
-            'action.type.*' => 'numeric|between:1,3',
-            'action.bot.*' => 'exists:bots,id',
-            'type' => 'required|numeric|between:1,2',
-            'condition.type' => 'required|numeric|between:0,2',
-            'activate_after' => 'date|after:'.$now->timestamp,
-            'deactivate_after_times' => 'numeric',
+            'name'                      => 'required|max:100',
+            'description'               => 'max:1000',
+            'action.type.0'             => 'required|numeric|between:1,3',
+            'action.bot.0'              => 'required|exists:bots,id', // Thiếu check permission
+            'action.type.*'             => 'numeric|between:1,3',
+            'action.bot.*'              => 'exists:bots,id',
+            'type'                      => 'required|numeric|between:1,2',
+            'condition.type'            => 'required|numeric|between:0,2',
+            'activate_after'            => 'date|after:'.$now->timestamp,
+            'deactivate_after_times'    => 'numeric',
             'deactivate_after_datetime' => 'date|after:'.$now->timestamp,
-            // Kiểm tra xem user's id được add có phải là member của hub không
-            'permissions.*' => 'exists:members,user_id,hub_id,'.session('currentHub'),
-            'highpermissions.*' => 'exists:members,user_id,hub_id,'.session('currentHub')
+            'permissions.*'             => 'exists:members,user_id,hub_id,'.session('currentHub'),
+            'highpermissions.*'         => 'exists:members,user_id,hub_id,'.session('currentHub')
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -94,23 +111,23 @@ class ScheduleController extends Controller
                         break;
                     case 2: // hours
                         $rules['frequency.value.'.$i] = 'required|numeric|between:1,24';
-                        $rules['frequency.at.'.$i] = 'required|numeric|between:0,59';
+                        $rules['frequency.at.'.$i]    = 'required|numeric|between:0,59';
                         break;
                     case 3: // days
                         $rules['frequency.value.'.$i] = 'required|numeric|between:1,31';
-                        $rules['frequency.at.'.$i] = ['required','regex:/^([01]{1}[0-9]{1}|[2]{1}[0-3]{1}):([012345]{1}[0-9]{1})$/'];
+                        $rules['frequency.at.'.$i]    = ['required','regex:/^([01]{1}[0-9]{1}|[2]{1}[0-3]{1}):([012345]{1}[0-9]{1})$/'];
                         break;
                     case 4: // weeks
                         $rules['frequency.value.'.$i] = 'required|numeric|between:1,5';
-                        $rules['frequency.at.'.$i] = ['required','regex:/^(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday) ([01]{1}[0-9]{1}|[2]{1}[0-3]{1}):([012345]{1}[0-9]{1})$/'];
+                        $rules['frequency.at.'.$i]    = ['required','regex:/^(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday) ([01]{1}[0-9]{1}|[2]{1}[0-3]{1}):([012345]{1}[0-9]{1})$/'];
                         break;
                     case 5: // months
                         $rules['frequency.value.'.$i] = 'required|numeric|between:1,12';
-                        $rules['frequency.at.'.$i] = ['required','regex:/^([0-9]{1}|[012]{1}[0-9]{1}|[3]{1}[01]) ([01]{1}[0-9]{1}|[2]{1}[0-3]{1}):([012345]{1}[0-9]{1})$/'];
+                        $rules['frequency.at.'.$i]    = ['required','regex:/^([0-9]{1}|[012]{1}[0-9]{1}|[3]{1}[01]) ([01]{1}[0-9]{1}|[2]{1}[0-3]{1}):([012345]{1}[0-9]{1})$/'];
                         break;
                     case 6: // years
                         $rules['frequency.value.'.$i] = 'required|numeric';
-                        $rules['frequency.at.'.$i] = ['required','regex:/^(January|February|March|April|May|June|July|August|September|October|November|December) ([0-9]{1}|[012]{1}[0-9]{1}|[3]{1}[01]) ([01]{1}[0-9]{1}|[2]{1}[0-3]{1}):([012345]{1}[0-9]{1})$/'];
+                        $rules['frequency.at.'.$i]    = ['required','regex:/^(January|February|March|April|May|June|July|August|September|October|November|December) ([0-9]{1}|[012]{1}[0-9]{1}|[3]{1}[01]) ([01]{1}[0-9]{1}|[2]{1}[0-3]{1}):([012345]{1}[0-9]{1})$/'];
                         break;
                 }
 
@@ -126,10 +143,10 @@ class ScheduleController extends Controller
         if ($request->condition['type'] != 0) {
 
             $rules = [
-                'condition.method' => 'required|numeric|between:1,2',
-                'condition.bot.0' => 'required|exists:bots,id',
+                'condition.method'  => 'required|numeric|between:1,2',
+                'condition.bot.0'   => 'required|exists:bots,id',
                 'condition.state.0' => 'required|numeric|between:0,1',
-                'condition.bot.*' => 'required|exists:bots,id',
+                'condition.bot.*'   => 'required|exists:bots,id',
                 'condition.state.*' => 'required|numeric|between:0,1'
             ];
 
@@ -142,9 +159,9 @@ class ScheduleController extends Controller
 
         $schedule = new Schedule;
 
-        $schedule->hub_id = session('currentHub');
+        $schedule->hub_id      = session('currentHub');
 
-        $schedule->name = $request->name;
+        $schedule->name        = $request->name;
         $schedule->description = $request->description;
 
         $actionData = '';
@@ -156,7 +173,7 @@ class ScheduleController extends Controller
         $schedule->type = $request->type;
 
         if ($request->type == 1) {
-            $schedule->data = $request->time;
+            $schedule->data   = $request->time;
             $schedule->status = 1;
         } else {
 
@@ -260,14 +277,14 @@ class ScheduleController extends Controller
                 }
 
             }
-            $schedule->data = trim($frequencyData,'|');
+            $schedule->data          = trim($frequencyData,'|');
             $schedule->next_run_time = trim($nextRunData,'|');
 
         }
 
         if ($request->condition['type'] != 0)
         {
-            $schedule->condition_type = $request->condition['type'];
+            $schedule->condition_type   = $request->condition['type'];
             $schedule->condition_method = $request->condition['method'];
 
             $conditionData = '';
@@ -282,25 +299,25 @@ class ScheduleController extends Controller
             $schedule->activate_after = $request->activate_after;
         } else {
             $schedule->activate_after = '';
-            $schedule->status = 1;
+            $schedule->status         = 1;
         }
 
-        $schedule->deactivate_after_times = $request->deactivate_after_times;
+        $schedule->deactivate_after_times    = $request->deactivate_after_times;
         $schedule->deactivate_after_datetime = $request->deactivate_after_datetime;
 
         $schedule->save();
 
         $newSchePerm = new SchedulePermission;
-        $newSchePerm->user_id = auth()->user()->id;
+        $newSchePerm->user_id     = auth()->user()->id;
         $newSchePerm->schedule_id = $schedule->id;
-        $newSchePerm->high = true;
+        $newSchePerm->high        = true;
         $newSchePerm->save();
 
         if (is_array($request->permissions)) {
             foreach ($request->permissions as $user_id) {
                 $newPerm = new SchedulePermission;
                 $newPerm->schedule_id = $schedule->id;
-                $newPerm->user_id = $user_id;
+                $newPerm->user_id     = $user_id;
                 $newPerm->save();
             }
         }
@@ -315,54 +332,75 @@ class ScheduleController extends Controller
 
     }
 
-    public function edit($id) {
+    /**
+     * Show up schedule edit form
+     * @param  int    $id
+     * @return Illuminate\Contracts\View\View
+     */
+    public function edit(int $id) {
         $schedule = Schedule::findOrFail($id);
-        $users = Hub::findOrFail(session('currentHub'))->users()->orderBy('id','DESC')->get()->toArray();
+        $users    = Hub::findOrFail(session('currentHub'))->users()->orderBy('id','DESC')->get()->toArray();
+
         $nUsers = [];
         foreach ($users as $user) {
             $nUsers[$user['id']] = $user['username'];
         }
-        $perms = SchedulePermission::where('schedule_id',$id)->get();
+
+        $perms  = SchedulePermission::where('schedule_id',$id)->get();
         $sUsers = array_pluck($perms,'user_id');
-        $perm2s = SchedulePermission::where('schedule_id',$id)->where('high',true)->get();
+
+        $perm2s  = SchedulePermission::where('schedule_id',$id)->where('high',true)->get();
         $sUser2s = array_pluck($perm2s,'user_id');
-        return view('hub.schedule.edit')->withSche($schedule)->withUsers($nUsers)->withSelected($sUsers)->withSelected2($sUser2s);
+
+        return view('hub.schedule.edit')
+            ->withSche($schedule)
+            ->withUsers($nUsers)
+            ->withSelected($sUsers)
+            ->withSelected2($sUser2s);
     }
 
-    public function update($id, Request $request) {
+    /**
+     * Handle a request to edit schedule
+     * @param  Request $request
+     * @param  int     $id
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, int $id) {
 
         $rules = [
-            'permissions.*' => 'exists:members,user_id,hub_id,'.session('currentHub'),
+            'permissions.*'     => 'exists:members,user_id,hub_id,'.session('currentHub'),
             'highpermissions.*' => 'exists:members,user_id,hub_id,'.session('currentHub')
         ];
 
-        $scheduleperms = SchedulePermission::where('schedule_id',$id)->get();
+        $scheduleperms         = SchedulePermission::where('schedule_id',$id)->get();
         $users_of_schedule_old = array_pluck($scheduleperms,'user_id');
 
-        if (count($users_of_schedule_old) > count($request->permissions)) { // Xóa bớt
+        if (count($users_of_schedule_old) > count($request->permissions)) {
+
             $diff = collect($users_of_schedule_old)->diff($request->permissions);
             SchedulePermission::whereIn('user_id',$diff->all())->where('schedule_id',$id)->delete();
-        } else { // Hoặc thêm
+        } else {
+
             $diff = collect($request->permissions)->diff($users_of_schedule_old)->toArray();
-            foreach ($diff as $user_id)
-            {
+            foreach ($diff as $user_id) {
                 $newPerm = new SchedulePermission;
-                $newPerm->user_id = $user_id;
+                $newPerm->user_id     = $user_id;
                 $newPerm->schedule_id = $id;
                 $newPerm->save();
             }
         }
 
-        $scheduleperms = SchedulePermission::where('schedule_id',$id)->where('high',true)->get();
+        $scheduleperms         = SchedulePermission::where('schedule_id',$id)->where('high',true)->get();
         $users_of_schedule_old = array_pluck($scheduleperms,'user_id');
 
-        if (count($users_of_schedule_old) > count($request->highpermissions)) { // Xóa bớt
+        if (count($users_of_schedule_old) > count($request->highpermissions)) {
+
             $diff = collect($users_of_schedule_old)->diff($request->highpermissions);
             SchedulePermission::whereIn('user_id',$diff->all())->where('schedule_id',$id)->where('high',true)->update(['high' => false]);
-        } else { // Hoặc thêm
+        } else {
+
             $diff = collect($request->highpermissions)->diff($users_of_schedule_old)->toArray();
-            foreach ($diff as $user_id)
-            {
+            foreach ($diff as $user_id) {
                 SchedulePermission::updateOrCreate(['schedule_id' => $id, 'user_id' => $user_id],['high' => true]);
             }
         }
@@ -371,15 +409,27 @@ class ScheduleController extends Controller
         return response()->json($errors);
     }
 
-    public function deactivate($id) {
+    /**
+     * Deactivate a schedule
+     * @param  int    $id
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function deactivate(int $id) {
+
         $schedule = Schedule::findorfail($id);
         $schedule->deactivate_after_datetime = '';
-        $schedule->deactivate_after_times = 0;
+        $schedule->deactivate_after_times    = 0;
         $schedule->deactivate();
+
         return response()->json(['error' => 0]);
     }
 
-    public function reactivate($id) {
+    /**
+     * Reactivate a schedule
+     * @param  int    $id
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function reactivate(int $id) {
 
         $schedule = Schedule::findorfail($id);
 
@@ -482,6 +532,16 @@ class ScheduleController extends Controller
 
         $schedule->reactivate();
 
+        return response()->json(['error' => 0]);
+    }
+
+    /**
+     * Delete a schedule
+     * @param  int    $id
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function destroy(int $id) {
+        Schedule::destroy($id);
         return response()->json(['error' => 0]);
     }
 }

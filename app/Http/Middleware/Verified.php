@@ -3,29 +3,26 @@
 namespace SmartBots\Http\Middleware;
 
 use Closure;
-use Session;
 
-class Authenticated
+class Verified
 {
     /**
-     * Check if user is loged in.
+     * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next)
     {
-        if (auth()->guard($guard)->guest()) {
+        if (!auth()->user()->verified) {
             if ($request->ajax() || $request->wantsJson()) {
                 return abort(401);
             } else {
-                return redirect()->route('a::login');
+                return redirect()->route('a::verify');
             }
         }
 
         return $next($request);
     }
-
 }

@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('phone')->unique();
             $table->string('password');
             $table->string('avatar')->default('public/images/noavatar.png');
+            $table->boolean('verified');
             $table->rememberToken();
         });
     }

@@ -72,12 +72,6 @@
 
             <div class="form-group">
                 <div class="col-xs-12">
-                    <input type="text" class="form-control" name="phone" placeholder="@trans('register.phone')">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-xs-12">
                     <input type="password" class="form-control" name="password" placeholder="@trans('register.password')">
                 </div>
             </div>

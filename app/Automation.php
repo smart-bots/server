@@ -23,7 +23,6 @@ class Automation extends Model
     }
 
     public function users() {
-        // thông qua automationpermission
         $automationpermissions = $this->automationpermissions;
         $users = [];
         foreach ($automationpermissions as $automationpermission) {

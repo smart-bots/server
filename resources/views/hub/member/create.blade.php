@@ -127,49 +127,49 @@
               <div class="form-group">
                 {!! Form::label('username', 'Bot low permissions', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-10">
-                  {!! Form::select('permissions[bot][low]', $bots, null, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+                  {!! Form::select('permissions[bot][low][]', $bots, null, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
                 </div>
               </div>
               <div class="form-group">
                 {!! Form::label('username', 'Bot high permissions', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-10">
-                  {!! Form::select('permissions[bot][high]', $bots, null, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+                  {!! Form::select('permissions[bot][high][]', $bots, null, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
                 </div>
               </div>
               <div class="form-group">
                 {!! Form::label('username', 'Schedule low permissions', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-10">
-                  {!! Form::select('permissions[schedule][low]', $schedules, null, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+                  {!! Form::select('permissions[schedule][low][]', $schedules, null, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
                 </div>
               </div>
               <div class="form-group">
                 {!! Form::label('username', 'Schedule high permissions', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-10">
-                  {!! Form::select('permissions[schedule][high]', $schedules, null, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
-                </div>
-              </div>
-              <div class="form-group">
-                {!! Form::label('username', 'Automation low permissions', ['class' => 'col-sm-2 control-label']) !!}
-                <div class="col-sm-10">
-                  {!! Form::select('permissions[automation][low]', $automations, null, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
-                </div>
-              </div>
-              <div class="form-group">
-                {!! Form::label('username', 'Automation high permissions', ['class' => 'col-sm-2 control-label']) !!}
-                <div class="col-sm-10">
-                  {!! Form::select('permissions[automation][high]', $automations, null, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+                  {!! Form::select('permissions[schedule][high][]', $schedules, null, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
                 </div>
               </div>
               <div class="form-group">
                 {!! Form::label('username', 'Event low permissions', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-10">
-                  {!! Form::select('permissions[event][low]', $events, null, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+                  {!! Form::select('permissions[event][low][]', $events, null, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
                 </div>
               </div>
               <div class="form-group">
                 {!! Form::label('username', 'Event high permissions', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-10">
-                  {!! Form::select('permissions[event][high]', $events, null, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+                  {!! Form::select('permissions[event][high][]', $events, null, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+                </div>
+              </div>
+              <div class="form-group">
+                {!! Form::label('username', 'Automation low permissions', ['class' => 'col-sm-2 control-label']) !!}
+                <div class="col-sm-10">
+                  {!! Form::select('permissions[automation][low][]', $automations, null, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
+                </div>
+              </div>
+              <div class="form-group">
+                {!! Form::label('username', 'Automation high permissions', ['class' => 'col-sm-2 control-label']) !!}
+                <div class="col-sm-10">
+                  {!! Form::select('permissions[automation][high][]', $automations, null, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
                 </div>
               </div>
               <div class="form-group" >
@@ -201,6 +201,12 @@
                     <td>{!! Form::checkbox('hubpermissions[]', 6) !!}</td>
                     <td>{!! Form::checkbox('hubpermissions[]', 7) !!}</td>
                     <td>{!! Form::checkbox('hubpermissions[]', 8) !!}</td>
+                  </tr>
+                  <tr>
+                    <td class="text-left">Events</td>
+                    <td>{!! Form::checkbox('hubpermissions[]', 15) !!}</td>
+                    <td>{!! Form::checkbox('hubpermissions[]', 16) !!}</td>
+                    <td>{!! Form::checkbox('hubpermissions[]', 17) !!}</td>
                   </tr>
                   <tr>
                     <td class="text-left">Automations</td>

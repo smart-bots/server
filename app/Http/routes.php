@@ -12,6 +12,8 @@ use SmartBots\{
     AutomationPermission
 };
 
+use SmartBots\Events\VerifyServerSentEvents;
+
 // Route::group([
 //     'middleware' => [],
 //     'as'         => 'comingsoon'
@@ -30,9 +32,10 @@ Route::group([
 });
 
 Route::get('test', function () {
-    dd(Automation::where('trigger_id',1)->where(function ($query) {
-                $query->where('trigger_type',2)->orWhere('trigger_type',3);
-            })->toSql());
+    $phone = auth()->user()->phone;
+    $sse = new VerifyServerSentEvents($phone);
+    $sse->sendVerified();
+    return view('test');
 });
 
 Route::group([
@@ -61,14 +64,24 @@ Route::group([
 
     Route::group(['middleware' => ['authed']], function() {
 
+        Route::get('verify','UserController@getVerify')->name('::verify');
+        Route::post('verify','UserController@postVerify');
+
+        Route::get('/verify-status', 'UserController@getVerifyStatus')->name('::verifyStatus');
+
         Route::get('/', function () {
             return redirect()->to(route('a::edit'),301);
         });
 
-        Route::get('edit','UserController@edit')->name('::edit');
-        Route::post('edit','UserController@update')->name('::update');
         Route::get('logout','UserController@logout')->name('::logout');
         Route::post('logout','UserController@logout')->name('::logout');
+    });
+
+    Route::group(['middleware' => ['authed','verified']], function() {
+
+        Route::get('edit','UserController@edit')->name('::edit');
+        Route::post('edit','UserController@update')->name('::update');
+
         Route::get('change-pass','UserController@getChangePass')->name('::changePass');
         Route::post('change-pass','UserController@postChangePass')->name('::changePass');
 
@@ -80,7 +93,7 @@ Route::group([
 Route::group([
     'prefix'     => 'hub',
     'as'         => 'h',
-    'middleware' => ['authed']
+    'middleware' => ['authed','verified']
 ], function () {
 
     Route::get('index','HubController@index')->name('::index');
@@ -302,3 +315,10 @@ Route::group([
 // })->where('all', '.*');
 
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+
+Route::get('/twilio-voice-request', function() {
+    return response('<?xml version="1.0" encoding="UTF-8"?><Response><Reject reason="busy" /></Response>')
+        ->header('Content-Type', 'application/xml');
+})->name('twilioVoiceRequest');
+
+Route::post('/twilio-voice-status-callback', 'UserController@handleTwilioVoiceStatusCallback')->name('twilioVoiceStatusCallBack');

@@ -6,6 +6,23 @@ use Illuminate\Support\ServiceProvider;
 
 use Validator;
 
+use SmartBots\{
+    User,
+    Hub,
+    Member,
+    Bot,
+    Schedule,
+    Event,
+    Automation,
+    HubPermission,
+    BotPermission,
+    SchedulePermission,
+    EventPermission,
+    AutomationPermission
+};
+
+use Hash;
+
 class ValidationServiceProvider extends ServiceProvider
 {
     /**
@@ -15,9 +32,18 @@ class ValidationServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Validator::extend('foo', function($attribute, $value, $parameters, $validator) {
-            return $value == 'foo';
+        Validator::extend('botCanBeSeen', function($attribute, $value, $parameters, $validator) {
+            return auth()->user()->can('low',Bot::findOrFail($value));
         });
+
+        Validator::extend('currentpassword', function($attribute, $value, $parameters, $validator) {
+            if (Hash::check($value, auth()->user()->password)) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+
     }
 
     /**

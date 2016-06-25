@@ -9,7 +9,7 @@ use SmartBots\Hub;
 class HubLogedIn
 {
     /**
-     * Handle an incoming request.
+     * Check if user loged in to a hub
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next

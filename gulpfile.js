@@ -42,7 +42,8 @@ var less = { // LESS file to compile => css
         'raven-js/dist/raven.js' : 'raven-js/raven.js',
         'amcharts3/amcharts/amchart.js' : 'amcharts/amcharts.js',
         'amcharts3/amcharts/amchart.js' : 'amcharts/serial.js',
-        'socket.io-client/socket.io.js' : 'socket.io/socket.io.js'
+        'socket.io-client/socket.io.js' : 'socket.io/socket.io.js',
+        'intl-tel-input/build/js/intlTelInput.js' : 'intl-tel-input/js/intlTelInput.js'
     },
 
     css = { // CSS file vendored => libs
@@ -54,14 +55,16 @@ var less = { // LESS file to compile => css
         'animate.css/animate.css' : 'animate.css/animate.css',
         'multiselect/css/multi-select.css' : 'multiselect/css/multi-select.css',
         'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css' : 'bootstrap-datetimepicker/bootstrap-datetimepicker.css',
-        'bootstrap-select/dist/css/bootstrap-select.css' : 'bootstrap-select/bootstrap-select.css'
+        'bootstrap-select/dist/css/bootstrap-select.css' : 'bootstrap-select/bootstrap-select.css',
+        'intl-tel-input/build/css/intlTelInput.css' : 'intl-tel-input/css/intlTelInput.css'
     },
 
     assets = { // Assets file & folder vendored => libs
         'bootstrap/dist/fonts' : 'bootstrap/fonts',
         'font-awesome/fonts' : 'font-awesome/fonts',
         'themify-icons/fonts' : 'themify-icons/fonts',
-        'multiselect/img' : 'multiselect/img'
+        'multiselect/img' : 'multiselect/img',
+        'intl-tel-input/build/img' : 'intl-tel-input/img'
     },
 
     jsx = { // JS (not vendored) files => js
@@ -88,25 +91,25 @@ elixir(function(mix) {
 
     // mix.compress();
 
-    for(var key in less) {
-        mix.less(key, css_dir+less[key], vendor_dir);
-    }
+    // for(var key in less) {
+    //     mix.less(key, css_dir+less[key], vendor_dir);
+    // }
 
-    for(var key in js) {
-        mix.scripts(key, libs_dir+js[key], vendor_dir);
-    }
+    // for(var key in js) {
+    //     mix.scripts(key, libs_dir+js[key], vendor_dir);
+    // }
 
     for(var key in jsx) {
         mix.scripts(key, js_dir+jsx[key]);
     }
 
-    for(var key in css) {
-        mix.styles(key, libs_dir+css[key], vendor_dir);
-    }
+    // for(var key in css) {
+    //     mix.styles(key, libs_dir+css[key], vendor_dir);
+    // }
 
-    for (var key in assets) {
-        mix.copy(vendor_dir+key, libs_dir+assets[key]);
-    }
+    // for (var key in assets) {
+    //     mix.copy(vendor_dir+key, libs_dir+assets[key]);
+    // }
 
     mix.browserSync({
         // online: false,
