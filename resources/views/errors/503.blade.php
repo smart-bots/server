@@ -1,47 +1,8 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Be right back</title>
-
-        <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
-
-        <style>
-            html, body {
-                height: 100%;
-            }
-
-            body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                color: #B0BEC5;
-                display: table;
-                font-weight: 100;
-                font-family: 'Lato';
-            }
-
-            .container {
-                text-align: center;
-                display: table-cell;
-                vertical-align: middle;
-            }
-
-            .content {
-                text-align: center;
-                display: inline-block;
-            }
-
-            .title {
-                font-size: 72px;
-                margin-bottom: 40px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="content">
-                <div class="title">Be right back</div>
-            </div>
-        </div>
-    </body>
-</html>
+@extends('errors.master')
+@section('title','Bad Request')
+@section('content')
+<div class="text-error"><span class="text-primary">5</span><span class="text-pink">0</span><span class="text-info">3</span></div>
+<h2>This site is getting a tune-up.</h2><br>
+<p class="text-muted">Why don't you come back in a little while and see if our expert are finished tinkering.</p>
+<br>
+@endsection

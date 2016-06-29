@@ -1,47 +1,9 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>404.</title>
-
-        <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
-
-        <style>
-            html, body {
-                height: 100%;
-            }
-
-            body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                color: #B0BEC5;
-                display: table;
-                font-weight: 100;
-                font-family: 'Lato';
-            }
-
-            .container {
-                text-align: center;
-                display: table-cell;
-                vertical-align: middle;
-            }
-
-            .content {
-                text-align: center;
-                display: inline-block;
-            }
-
-            .title {
-                font-size: 72px;
-                margin-bottom: 40px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="content">
-                <div class="title">NOT FOUND</div>
-            </div>
-        </div>
-    </body>
-</html>
+@extends('errors.master')
+@section('title','Forbidden')
+@section('content')
+<div class="text-error"><span class="text-primary">4</span><span class="text-pink">0</span><span class="text-info">4</span></div>
+<h2>Who0ps! Page not found</h2><br>
+<p class="text-muted">This page cannot found or is missing.</p>
+<p class="text-muted">Use the navigation above or the button below to get back and track.</p>
+<br>
+@endsection
