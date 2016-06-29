@@ -40,6 +40,7 @@ class TwilioSetup extends Command
      */
     public function handle()
     {
+
         $this->info('Configuring Twilio...');
 
         $client = new Client([

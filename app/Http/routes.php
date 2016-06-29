@@ -9,7 +9,8 @@ use SmartBots\{
     HubPermission,
     BotPermission,
     SchedulePermission,
-    AutomationPermission
+    AutomationPermission,
+    Notification
 };
 
 use SmartBots\Events\VerifyServerSentEvents;
@@ -23,18 +24,14 @@ use SmartBots\Events\VerifyServerSentEvents;
 // });
 
 Route::group([
-    'middleware' => [],
     'as'         => 'landing'
 ], function() {
-    Route::get('','LandingController@index')->name('::index');
+    Route::get('/','LandingController@index')->name('::index');
     Route::post('/contact','LandingController@contact')->name('::contact');
     Route::post('/subscribe','LandingController@subscribe')->name('::subscribe');
 });
 
 Route::get('test', function () {
-    $phone = auth()->user()->phone;
-    $sse = new VerifyServerSentEvents($phone);
-    $sse->sendVerified();
     return view('test');
 });
 
@@ -126,8 +123,6 @@ Route::group([
             Route::get('destroy','HubController@destroy')->name('::destroy');
         });
 
-        Route::get('bots-status','HubController@botsStatus')->name('::botsStatus');
-
         Route::group([
             'prefix' => 'member',
             'as'     => '::m'
@@ -179,7 +174,7 @@ Route::group([
             Route::group(['middleware' => 'can:low'], function () {
 
                 Route::get('{id}/edit','BotController@edit')->name('::edit');
-                Route::post('control','BotController@control')->name('::control');
+                Route::get('control','BotController@control')->name('::control');
             });
 
             Route::group(['middleware' => 'can:high'], function () {
@@ -238,19 +233,15 @@ Route::group([
 
             Route::get('index','AutomationController@index')->name('::index');
 
-            Route::get('{id}/edit','AutomationController@edit')->name('::edit'); // ->middleware('can:low');
+            Route::get('{id}/edit','AutomationController@edit')->name('::edit')->middleware('can:low');
 
-            // Route::group(['middleware' => 'can:createSchedules'], function () {
-
-            Route::group([], function () {
+            Route::group(['middleware' => 'can:createAutomations'], function () {
 
                 Route::get('create','AutomationController@create')->name('::create');
                 Route::post('create','AutomationController@store')->name('::create');
             });
 
-            // Route::group(['middleware' => 'can:high'], function () {
-
-            Route::group([], function () {
+            Route::group(['middleware' => 'can:high'], function () {
 
                 Route::post('{id}/edit','AutomationController@update')->name('::edit');
 
@@ -275,24 +266,18 @@ Route::group([
 
             Route::group(['middleware' => 'can:low'], function () {
 
-            // Route::group([], function () {
-
                 Route::get('{id}/edit','EventController@edit')->name('::edit');
                 Route::post('fire','EventController@fire')->name('::fire');
 
             });
 
-            Route::group(['middleware' => 'can:createSchedules'], function () {
-
-            // Route::group([], function () {
+            Route::group(['middleware' => 'can:createEvents'], function () {
 
                 Route::get('create','EventController@create')->name('::create');
                 Route::post('create','EventController@store')->name('::create');
             });
 
             Route::group(['middleware' => 'can:high'], function () {
-
-            // Route::group([], function () {
 
                 Route::post('{id}/edit','EventController@update')->name('::edit');
 
@@ -305,10 +290,40 @@ Route::group([
             Route::get('search/{query?}/{query2?}','EventController@search')->name('::search');
         });
 
+        Route::group([
+            'prefix' => 'notification',
+            'as'     => '::n'
+        ], function() {
+
+            Route::get('/',function () {
+                return redirect()->to(route('h::n::index'),301);
+            });
+
+            Route::get('index','NotificationController@index')->name('::index');
+
+            Route::get('read','NotificationController@read')->name('::read');
+        });
+
+        Route::group([
+            'prefix' => 'quickcontrol',
+            'as'     => '::q'
+        ], function() {
+
+            Route::get('add','QuickControlController@add')->name('::add');
+
+            Route::get('remove','QuickControlController@remove')->name('::remove');
+        });
+
     });
 
 });
 
+Route::get('languague/{lang?}', function ($lang = en) {
+    if (session('language') != $lang) {
+        session()->set('language',$lang);
+        return [true];
+    }
+})->name('lang');
 
 // Route::any('{all}', function(){
 //     abort(404);

@@ -68,7 +68,7 @@ class EventController extends Controller
         $event = new Event;
         $event->hub_id = session('currentHub');
         $event->name   = $request->name;
-        if (!empty($event->trigger_type) && !empty($event->trigger_bot)) {
+        if (!empty($request->trigger['type']) && !empty($request->trigger['bot'])) {
             $event->trigger_type = $request->trigger['type'];
             $event->trigger_bot  = $request->trigger['bot'];
         }
@@ -79,6 +79,7 @@ class EventController extends Controller
         $newEventPerm->user_id  = auth()->user()->id;
         $newEventPerm->event_id = $event->id;
         $newEventPerm->high     = true;
+        $newEventPerm->notice = $request->notice;
         $newEventPerm->save();
 
         if (is_array($request->permissions)) {
@@ -138,8 +139,8 @@ class EventController extends Controller
 
         $rules = [
             'name'              => 'required|max:100',
-            'trigger.type'      => 'required|numeric|between:1,3',
-            'trigger.bot'       => 'required|numeric|exists:bots,id',
+            // 'trigger.type'      => 'required|numeric|between:1,3',
+            // 'trigger.bot'       => 'required|numeric|exists:bots,id',
             'permissions.*'     => 'exists:members,user_id,hub_id,'.session('currentHub'),
             'highpermissions.*' => 'exists:members,user_id,hub_id,'.session('currentHub')
         ];
@@ -152,8 +153,8 @@ class EventController extends Controller
 
         $event = Event::findOrFail($id);
         $event->name         = $request->name;
-        $event->trigger_type = $request->trigger['type'];
-        $event->trigger_bot  = $request->trigger['bot'];
+        // $event->trigger_type = $request->trigger['type'];
+        // $event->trigger_bot  = $request->trigger['bot'];
         $event->save();
 
         $eventperms = EventPermission::where('event_id',$id)->get();
@@ -188,6 +189,8 @@ class EventController extends Controller
                 EventPermission::updateOrCreate(['event_id' => $id, 'user_id' => $user_id],['high' => true]);
             }
         }
+
+        EventPermission::updateOrCreate(['event_id' => $id, 'user_id' => auth()->user()->id],['notice' => $request->notice]);
 
         $errors = ['success' => 'Saved successfully'];
         return response()->json($errors);

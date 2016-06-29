@@ -20,7 +20,7 @@
   ],
   "dependencies": {
     "jquery": "^2.2.4",
-    "amcharts3": "^3.20.7",
+    "amcharts3": "^3.20.8",
     "animate.css": "^3.5.1",
     "blockUI": "blockui#*",
     "fastclick": "^1.0.6",
@@ -46,7 +46,8 @@
     "typeahead.js": "^0.11.1",
     "wow": "^1.1.2",
     "Waves": "waves#^0.7.5",
-    "intl-tel-input": "^9.0.1"
+    "intl-tel-input": "^9.0.1",
+    "notifyjs": "^0.4.2"
   },
   "resolutions": {
     "jquery": "2.2.4"

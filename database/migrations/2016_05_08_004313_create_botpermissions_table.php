@@ -19,6 +19,7 @@ class CreateBotpermissionsTable extends Migration
             $table->integer('bot_id')->unsigned();
             $table->foreign('bot_id')->references('id')->on('bots')->onDelete('cascade');
             $table->boolean('high')->default(false);
+            $table->boolean('notice')->default(false)->nullable();
         });
     }
 

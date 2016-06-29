@@ -1,8 +1,11 @@
+<?php
+  use SmartBots\Bot;
+?>
 @extends('hub.master')
 @section('title','Edit bot')
 @section('additionHeader')
-  <link rel="stylesheet" href="@asset('public/libs/html5imageupload/html5imageupload.css')">
-  <link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="@asset('public/libs/html5imageupload/html5imageupload.css')">
+<link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
 @endsection
 @section('additionFooter')
 <script src="@asset('public/libs/html5imageupload/html5imageupload.js')"></script>
@@ -209,6 +212,15 @@
           </div>
         </div>
         <div class="form-group">
+          {!! Form::label('notice', 'Get notify', ['class' => 'col-sm-2 control-label']) !!}
+          <div class="col-sm-10">
+            <div class="material-switch" style="margin-top:8px">
+                <input id="notice" name="notice" type="checkbox" value="1" @if (auth()->user()->willNoticeByBot($bot['id'])) checked @endif/>
+                <label for="notice" class="label-default"></label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
           {!! Form::label('permissions', 'Low permissions', ['class' => 'col-sm-2 control-label']) !!}
           <div class="col-sm-10">
             {!! Form::select('permissions[]', $users, $selected, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
@@ -222,12 +234,14 @@
             <span class="help-block margin-bottom-none">Users can manage this bot</span>
           </div>
         </div>
-        {!! Form::button('<span class="btn-label"><i class="fa fa-floppy-o" aria-hidden="true"></i></span>Save', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
-        {!! Form::button('<span class="btn-label"><i class="fa fa-trash" aria-hidden="true"></i></span>Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'botDelete()']) !!}</a>
-        @if ($bot['status'] != -1)
-          {!! Form::button('<span class="btn-label"><i class="fa fa-ban" aria-hidden="true"></i></span><span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right m-r-5','id' => 'botDeactivateBtn','onclick' => 'botDeactivate()']) !!}
-        @else
-          {!! Form::button('<span class="btn-label"><i class="fa fa-check-square-o" aria-hidden="true"></i></i></span><span>Reactivate</span>', ['type' => 'button', 'class' => 'btn btn-default pull-right m-r-5','id' => 'botReactivateBtn','onclick' => 'botReactivate()']) !!}
+        @if(auth()->user()->can('high',Bot::findOrFail($bot['id'])))
+          {!! Form::button('<span class="btn-label"><i class="fa fa-floppy-o" aria-hidden="true"></i></span>Save', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
+          {!! Form::button('<span class="btn-label"><i class="fa fa-trash" aria-hidden="true"></i></span>Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'botDelete()']) !!}</a>
+          @if ($bot['status'] != -1)
+            {!! Form::button('<span class="btn-label"><i class="fa fa-ban" aria-hidden="true"></i></span><span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right m-r-5','id' => 'botDeactivateBtn','onclick' => 'botDeactivate()']) !!}
+          @else
+            {!! Form::button('<span class="btn-label"><i class="fa fa-check-square-o" aria-hidden="true"></i></i></span><span>Reactivate</span>', ['type' => 'button', 'class' => 'btn btn-default pull-right m-r-5','id' => 'botReactivateBtn','onclick' => 'botReactivate()']) !!}
+          @endif
         @endif
     {!! Form::close() !!}
     </div>

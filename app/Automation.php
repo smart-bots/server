@@ -4,6 +4,8 @@ namespace SmartBots;
 
 use Illuminate\Database\Eloquent\Model;
 
+use SmartBots\AutomationPermission;
+
 class Automation extends Model
 {
     protected $table = 'automations';
@@ -132,6 +134,20 @@ class Automation extends Model
                 $this->ran_times++;
 
                 $this->save();
+
+                $needToNotice = AutomationPermission::where('notice',1)->where('automation_id',$this->id)->get();
+
+                foreach ($needToNotice as $perm) {
+                    Notification::send([
+                        'user_id' => $perm->user_id,
+                        'hub_id'  => $this->hub_id,
+                        'subject' => 'Automation "'.$this->name.'" is running',
+                        'body'    => 'Someone just make this automation run',
+                        // 'href' => route('h::a::edit',$this->id),
+                        'href'    => '#',
+                        'holder'  => 'icon:bolt'
+                    ]);
+                }
 
             }
         }

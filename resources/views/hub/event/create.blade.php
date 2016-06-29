@@ -1,108 +1,106 @@
 @extends('hub.master')
 @section('title','Create event')
 @section('additionHeader')
-  <link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
-  <style>
-    select {
-      width: 125px !important;
-    }
-  </style>
+<link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
+<style>
+  select {
+    width: 125px !important;
+  }
+</style>
 @endsection
 @section('additionFooter')
-  <script src="@asset('public/libs/typeahead.js/typeahead.bundle.js')" type="text/javascript"></script>
-  <script src="@asset('public/libs/handlebars/handlebars.js')" type="text/javascript"></script>
-  <script src="@asset('public/libs/multiselect/js/jquery.multi-select.js')" type="text/javascript"></script>
-  <script src="@asset('public/libs/quicksearch/jquery.quicksearch.js')" type="text/javascript"></script>
-  <script>
+<script src="@asset('public/libs/multiselect/js/jquery.multi-select.js')" type="text/javascript"></script>
+<script src="@asset('public/libs/quicksearch/jquery.quicksearch.js')" type="text/javascript"></script>
+<script>
 
-    var bot = new Bloodhound({
-      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-      queryTokenizer: Bloodhound.tokenizers.whitespace,
-      remote: {
-        url: '@route('h::b::search')/%Q/{{ session('currentHub') }}',
-        wildcard: '%Q'
-      }
-    });
-
-    var typeahead_bot_option = {
-      name: 'bot',
-      display: 'id',
-      source: bot,
-      templates: {
-        empty: [
-        '<div class="tt-no-result">',
-        'No result',
-        '</div>'
-        ].join(''),
-        suggestion: Handlebars.compile([
-          '<div class="">',
-            '<div class="pull-left">',
-                '<img src="@{{ image }}" alt="" class="user-mini-ava">',
-            '</div>',
-            '<div>',
-                '<strong>@{{ name }}</strong>',
-                '<p class="m-0">@{{ id }}</p>',
-            '</div>',
-          '</div>'].join(''))
-      }
-    };
-
-    var searchableObj = {
-        selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
-        selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
-        afterInit: function (ms) {
-            var that = this,
-                $selectableSearch = that.$selectableUl.prev(),
-                $selectionSearch = that.$selectionUl.prev(),
-                selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
-                selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
-
-            that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-                .on('keydown', function (e) {
-                    if (e.which === 40) {
-                        that.$selectableUl.focus();
-                        return false;
-                    }
-                });
-
-            that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-                .on('keydown', function (e) {
-                    if (e.which == 40) {
-                        that.$selectionUl.focus();
-                        return false;
-                    }
-                });
-        },
-        afterSelect: function () {
-            this.qs1.cache();
-            this.qs2.cache();
-        },
-        afterDeselect: function () {
-            this.qs1.cache();
-            this.qs2.cache();
-        }
-    };
-
-    $("[name='permissions[]']").multiSelect(searchableObj);
-    $("[name='highpermissions[]']").multiSelect(searchableObj);
-    $('[name="trigger[bot]"]').typeahead(null, typeahead_bot_option);
-
-    function eventCreate() {
-      $.ajax({
-          url : '@route('h::e::create')',
-          type : 'post',
-          data : $('[name=event-create-form]').serializeArray(),
-          dataType : 'json',
-          success : function (response)
-          {
-              $('[name=event-create-form]').validate(response, [], function () {
-                window.location.href = response['href'];
-              });
-          }
-      });
-      return false;
+  var bot = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    remote: {
+      url: '@route('h::b::search')/%Q/{{ session('currentHub') }}',
+      wildcard: '%Q'
     }
-  </script>
+  });
+
+  var typeahead_bot_option = {
+    name: 'bot',
+    display: 'id',
+    source: bot,
+    templates: {
+      empty: [
+      '<div class="tt-no-result">',
+      'No result',
+      '</div>'
+      ].join(''),
+      suggestion: Handlebars.compile([
+        '<div class="">',
+          '<div class="pull-left">',
+              '<img src="@{{ image }}" alt="" class="user-mini-ava">',
+          '</div>',
+          '<div>',
+              '<strong>@{{ name }}</strong>',
+              '<p class="m-0">@{{ id }}</p>',
+          '</div>',
+        '</div>'].join(''))
+    }
+  };
+
+  var searchableObj = {
+      selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
+      selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
+      afterInit: function (ms) {
+          var that = this,
+              $selectableSearch = that.$selectableUl.prev(),
+              $selectionSearch = that.$selectionUl.prev(),
+              selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+              selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+          that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+              .on('keydown', function (e) {
+                  if (e.which === 40) {
+                      that.$selectableUl.focus();
+                      return false;
+                  }
+              });
+
+          that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+              .on('keydown', function (e) {
+                  if (e.which == 40) {
+                      that.$selectionUl.focus();
+                      return false;
+                  }
+              });
+      },
+      afterSelect: function () {
+          this.qs1.cache();
+          this.qs2.cache();
+      },
+      afterDeselect: function () {
+          this.qs1.cache();
+          this.qs2.cache();
+      }
+  };
+
+  $("[name='permissions[]']").multiSelect(searchableObj);
+  $("[name='highpermissions[]']").multiSelect(searchableObj);
+  $('[name="trigger[bot]"]').typeahead(null, typeahead_bot_option);
+
+  function eventCreate() {
+    $.ajax({
+        url : '@route('h::e::create')',
+        type : 'post',
+        data : $('[name=event-create-form]').serializeArray(),
+        dataType : 'json',
+        success : function (response)
+        {
+            $('[name=event-create-form]').validate(response, [], function () {
+              window.location.href = response['href'];
+            });
+        }
+    });
+    return false;
+  }
+</script>
 @endsection
 @section('body')
 {!! content_header('Create new event', [
@@ -129,6 +127,15 @@
                     {!! Form::select('trigger[type]', ['1' => 'Toggle', '2' => 'Turn on', '3' => 'Turn off'], null, ['class' => 'form-control', 'style' => 'margin-top: -5px']) !!}
                   </div>
                   {!! Form::text('trigger[bot]', null, ['class' => 'form-control b-left-0']) !!}
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              {!! Form::label('notice', 'Get notify', ['class' => 'col-sm-2 control-label']) !!}
+              <div class="col-sm-10">
+                <div class="material-switch" style="margin-top:8px">
+                    <input id="notice" name="notice" type="checkbox" value="1"/>
+                    <label for="notice" class="label-default"></label>
                 </div>
               </div>
             </div>

@@ -1,18 +1,20 @@
+<?php
+  use SmartBots\Hub;
+?>
 @extends('hub.master')
 @section('title','Add new member')
 @section('additionHeader')
-  <link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
-
-  <style>
-    .table td {
-      font-weight: bold;
-      text-align: center;
-    }
-  </style>
+<link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
+<style>
+  .table td {
+    font-weight: bold;
+    text-align: center;
+  }
+</style>
 @endsection
 @section('additionFooter')
-  <script src="@asset('public/libs/multiselect/js/jquery.multi-select.js')" type="text/javascript"></script>
-  <script src="@asset('public/libs/quicksearch/jquery.quicksearch.js')" type="text/javascript"></script>
+<script src="@asset('public/libs/multiselect/js/jquery.multi-select.js')" type="text/javascript"></script>
+<script src="@asset('public/libs/quicksearch/jquery.quicksearch.js')" type="text/javascript"></script>
 <script>
   $("[name='hubpermissions[]']").materialSwitch();
   var searchableObj = {
@@ -273,12 +275,14 @@
             </table>
           </div>
         </div>
-        {!! Form::button('<span class="btn-label"><i class="fa fa-floppy-o" aria-hidden="true"></i></span>Save', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
-        {!! Form::button('<span class="btn-label"><i class="fa fa-trash" aria-hidden="true"></i></span>Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'memDelete()']) !!}</a>
-        @if ($mem['status'] != 0)
-          {!! Form::button('<span class="btn-label"><i class="fa fa-ban" aria-hidden="true"></i></span><span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right m-r-5','id' => 'memDeactivateBtn','onclick' => 'memDeactivate()']) !!}
-        @else
-          {!! Form::button('<span class="btn-label"><i class="fa fa-check-square-o" aria-hidden="true"></i></i></span><span>Reactivate</span>', ['type' => 'button', 'class' => 'btn btn-default pull-right m-r-5','id' => 'memReactivateBtn','onclick' => 'memReactivate()']) !!}
+        @if(auth()->user()->can('editDeleteAllMembers',Hub::findOrFail(session('currentHub'))))
+          {!! Form::button('<span class="btn-label"><i class="fa fa-floppy-o" aria-hidden="true"></i></span>Save', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
+          {!! Form::button('<span class="btn-label"><i class="fa fa-trash" aria-hidden="true"></i></span>Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'memDelete()']) !!}</a>
+          @if ($mem['status'] != 0)
+            {!! Form::button('<span class="btn-label"><i class="fa fa-ban" aria-hidden="true"></i></span><span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right m-r-5','id' => 'memDeactivateBtn','onclick' => 'memDeactivate()']) !!}
+          @else
+            {!! Form::button('<span class="btn-label"><i class="fa fa-check-square-o" aria-hidden="true"></i></i></span><span>Reactivate</span>', ['type' => 'button', 'class' => 'btn btn-default pull-right m-r-5','id' => 'memReactivateBtn','onclick' => 'memReactivate()']) !!}
+          @endif
         @endif
     {!! Form::close() !!}
     </div>

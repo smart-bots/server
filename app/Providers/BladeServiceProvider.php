@@ -62,12 +62,23 @@ class BladeServiceProvider extends ServiceProvider
             return "<?php echo route$expression; ?>";
         });
 
+        // Add @session for route laravel function
+        Blade::directive('session', function ($expression) {
+            // dd($expression);
+            return "<?php echo session$expression; ?>";
+        });
+
         // Add @trans for route laravel function
         Blade::directive('trans', function ($expression) {
             // dd($expression);
             return "<?php echo trans$expression; ?>";
         });
 
+        // Add @env for route laravel function
+        Blade::directive('env', function ($expression) {
+            // dd($expression);
+            return "<?php echo env$expression; ?>";
+        });
         //------------------------------------------------------------------
 
         Blade::directive('header', function ($expression) {

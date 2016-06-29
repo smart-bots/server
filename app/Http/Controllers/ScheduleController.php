@@ -311,6 +311,7 @@ class ScheduleController extends Controller
         $newSchePerm->user_id     = auth()->user()->id;
         $newSchePerm->schedule_id = $schedule->id;
         $newSchePerm->high        = true;
+        $newSchePerm->notice = $request->notice;
         $newSchePerm->save();
 
         if (is_array($request->permissions)) {
@@ -404,6 +405,8 @@ class ScheduleController extends Controller
                 SchedulePermission::updateOrCreate(['schedule_id' => $id, 'user_id' => $user_id],['high' => true]);
             }
         }
+
+        SchedulePermission::updateOrCreate(['schedule_id' => $id, 'user_id' => auth()->user()->id],['notice' => $request->notice]);
 
         $errors = ['success' => 'Saved successfully'];
         return response()->json($errors);

@@ -13,10 +13,13 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        Commands\CreateDatabase::class,
         Commands\Inspire::class,
         Commands\RunSmartSchedule::class,
         Commands\SmartScheduleRunner::class,
         Commands\TwilioSetup::class,
+        Commands\KeySet::class,
+        Commands\FlushStorage::class,
     ];
 
     /**

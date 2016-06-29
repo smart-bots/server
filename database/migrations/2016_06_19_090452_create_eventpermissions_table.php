@@ -19,6 +19,7 @@ class CreateEventpermissionsTable extends Migration
             $table->integer('event_id')->unsigned();
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
             $table->boolean('high')->default(false);
+            $table->boolean('notice')->default(false)->nullable();
         });
     }
 

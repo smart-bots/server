@@ -30,7 +30,7 @@ class UserController extends Controller
      * on/off verify phone number feature
      * @var boolean
      */
-    public $verify_phone_number = true;
+    public $verify_phone_number = false;
 
     /**
      * Name (alias) of the route to redirect after user logged in

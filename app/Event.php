@@ -4,6 +4,8 @@ namespace SmartBots;
 
 use Illuminate\Database\Eloquent\Model;
 
+use SmartBots\EventPermission;
+
 class Event extends Model
 {
     protected $table = 'events';
@@ -68,6 +70,20 @@ class Event extends Model
         $automations = Automation::where('trigger_id',$this->id)->where('trigger_type',4)->get();
         foreach ($automations as $automation) {
             $automation->fire();
+        }
+
+        $needToNotice = EventPermission::where('notice',1)->where('event_id',$this->id)->get();
+
+        foreach ($needToNotice as $perm) {
+            Notification::send([
+                'user_id' => $perm->user_id,
+                'hub_id'  => $this->hub_id,
+                'subject' => 'Event "'.$this->name.'" is fired',
+                'body'    => 'Someone just make this event fired',
+                // 'href' => route('h::a::edit',$this->id),
+                'href'    => '#',
+                'holder'  => 'icon:bolt'
+            ]);
         }
     }
 }

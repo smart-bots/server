@@ -1644,6 +1644,7 @@ body.fixed-left .side-menu.left {
 }
 .contact-list {
   max-height: 600px;
+  right: 2.5px;
 }
 .contact-list .list-group-item {
   border: none;
@@ -1667,6 +1668,9 @@ body.fixed-left .side-menu.left {
   border-radius: 50%;
   width: 100%;
 }
+.contacts-list .list-group-item {
+  padding-left: 5px;
+}
 .contacts-list .list-group-item span.name {
   color: #707780;
   display: inline-block;
@@ -1676,7 +1680,15 @@ body.fixed-left .side-menu.left {
   padding-top: 6px;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 130px;
+  width: 140px;
+  margin-right: 40px;
+}
+.contacts-list .quick-control-delete-btn {
+  top: 2px;
+  right: 10px;
+  position: relative;
+  margin-left: 10px;
+  font-size: 16px;
 }
 .contacts-list i {
   color: #7a8c9a;
@@ -1849,8 +1861,15 @@ ul.quick-control li .name {
 .quick-control-btn {
   position: relative;
   font-size: 16px;
-  top: -45px;
+  top: -38px;
   right: 12px;
+}
+.quick-control-plus-btn {
+  position: relative;
+  font-size: 16px;
+  top: 8px;
+  left: 10px;
+  padding: 0 5px;
 }
 /* Linh tinh */
 .back-btn {
@@ -1892,6 +1911,9 @@ ul.quick-control li .name {
   position: absolute;
   top: -15px;
   right: 30px;
+}
+#quick-modal .twitter-typeahead {
+  display: block !important;
 }
 
 /*# sourceMappingURL=core.css.map */

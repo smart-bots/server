@@ -8,7 +8,8 @@ use Carbon;
 
 use SmartBots\{
     Bot,
-    Schedule
+    Schedule,
+    SchedulePermission
 };
 
 class RunSmartSchedule extends Command
@@ -209,6 +210,20 @@ class RunSmartSchedule extends Command
 
                     $schedule->save();
 
+                }
+
+                $needToNotice = SchedulePermission::where('notice',1)->where('schedule_id',$this->id)->get();
+
+                foreach ($needToNotice as $perm) {
+                    Notification::send([
+                        'user_id' => $perm->user_id,
+                        'hub_id'  => $schedule->hub_id,
+                        'subject' => 'Schedule "'.$schedule->name.'" is working',
+                        'body'    => 'It\'s time, this schedule is working',
+                        // 'href' => route('h::s::edit',$this->id),
+                        'href'    => '#',
+                        'holder'  => 'icon:clock-o'
+                    ]);
                 }
             }
         } else {

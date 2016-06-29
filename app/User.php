@@ -4,6 +4,15 @@ namespace SmartBots;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+use SmartBots\Notification;
+
+use SmartBots\{
+    BotPermission,
+    SchedulePermission,
+    EventPermission,
+    AutomationPermission
+};
+
 class User extends Authenticatable
 {
     protected $table = 'users';
@@ -40,6 +49,14 @@ class User extends Authenticatable
 
     public function hubs() {
         return $this->belongsToMany('SmartBots\Hub','members');
+    }
+
+    public function notifications() {
+        return $this->hasMany('SmartBots\Notification','user_id');
+    }
+
+    public function quickcontrol() {
+        return $this->hasMany('SmartBots\QuickControl','user_id');
     }
 
     public function bots() {
@@ -134,6 +151,62 @@ class User extends Authenticatable
                     return $member;
                 }
             }
+        }
+    }
+
+    public function notisIn($hub_id) {
+        if ($this->isOf($hub_id)) {
+            return Notification::where('user_id',$this->id)->where('hub_id',$hub_id)->orderBy('id','desc')->get();
+        }
+    }
+
+    public function unreadNotisIn($hub_id) {
+        if ($this->isOf($hub_id)) {
+            return Notification::where('user_id',$this->id)->where('hub_id',$hub_id)->where('read',0)->orderBy('id','desc')->get();
+        }
+    }
+
+    public function willNoticeByBot($bot_id) {
+
+        $perm = BotPermission::where('user_id',$this->id)->where('bot_id',$bot_id)->get();
+
+        if ($perm->isEmpty()) {
+            return false;
+        } else {
+            return $perm->first()->notice;
+        }
+    }
+
+    public function willNoticeBySchedule($schedule_id) {
+
+        $perm =  SchedulePermission::where('user_id',$this->id)->where('schedule_id',$schedule_id)->get();
+
+        if ($perm->isEmpty()) {
+            return false;
+        } else {
+            return $perm->first()->notice;
+        }
+    }
+
+    public function willNoticeByEvent($event_id) {
+
+        $perm =  EventPermission::where('user_id',$this->id)->where('event_id',$event_id)->get();
+
+        if ($perm->isEmpty()) {
+            return false;
+        } else {
+            return $perm->first()->notice;
+        }
+    }
+
+    public function willNoticeByAutomation($automation_id) {
+
+        $perm =  AutomationPermission::where('user_id',$this->id)->where('automation_id',$automation_id)->get();
+
+        if ($perm->isEmpty()) {
+            return false;
+        } else {
+            return $perm->first()->notice;
         }
     }
 }

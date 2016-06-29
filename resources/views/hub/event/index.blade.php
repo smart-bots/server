@@ -1,34 +1,34 @@
 <?php
-    use SmartBots\Bot;
+    use SmartBots\{Bot, Hub};
 ?>
 @extends('hub.master')
 @section('title','Hub events')
 @section('additionHeader')
 @endsection
 @section('additionFooter')
-    <script>
-        function eventFire(id) {
-            $.ajax({
-                url : '@route('h::e::fire')',
-                type : 'post',
-                data : {
-                  _token: '{{ csrf_token() }}',
-                  id: id
-                },
-                dataType : 'json',
-                success : function (response)
-                {
-                    swal({
-                        title: 'Successfully',
-                        text: 'Event fired',
-                        type: "success",
-                        confirmButtonText: 'Good',
-                    });
-                }
+<script>
+    function eventFire(id) {
+        $.ajax({
+          url : '@route('h::e::fire')',
+          type : 'post',
+          data : {
+            _token: '{{ csrf_token() }}',
+            id: id
+          },
+          dataType : 'json',
+          success : function (response)
+          {
+            swal({
+              title: 'Successfully',
+              text: 'Event fired',
+              type: "success",
+              confirmButtonText: 'Good',
             });
-            return false;
-        }
-    </script>
+          }
+        });
+        return false;
+    }
+</script>
 @endsection
 @section('body')
 {!! content_header('Hub events', [
@@ -38,7 +38,9 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
-      <a href='{{ route('h::e::create') }}'>{!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Create event', ['type' => 'submit', 'class' => 'btn btn-default waves-effect waves-light btn-create']) !!}</a>
+        @if(auth()->user()->can('createEvents',Hub::findOrFail(session('currentHub'))))
+        <a href='{{ route('h::e::create') }}'>{!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Create event', ['type' => 'submit', 'class' => 'btn btn-default waves-effect waves-light btn-create']) !!}</a>
+        @endif
         @if (count($events)>0)
         <div class="table-responsive m-t-10">
         <table class="table table-hover table-striped">

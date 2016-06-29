@@ -8,16 +8,22 @@
     "test": "tests"
   },
   "dependencies": {
+    "cookie": "^0.3.1",
+    "crypto-js": "^3.1.6",
+    "dotenv": "^2.0.0",
     "express": "^4.14.0",
     "ioredis": "^2.1.0",
+    "jQuery": "^1.7.4",
+    "php-unserialize": "0.0.1",
+    "request": "https://registry.npmjs.org/request/-/request-2.65.0.tgz",
     "socket.io": "^1.4.6"
   },
   "devDependencies": {
     "bower": "^1.7.9",
-	"gulp": "^3.9.1",
+    "gulp": "^3.9.1",
     "gulp-htmlmin": "^2.0.0",
-	"laravel-elixir": "^5.0.0",
-	"bootstrap-sass": "^3.3.0",
+    "laravel-elixir": "^5.0.0",
+    "bootstrap-sass": "^3.3.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

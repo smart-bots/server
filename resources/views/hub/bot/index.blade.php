@@ -1,3 +1,6 @@
+<?php
+  use SmartBots\Hub;
+?>
 @extends('hub.master')
 @section('title','Hub bots')
 @section('additionHeader')
@@ -8,7 +11,7 @@
 
   $(".bot").change(function () {
     var bot = $(this),
-        bot_id = $(this).attr('id');
+        bot_id = $(this).attr('id').replace('bot', '');
         bot_state = bot.prop('checked');
     if (bot_state == true) {
       var bot_value = 1;
@@ -16,15 +19,14 @@
       var bot_value = 0;
     }
     control(bot_id,bot_value);
-  })
+  });
 
   function control(id,val) {
     $.ajax({
       url : '@route('h::b::control')',
-      type : 'post',
+      type : 'get',
       dataType : 'json',
       data : {
-        _token: '{{ csrf_token() }}',
         id: id,
         val: val
       },
@@ -37,36 +39,31 @@
     });
   }
 
-  function botsUpdate() {
-    $.ajax({
-      url : '@route('h::botsStatus')',
-      type : 'get',
-      dataType : 'json',
-      success : function (response)
-      {
-        $.each(response, function(index, value) {
-          switch(value) {
-            case -1:
-              $("#"+index).prop('disabled', true);
-              break;
-            case 0:
-              $("#"+index).prop('disabled', false);
-              $("#"+index).prop('checked', false);
-              break;
-            case 1:
-              $("#"+index).prop('disabled', false);
-              $("#"+index).prop('checked', true, true);
-              break;
-            case 2:
-              $("#"+index).prop('disabled', true);
-              break;
-          }
-        });
-      }
-    });
-  }
-  botsUpdate();
-  setInterval(botsUpdate, 1000);
+  socket.on('bot:change', function(message) {
+
+    var state = message.state;
+    var id = message.id;
+
+    switch (message.state) {
+      case '-1':
+        alert(message.id);
+        $("#bot"+message.id).prop('disabled', true);
+      break;
+      case '0':
+        $("#bot"+message.id).prop('disabled', false);
+        $("#bot"+message.id).prop('checked', false);
+      break;
+      case '1':
+        $("#bot"+message.id).prop('disabled', false);
+        $("#bot"+message.id).prop('checked', true, true);
+      break;
+      case '2':
+        $("#bot"+message.id).prop('disabled', true);
+      break;
+    }
+
+  });
+
 </script>
 @endsection
 @section('body')
@@ -77,9 +74,11 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
+          @if(auth()->user()->can('addBots',Hub::findOrFail(session('currentHub'))))
           <a href='@route('h::b::create')'>
             {!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Add bot', ['type' => 'button', 'class' => 'btn btn-default waves-effect waves-light btn-create']) !!}
           </a>
+          @endif
           <h3 class="m-t-0 header-title"><b>Bots list</b></h3>
           @if (count($bots)>0)
             <ul class="hubs-list clearfix">
@@ -89,7 +88,7 @@
                   <img class="img-thumbnail" src="@asset($bot['image'])">
                   <span class="hubs-list-name" href="@route('h::b::edit',$bot['id'])">{{ $bot['name'] }}</span>
                   <center>
-                  <input type="checkbox" class="bot" id="{{ $bot['id'] }}" @if ($bot->realStatus() == 1) checked @endif @if ($bot->realStatus() == 2) disabled @endif>
+                  <input type="checkbox" class="bot" id="bot{{ $bot['id'] }}" @if ($bot->realStatus() == 1) checked @endif @if (in_array($bot->realStatus(),[-1,2])) disabled @endif />
                   </center>
                 </a>
               </li>

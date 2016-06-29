@@ -13,9 +13,11 @@
 
 $factory->define(SmartBots\User::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->safeEmail,
-        'password' => bcrypt(str_random(10)),
+        'username' => 'demodemo',
+        'name' => 'Đê văn mô',
+        'email' => 'demo@de.mo',
+        'password' => bcrypt('demodemo'),
         'remember_token' => str_random(10),
+        'avatar' => 'http://loremflickr.com/200/200/?'.str_random(5)
     ];
 });

@@ -1,75 +1,75 @@
 @extends('hub.master')
 @section('title','Add new bot')
 @section('additionHeader')
-  <link rel="stylesheet" href="@asset('public/libs/html5imageupload/html5imageupload.css')">
-  <link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="@asset('public/libs/html5imageupload/html5imageupload.css')">
+<link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
 @endsection
 @section('additionFooter')
-  <script src="@asset('public/libs/html5imageupload/html5imageupload.js')"></script>
-  <script src="@asset('public/libs/multiselect/js/jquery.multi-select.js')" type="text/javascript"></script>
-  <script src="@asset('public/libs/quicksearch/jquery.quicksearch.js')" type="text/javascript"></script>
-  <script>
-    $('.dropzone').html5imageupload();
+<script src="@asset('public/libs/html5imageupload/html5imageupload.js')"></script>
+<script src="@asset('public/libs/multiselect/js/jquery.multi-select.js')" type="text/javascript"></script>
+<script src="@asset('public/libs/quicksearch/jquery.quicksearch.js')" type="text/javascript"></script>
+<script>
+  $('.dropzone').html5imageupload();
 
-    var searchableObj = {
-        selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
-        selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
-        afterInit: function (ms) {
-            var that = this,
-                $selectableSearch = that.$selectableUl.prev(),
-                $selectionSearch = that.$selectionUl.prev(),
-                selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
-                selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+  var searchableObj = {
+      selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
+      selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
+      afterInit: function (ms) {
+          var that = this,
+              $selectableSearch = that.$selectableUl.prev(),
+              $selectionSearch = that.$selectionUl.prev(),
+              selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+              selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
 
-            that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-                .on('keydown', function (e) {
-                    if (e.which === 40) {
-                        that.$selectableUl.focus();
-                        return false;
-                    }
-                });
-
-            that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-                .on('keydown', function (e) {
-                    if (e.which == 40) {
-                        that.$selectionUl.focus();
-                        return false;
-                    }
-                });
-        },
-        afterSelect: function () {
-            this.qs1.cache();
-            this.qs2.cache();
-        },
-        afterDeselect: function () {
-            this.qs1.cache();
-            this.qs2.cache();
-        }
-    };
-
-    $("[name='permissions[]']").multiSelect(searchableObj);
-    $("[name='highpermissions[]']").multiSelect(searchableObj);
-
-    function verifyToken() {
-      return false;
-    }
-
-    function botCreate() {
-      $.ajax({
-          url : '@route('h::b::create')',
-          type : 'post',
-          data : $('[name=bot-create-form]').serializeArray(),
-          dataType : 'json',
-          success : function (response)
-          {
-              $('[name=bot-create-form]').validate(response, [], function () {
-                window.location.href = response['href'];
+          that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+              .on('keydown', function (e) {
+                  if (e.which === 40) {
+                      that.$selectableUl.focus();
+                      return false;
+                  }
               });
-          }
-      });
-      return false;
-    }
-  </script>
+
+          that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+              .on('keydown', function (e) {
+                  if (e.which == 40) {
+                      that.$selectionUl.focus();
+                      return false;
+                  }
+              });
+      },
+      afterSelect: function () {
+          this.qs1.cache();
+          this.qs2.cache();
+      },
+      afterDeselect: function () {
+          this.qs1.cache();
+          this.qs2.cache();
+      }
+  };
+
+  $("[name='permissions[]']").multiSelect(searchableObj);
+  $("[name='highpermissions[]']").multiSelect(searchableObj);
+
+  function verifyToken() {
+    return false;
+  }
+
+  function botCreate() {
+    $.ajax({
+        url : '@route('h::b::create')',
+        type : 'post',
+        data : $('[name=bot-create-form]').serializeArray(),
+        dataType : 'json',
+        success : function (response)
+        {
+            $('[name=bot-create-form]').validate(response, [], function () {
+              window.location.href = response['href'];
+            });
+        }
+    });
+    return false;
+  }
+</script>
 @endsection
 @section('body')
   @header('Create bot', [
@@ -122,6 +122,15 @@
                   <span class="input-group-btn">
                     {!! Form::button('<i class="fa fa-bullseye" aria-hidden="true"></i>&nbsp;&nbsp;Verify', ['type' => 'button', 'class' => 'btn btn-default', 'onclick' => 'verifyToken();']) !!}
                   </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              {!! Form::label('notice', 'Get notify', ['class' => 'col-sm-2 control-label']) !!}
+              <div class="col-sm-10">
+                <div class="material-switch" style="margin-top:8px">
+                    <input id="notice" name="notice" type="checkbox" value="1"/>
+                    <label for="notice" class="label-default"></label>
                 </div>
               </div>
             </div>

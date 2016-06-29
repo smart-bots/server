@@ -1,5 +1,5 @@
 @extends('account.master')
-@section('title','Verify your account')
+@section('title',trans('account/verify.title'))
 @section('additionHeader')
     <link rel="stylesheet" href="@asset('public/libs/intl-tel-input/css/intlTelInput.css')">
     <style>
@@ -13,11 +13,12 @@
 <script>
     function logout() {
         swal({
-            title: "Are you sure?",
-            text: "To log out your account?",
+            title: '@trans('account/logout.title')',
+            text: '@trans('account/logout.text')',
             type: "warning",
             showCancelButton: true,
-            confirmButtonText: "Yes",
+            confirmButtonText: '@trans('account/logout.confirm')',
+            cancelButtonText: '@trans('account/logout.cancel')',
             closeOnConfirm: false }, function() {
                 $.ajax({
                     url : '@route('a::logout')',
@@ -65,7 +66,7 @@
 
                     swal({
                         title: response['number_to_dial'],
-                        text: "Dial this number within 90 secs from now to verify",
+                        text: '@trans('account/verify.info')',
                         type: "info",
                         allowOutsideClick: false,
                         showConfirmButton: false,
@@ -79,13 +80,13 @@
                     }
 
                     stream.addEventListener("expired", function foo(event) {
-                        swal("Too late..", "Your verification process is expired", "error");
+                        swal('@trans('account/verify.expired_title')', '@trans('account/verify.expired_text')', "error");
                         this.removeEventListener("expired", foo);
                         stream.close();
                     });
 
                     stream.addEventListener("verified", function foo(event) {
-                        swal("Verified!", "It's seems your number is correct", "success");
+                        swal('@trans('account/verify.verified_title')', '@trans('account/verify.verified_text')', "success");
                         this.removeEventListener("verified", foo);
                         stream.close();
                     });
@@ -104,25 +105,25 @@
     </div>
 
     <div class="panel-body animated">
-        <span class="panel-title">Verify your account</span>
-        <p class="m-t-10">Please fill in the form below. Once completed, you will see a popup with a phone number. Then you have to dial the number within 90 seconds, otherwise verification will expired.</p>
+        <span class="panel-title">@trans('account/verify.helper')</span>
+        <p class="m-t-10">@trans('account/verify.mini_helper')</p>
         {!! Form::open(['route' => 'a::verify', 'name' => 'verify-form', 'class' => 'form-horizontal m-t-20', 'onsubmit' => 'return verify()']) !!}
 
             <div class="form-group">
                 <div class="col-xs-12">
-                    <input type="text" class="form-control" name="phone" placeholder="Phone number" value="{{ $phone }}">
+                    <input type="text" class="form-control" name="phone" placeholder="@trans('account/verify.phone')" value="{{ $phone }}">
                 </div>
             </div>
 
             <div class="form-group text-center ">
                 <div class="col-xs-12">
-                    <button class="btn btn-custom btn-default btn-block text-uppercase waves-effect waves-light" type="submit">Verify</button>
+                    <button class="btn btn-custom btn-default btn-block text-uppercase waves-effect waves-light" type="submit">@trans('account/verify.verify')</button>
                 </div>
             </div>
 
             <div class="form-group m-t-20 m-b-0">
                 <div class="col-sm-12">
-                    <a href="javascript:logout()" class="text-dark"><i class="fa fa-lock m-r-5"></i>Not your account? Logout</a>
+                    <a href="javascript:logout()" class="text-dark"><i class="fa fa-lock m-r-5"></i>@trans('account/verify.logout')</a>
                 </div>
             </div>
 

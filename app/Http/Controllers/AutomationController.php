@@ -21,6 +21,7 @@ class AutomationController extends Controller
      * @return Illuminate\Contracts\View\View
      */
     public function index() {
+
         if (auth()->user()->can('viewAllAutomations',Hub::findOrFail(session('currentHub')))) {
             $automations = Hub::findOrFail(session('currentHub'))->automations()->orderBy('id','DESC')->get();
         } else {
@@ -131,6 +132,7 @@ class AutomationController extends Controller
         $newAutomationPerm->user_id       = auth()->user()->id;
         $newAutomationPerm->automation_id = $automation->id;
         $newAutomationPerm->high          = true;
+        $newAutomationPerm->notice        = $request->notice;
         $newAutomationPerm->save();
 
         if (is_array($request->permissions)) {
@@ -187,6 +189,7 @@ class AutomationController extends Controller
      * @return Illuminate\Http\JsonResponse
      */
     public function update(int $id, Request $request) {
+
         $rules = [
             'permissions.*'     => 'exists:members,user_id,hub_id,'.session('currentHub'),
             'highpermissions.*' => 'exists:members,user_id,hub_id,'.session('currentHub')
@@ -228,6 +231,8 @@ class AutomationController extends Controller
                 AutomationPermission::updateOrCreate(['automation_id' => $id, 'user_id' => $user_id],['high' => true]);
             }
         }
+
+        AutomationPermission::updateOrCreate(['automation_id' => $id, 'user_id' => auth()->user()->id],['notice' => $request->notice]);
 
         $errors = ['success' => 'Saved successfully'];
         return response()->json($errors);

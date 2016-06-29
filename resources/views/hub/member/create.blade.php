@@ -5,109 +5,106 @@
 @extends('hub.master')
 @section('title',$title)
 @section('additionHeader')
-  <link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
+<link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
 
-  <style>
-    .table td {
-      font-weight: bold;
-      text-align: center;
-    }
-  </style>
+<style>
+  .table td {
+    font-weight: bold;
+    text-align: center;
+  }
+</style>
 @endsection
 @section('additionFooter')
-  <script src="@asset('public/libs/typeahead.js/typeahead.bundle.js')" type="text/javascript"></script>
-  <script src="@asset('public/libs/handlebars/handlebars.js')" type="text/javascript"></script>
-  <script src="@asset('public/libs/multiselect/js/jquery.multi-select.js')" type="text/javascript"></script>
-  <script src="@asset('public/libs/quicksearch/jquery.quicksearch.js')" type="text/javascript"></script>
+<script src="@asset('public/libs/multiselect/js/jquery.multi-select.js')" type="text/javascript"></script>
+<script src="@asset('public/libs/quicksearch/jquery.quicksearch.js')" type="text/javascript"></script>
+<script>
+$("[name='hubpermissions[]']").materialSwitch();
+var searchableObj = {
+    selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
+    selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
+    afterInit: function (ms) {
+        var that = this,
+            $selectableSearch = that.$selectableUl.prev(),
+            $selectionSearch = that.$selectionUl.prev(),
+            selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+            selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
 
-  <script>
-  $("[name='hubpermissions[]']").materialSwitch();
-  var searchableObj = {
-      selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
-      selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
-      afterInit: function (ms) {
-          var that = this,
-              $selectableSearch = that.$selectableUl.prev(),
-              $selectionSearch = that.$selectionUl.prev(),
-              selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
-              selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
-
-          that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-              .on('keydown', function (e) {
-                  if (e.which === 40) {
-                      that.$selectableUl.focus();
-                      return false;
-                  }
-              });
-
-          that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-              .on('keydown', function (e) {
-                  if (e.which == 40) {
-                      that.$selectionUl.focus();
-                      return false;
-                  }
-              });
-      },
-      afterSelect: function () {
-          this.qs1.cache();
-          this.qs2.cache();
-      },
-      afterDeselect: function () {
-          this.qs1.cache();
-          this.qs2.cache();
-      }
-  };
-
-  $("[name^='permissions']").multiSelect(searchableObj);
-
-  var username = new Bloodhound({
-    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-    queryTokenizer: Bloodhound.tokenizers.whitespace,
-    remote: {
-      url: '@route('a::search')/%Q',
-      wildcard: '%Q'
-    }
-  });
-
-  $('[name="username"]').typeahead(null, {
-    name: 'username',
-    display: 'username',
-    source: username,
-    templates: {
-        empty: [
-          '<div class="tt-no-result">',
-            'No result',
-          '</div>'
-        ].join(''),
-        suggestion: Handlebars.compile([
-          '<div class="">',
-            '<div class="pull-left">',
-                '<img src="@{{ avatar }}" alt="" class="user-mini-ava">',
-            '</div>',
-            '<div>',
-                '<strong>@{{ username }}</strong>',
-                '<p class="m-0">@{{ name }}</p>',
-            '</div>',
-          '</div>'].join(''))
-      }
-  });
-
-  function memberCreate() {
-    $.ajax({
-        url : '@route('h::m::create')',
-        type : 'post',
-        data : $('[name=member-create-form]').serializeArray(),
-        dataType : 'json',
-        success : function (response)
-        {
-            $('[name=member-create-form]').validate(response, [], function () {
-                window.location.href = response['href'];
+        that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+            .on('keydown', function (e) {
+                if (e.which === 40) {
+                    that.$selectableUl.focus();
+                    return false;
+                }
             });
-        }
-    });
-    return false;
+
+        that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+            .on('keydown', function (e) {
+                if (e.which == 40) {
+                    that.$selectionUl.focus();
+                    return false;
+                }
+            });
+    },
+    afterSelect: function () {
+        this.qs1.cache();
+        this.qs2.cache();
+    },
+    afterDeselect: function () {
+        this.qs1.cache();
+        this.qs2.cache();
+    }
+};
+
+$("[name^='permissions']").multiSelect(searchableObj);
+
+var username = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  remote: {
+    url: '@route('a::search')/%Q',
+    wildcard: '%Q'
   }
-  </script>
+});
+
+$('[name="username"]').typeahead(null, {
+  name: 'username',
+  display: 'username',
+  source: username,
+  templates: {
+      empty: [
+        '<div class="tt-no-result">',
+          'No result',
+        '</div>'
+      ].join(''),
+      suggestion: Handlebars.compile([
+        '<div class="">',
+          '<div class="pull-left">',
+              '<img src="@{{ avatar }}" alt="" class="user-mini-ava">',
+          '</div>',
+          '<div>',
+              '<strong>@{{ username }}</strong>',
+              '<p class="m-0">@{{ name }}</p>',
+          '</div>',
+        '</div>'].join(''))
+    }
+});
+
+function memberCreate() {
+  $.ajax({
+      url : '@route('h::m::create')',
+      type : 'post',
+      data : $('[name=member-create-form]').serializeArray(),
+      dataType : 'json',
+      success : function (response)
+      {
+          $('[name=member-create-form]').validate(response, [], function () {
+              window.location.href = response['href'];
+          });
+      }
+  });
+  return false;
+}
+</script>
 @endsection
 @section('body')
 @header($title, [

@@ -16,6 +16,8 @@ class ViewComposerServiceProvider extends ServiceProvider
         $this->composeMenu();
         $this->composeHubPanel();
         $this->composeUserMenu();
+        $this->composeNotify();
+        $this->composeQuickControl();
     }
 
     /**
@@ -38,5 +40,13 @@ class ViewComposerServiceProvider extends ServiceProvider
 
     private function composeUserMenu() {
         view()->composer('hub.partials.user-menu','SmartBots\Http\Composers\UserMenuComposer@compose');
+    }
+
+    private function composeNotify() {
+        view()->composer('hub.partials.notifications-menu','SmartBots\Http\Composers\NotifyComposer@compose');
+    }
+
+    private function composeQuickControl() {
+        view()->composer('hub.partials.right-side-bar','SmartBots\Http\Composers\QuickControlComposer@compose');
     }
 }

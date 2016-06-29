@@ -15,9 +15,9 @@
         </div>
         <div class='title'>
             @if ($hub_panel->status == 1)
-				<p onclick="hubDeactivate()" id="hubStatus" class="text-muted m-0" style="cursor: pointer"><i class="fa fa-circle text-custom"></i>&nbsp;<span>Activated</span></a>
+				<p onclick="hubDeactivate()" id="hubStatus" class="text-muted m-0" style="cursor: pointer"><i class="fa fa-circle text-custom"></i>&nbsp;<span>@trans('hub/hub.activated')</span></a>
 			@else
-				<p onclick="hubReactivate()" id="hubStatus" class="text-muted m-0" style="cursor: pointer"><i class="fa fa-circle text-danger"></i>&nbsp;<span>Deactivated</span></a>
+				<p onclick="hubReactivate()" id="hubStatus" class="text-muted m-0" style="cursor: pointer"><i class="fa fa-circle text-danger"></i>&nbsp;<span>@trans('hub/hub.deactivated')</span></a>
 			@endif
         </div>
     </div>

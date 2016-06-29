@@ -125,7 +125,36 @@
 <script type="text/javascript" src="@asset('public/js/jquery.app.js')"></script>
 <script type="text/javascript" src="@asset('public/js/jquery.custom.js')"></script>
 <script>
-    Waves.init();
+    function logout() {
+        swal({
+            title: '@trans('account/logout.title')',
+            text: '@trans('account/logout.text')',
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: '@trans('account/logout.confirm')',
+            cancelButtonText: '@trans('account/logout.cancel')',
+            closeOnConfirm: false }, function() {
+                $.ajax({
+                    url : '@route('a::logout')',
+                    type : 'get',
+                    success : function (response)
+                    {
+                        window.location.href=response.href;
+                    }
+                });
+            });
+    }
+</script>
+@if (session()->has('currentHub'))
+<script type="text/javascript" src="@asset('public/libs/socket.io/socket.io.js')"></script>
+<script type="text/javascript" src="@asset('public/libs/tinycon/tinycon.js')"></script>
+<script type="text/javascript" src="@asset('public/libs/notifyjs/js/notify.js')"></script>
+<script type="text/javascript" src="@asset('public/libs/notifyjs/js/notify-metro.js')"></script>
+<script type="text/javascript" src="@asset('public/libs/typeahead.js/typeahead.bundle.js')"></script>
+<script type="text/javascript" src="@asset('public/libs/handlebars/handlebars.js')"></script>
+<script>
+
+    var socket = io('@env('APP_DOMAIN'):@env('SOCKETIO_PORT')@env('APP_NAMESPACE')');
 
     function hubDeactivate() {
         $.ajax({
@@ -166,11 +195,12 @@
     function hubLogout()
     {
         swal({
-            title: "Are you sure?",
-            text: "To log out your hub?",
+            title: '@trans('hub/hub.logout_title')',
+            text: '@trans('hub/hub.logout_text')',
             type: "warning",
             showCancelButton: true,
-            confirmButtonText: "Yes",
+            confirmButtonText: '@trans('hub/hub.logout_confirm')',
+            cancelButtonText: '@trans('hub/hub.logout_cancel')',
             closeOnConfirm: false }, function() {
                 $.ajax({
                     url : '@route('h::logout')',
@@ -183,25 +213,216 @@
             });
     }
 
-    function logout() {
-        swal({
-            title: "Are you sure?",
-            text: "To log out your account?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes",
-            closeOnConfirm: false }, function() {
-                $.ajax({
-                    url : '@route('a::logout')',
-                    type : 'get',
-                    success : function (response)
-                    {
-                        window.location.href=response.href;
-                    }
-                });
+    //-----------------------------------------------------------------------------------------------------------------
+
+    var title = $(document).attr('title');
+
+    var notiCounter = parseInt($('#noti-counter').text());
+
+    function readNotify(id) {
+
+        if ($('#noti' + id).exists()) {
+
+            $.ajax({
+                url : '@route('h::n::read')',
+                type : 'get',
+                dataType : 'json',
+                data: { id: id }
             });
+
+            $('#noti' + id).remove();
+
+            notiCounter--;
+
+            $('#noti-counter').text(notiCounter);
+
+            if (notiCounter <= 0) {
+                $(document).attr('title',title);
+            } else {
+                $(document).attr('title','('+notiCounter+') '+title);
+            }
+
+            Tinycon.setBubble(notiCounter);
+        }
+
+        return false;
     }
+
+    if (notiCounter > 0) {
+        $(document).attr('title','('+notiCounter+') '+title);
+    }
+
+    Tinycon.setBubble(notiCounter);
+
+    var Notification = window.Notification || window.mozNotification || window.webkitNotification;
+
+    if (Notification) {
+        Notification.requestPermission();
+    }
+
+    socket.on('notification:new', function(message) { // New notification arrived
+
+        console.log(message);
+
+        var holder = message.holder.split(':');
+
+        if (holder[0] == 'icon') {
+            var holderData = '<em class="fa fa-' + holder[1] + ' fa-2x text-custom"></em>';
+        } else if (holder[0] == 'image') {
+            var holderData = '<img src="' + holder[1] + ':' + holder[2] + '" class="img-noti">';
+        }
+
+        $('#noti-list').prepend([
+             '<a href="' + message.href + '" class="list-group-item" id="noti' + message.id + '" onclick="readNotify(' + message.id + ')">',
+               '<div class="media">',
+                  '<div class="pull-left p-r-10">',
+                    holderData,
+                  '</div>',
+                  '<div class="media-body">',
+                     '<h5 class="media-heading">' + message.subject + '</h5>',
+                     '<p class="m-0">',
+                         '<small>' + message.body + '</small>',
+                     '</p>',
+                  '</div>',
+               '</div>',
+            '</a>'
+        ].join(''));
+
+        $.Notification.notify('custom','bottom left', message.subject, message.body);
+
+        if (Notification && Notification.permission === "granted") {
+
+            var noti = new Notification(
+                message.subject, {
+                    icon: "@asset('logo-norounded.png')",
+                    body: message.body
+                }
+            );
+
+            noti.onclick = function () {
+                readNotify(message.id);
+                window.location.href = message.href;
+                window.focus();
+                noti.close()
+            };
+
+            setTimeout(function(){noti.close();},5000);
+        }
+
+        notiCounter++;
+
+        $('#noti-counter').text(notiCounter);
+        $(document).attr('title','('+notiCounter+') '+title);
+
+        Tinycon.setBubble(notiCounter);
+    });
+
+    socket.on('notification:read', function(message) {
+
+        console.log(message);
+
+        readNotify(message.id);
+    });
+
+    //-----------------------------------------------------------------------------------------------------------------
+
+    var bot = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      remote: {
+        url: '@route('h::b::search')/%Q/@session('currentHub')',
+        wildcard: '%Q'
+      }
+    });
+
+    var typeahead_bot_option = {
+      name: 'bot',
+      display: 'id',
+      source: bot,
+      templates: {
+        empty: [
+        '<div class="tt-no-result">',
+        'No result',
+        '</div>'
+        ].join(''),
+        suggestion: Handlebars.compile([
+          '<div class="">',
+            '<div class="pull-left">',
+                '<img src="@{{ image }}" alt="" class="user-mini-ava">',
+            '</div>',
+            '<div>',
+                '<strong>@{{ name }}</strong>',
+                '<p class="m-0">@{{ id }}</p>',
+            '</div>',
+          '</div>'].join(''))
+      }
+    };
+
+    $('[name="quickbot"]').typeahead(null, typeahead_bot_option);
+
+    function addQuick() {
+
+        $.ajax({
+            url : '@route('h::q::add')',
+            type : 'get',
+            dataType : 'json',
+            data: { id: $('[name=quickbot]').val() },
+            success: function (response) {
+                $('#quick-modal').modal('hide');
+                if (response.success == true) {
+                    $('.quick-control').append([
+                        '<li class="list-group-item" id="quick' + response.bot['id'] + '">',
+                            '<a>',
+                                '<a class="btn btn-danger btn-xs pull-left waves-effect waves-light quick-control-delete-btn" href="javascript:removeQuick(' + response.bot['id'] + ')" style="display: none">',
+                                  '<em class="fa fa-trash" aria-hidden="true"></em>',
+                                '</a>',
+                            '</a>',
+                            '<div class="avatar">',
+                                '<img src="' + response.bot['image'] + '">',
+                            '</div>',
+                            '<span class="name">' + response.bot['name'] + '</span>',
+                            '<div class="material-switch" style="position: absolute; right: 10px;">',
+                                '<input id="bot' + response.bot['id'] + '" type="checkbox"/>',
+                                '<label for="bot' + response.bot['id'] + '" class="label-default"></label>',
+                            '</div>',
+                            '<span class="clearfix"></span>',
+                        '</li>'
+                    ].join(''));
+                }
+            }
+        });
+
+        return false;
+    }
+
+    function removeQuick(id) {
+        $.ajax({
+            url : '@route('h::q::remove')',
+            type : 'get',
+            dataType : 'json',
+            data: { id: id },
+            success: function (response) {
+                $('#quick' + id).remove();
+            }
+        });
+
+        return false;
+    }
+
+    function toggleQuickRmBtn() {
+        $('.quick-control-delete-btn').toggle();
+
+        if ($('.quick-control-delete-btn').is(":visible")) {
+            $('.contacts-list .list-group-item span.name').css('width', '105px');
+        } else {
+            $('.contacts-list .list-group-item span.name').css('width', '140px');
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+
 </script>
+@endif
 @yield('additionFooter')
 </body>
 </html>

@@ -2259,5 +2259,14 @@ a.editable-click:hover {
   transition: all 0.3s ease-in-out;
   width: 24px;
 }
+.img-noti {
+  border-radius: 50%;
+  width: 38px;
+}
+.no-noti {
+  padding: 10px 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 0;
+}
 
 /*# sourceMappingURL=components.css.map */

@@ -40,10 +40,13 @@ var less = { // LESS file to compile => css
         'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' : 'bootstrap-datetimepicker/bootstrap-datetimepicker.js',
         'bootstrap-select/dist/js/bootstrap-select.js' : 'bootstrap-select/bootstrap-select.js',
         'raven-js/dist/raven.js' : 'raven-js/raven.js',
-        'amcharts3/amcharts/amchart.js' : 'amcharts/amcharts.js',
-        'amcharts3/amcharts/amchart.js' : 'amcharts/serial.js',
+        'amcharts3/amcharts/amcharts.js' : 'amcharts/amcharts.js',
+        'amcharts3/amcharts/serial.js' : 'amcharts/serial.js',
         'socket.io-client/socket.io.js' : 'socket.io/socket.io.js',
-        'intl-tel-input/build/js/intlTelInput.js' : 'intl-tel-input/js/intlTelInput.js'
+        'intl-tel-input/build/js/intlTelInput.js' : 'intl-tel-input/js/intlTelInput.js',
+        'notifyjs/dist/notify.js' : 'notifyjs/js/notify.js',
+        'tinycon/tinycon.js' : 'tinycon/tinycon.js'
+
     },
 
     css = { // CSS file vendored => libs
@@ -56,7 +59,8 @@ var less = { // LESS file to compile => css
         'multiselect/css/multi-select.css' : 'multiselect/css/multi-select.css',
         'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css' : 'bootstrap-datetimepicker/bootstrap-datetimepicker.css',
         'bootstrap-select/dist/css/bootstrap-select.css' : 'bootstrap-select/bootstrap-select.css',
-        'intl-tel-input/build/css/intlTelInput.css' : 'intl-tel-input/css/intlTelInput.css'
+        'intl-tel-input/build/css/intlTelInput.css' : 'intl-tel-input/css/intlTelInput.css',
+        'notifyjs/dist/styles/metro/notify-metro.css' : 'notifyjs/css/notify-metro.css',
     },
 
     assets = { // Assets file & folder vendored => libs
@@ -91,25 +95,25 @@ elixir(function(mix) {
 
     // mix.compress();
 
-    // for(var key in less) {
-    //     mix.less(key, css_dir+less[key], vendor_dir);
-    // }
+    for(var key in less) {
+        mix.less(key, css_dir+less[key], vendor_dir);
+    }
 
-    // for(var key in js) {
-    //     mix.scripts(key, libs_dir+js[key], vendor_dir);
-    // }
+    for(var key in js) {
+        mix.scripts(key, libs_dir+js[key], vendor_dir);
+    }
 
     for(var key in jsx) {
         mix.scripts(key, js_dir+jsx[key]);
     }
 
-    // for(var key in css) {
-    //     mix.styles(key, libs_dir+css[key], vendor_dir);
-    // }
+    for(var key in css) {
+        mix.styles(key, libs_dir+css[key], vendor_dir);
+    }
 
-    // for (var key in assets) {
-    //     mix.copy(vendor_dir+key, libs_dir+assets[key]);
-    // }
+    for (var key in assets) {
+        mix.copy(vendor_dir+key, libs_dir+assets[key]);
+    }
 
     mix.browserSync({
         // online: false,

@@ -8,7 +8,7 @@ class AutomationPermission extends Model
 {
     protected $table = 'automationpermissions';
 
-    protected $fillable = ['user_id','automation_id','high'];
+    protected $fillable = ['user_id','automation_id','high','notice'];
 
     protected $hidden = [];
 
@@ -20,5 +20,9 @@ class AutomationPermission extends Model
 
     public function user() {
         return $this->belongsTo('SmartBots\User','user_id');
+    }
+
+    public function willNotice():boolean {
+        return $this->notice;
     }
 }

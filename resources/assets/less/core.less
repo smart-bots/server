@@ -1922,6 +1922,7 @@ body.fixed-left {
 
 .contact-list {
   max-height: 600px;
+  right: 2.5px;
 
   .list-group-item {
     border: none;
@@ -1951,6 +1952,9 @@ body.fixed-left {
     }
   }
   .list-group-item {
+
+    padding-left: 5px;
+
     span.name {
       color: #707780;
       display: inline-block;
@@ -1960,8 +1964,17 @@ body.fixed-left {
       padding-top: 6px;
       text-overflow: ellipsis;
       white-space: nowrap;
-      width: 130px;
+      width: 140px;
+      margin-right: 40px;
     }
+  }
+
+  .quick-control-delete-btn {
+    top: 2px;
+    right: 10px;
+    position: relative;
+    margin-left: 10px;
+    font-size: 16px;
   }
 
   i {
@@ -2256,8 +2269,16 @@ ul.quick-control {
 .quick-control-btn {
   position: relative;
   font-size: 16px;
-  top: -45px;
+  top: -38px;
   right: 12px;
+}
+
+.quick-control-plus-btn {
+  position: relative;
+  font-size: 16px;
+  top: 8px;
+  left: 10px;
+  padding: 0 5px;
 }
 
 /* Linh tinh */
@@ -2310,4 +2331,8 @@ ul.quick-control {
   position: absolute;
   top: -15px;
   right: 30px;
+}
+
+#quick-modal .twitter-typeahead {
+  display: block !important;
 }

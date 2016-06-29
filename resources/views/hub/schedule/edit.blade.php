@@ -1,5 +1,5 @@
 <?php
-  use SmartBots\Bot;
+  use SmartBots\{Bot, Schedule};
 ?>
 @extends('hub.master')
 @section('title','View schedule')
@@ -433,6 +433,16 @@
           </p>
         </div>
       </div>
+      @endif
+      <div class="form-group">
+        {!! Form::label('notice', 'Get notify', ['class' => 'col-sm-2 control-label']) !!}
+        <div class="col-sm-10">
+          <div class="material-switch" style="margin-top:8px">
+              <input id="notice" name="notice" type="checkbox" value="1" @if (auth()->user()->willNoticeBySchedule($bot['id'])) checked @endif/>
+              <label for="notice" class="label-default"></label>
+          </div>
+        </div>
+      </div>
       <div class="form-group">
         {!! Form::label('permissions', 'Low permissions', ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
@@ -447,13 +457,14 @@
           <span class="help-block margin-bottom-none">Users can manage this bot</span>
         </div>
       </div>
-      @endif
-      {!! Form::button('<span class="btn-label"><i class="fa fa-floppy-o" aria-hidden="true"></i></span>Save', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
-      {!! Form::button('<span class="btn-label"><i class="fa fa-trash" aria-hidden="true"></i></span>Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'scheduleDelete()']) !!}</a>
-      @if ($sche['status'] != 0)
-        {!! Form::button('<span class="btn-label"><i class="fa fa-ban" aria-hidden="true"></i></span><span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right m-r-5','id' => 'scheduleDeactivateBtn','onclick' => 'scheduleDeactivate()']) !!}
-      @else
-        {!! Form::button('<span class="btn-label"><i class="fa fa-check-square-o" aria-hidden="true"></i></i></span><span>Reactivate</span>', ['type' => 'button', 'class' => 'btn btn-default pull-right m-r-5','id' => 'scheduleReactivateBtn','onclick' => 'scheduleReactivate()']) !!}
+      @if(auth()->user()->can('high',Schedule::findOrFail($sche['id'])))
+        {!! Form::button('<span class="btn-label"><i class="fa fa-floppy-o" aria-hidden="true"></i></span>Save', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
+        {!! Form::button('<span class="btn-label"><i class="fa fa-trash" aria-hidden="true"></i></span>Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'scheduleDelete()']) !!}</a>
+        @if ($sche['status'] != 0)
+          {!! Form::button('<span class="btn-label"><i class="fa fa-ban" aria-hidden="true"></i></span><span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right m-r-5','id' => 'scheduleDeactivateBtn','onclick' => 'scheduleDeactivate()']) !!}
+        @else
+          {!! Form::button('<span class="btn-label"><i class="fa fa-check-square-o" aria-hidden="true"></i></i></span><span>Reactivate</span>', ['type' => 'button', 'class' => 'btn btn-default pull-right m-r-5','id' => 'scheduleReactivateBtn','onclick' => 'scheduleReactivate()']) !!}
+        @endif
       @endif
     {!! Form::close() !!}
   </div>

@@ -89,6 +89,7 @@ class BotController extends Controller
         $newBotPerm->user_id = auth()->user()->id;
         $newBotPerm->bot_id  = $bot->id;
         $newBotPerm->high    = true;
+        $newBotPerm->notice  = $request->notice;
         $newBotPerm->save();
 
         if (is_array($request->permissions)) {
@@ -205,6 +206,8 @@ class BotController extends Controller
                 BotPermission::updateOrCreate(['bot_id' => $id, 'user_id' => $user_id],['high' => true]);
             }
         }
+
+        BotPermission::updateOrCreate(['bot_id' => $bot->id, 'user_id' => auth()->user()->id],['notice' => $request->notice]);
 
         $errors = ['success' => 'Saved successfully'];
         return response()->json($errors);

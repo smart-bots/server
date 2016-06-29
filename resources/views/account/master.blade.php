@@ -49,6 +49,11 @@
 
         </div>
 
+        <div class="languague-bar" style="position: fixed; bottom: 10px; right: 10px;">
+            <a href="javascript:setLang('vi')"><img src="@asset('public/images/vi.png')" style="width: 30px"></a>
+            <a href="javascript:setLang('en')"><img src="@asset('public/images/en.png')" style="width: 30px"></a>
+        </div>
+
         <script>
             var resizefunc = [];
         </script>
@@ -76,6 +81,20 @@
             $(window).bind('unload', function(){
                 $('div.wrapper-page').removeClass('animated fadeIn').addClass('animated fadeOut');
             });
+
+            function setLang(lang) {
+                $.ajax({
+                    url : '@route('lang')/'+lang,
+                    type : 'get',
+                    dataType : 'json',
+                    success : function (response)
+                    {
+                        window.location.reload();
+                    }
+                });
+
+                return false;
+            }
         </script>
 
         @yield('additionFooter')

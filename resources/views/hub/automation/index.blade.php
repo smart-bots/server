@@ -1,5 +1,5 @@
 <?php
-    use SmartBots\{Bot, Event};
+    use SmartBots\{Hub, Bot, Event};
 ?>
 @extends('hub.master')
 @section('title','Hub automations')
@@ -15,7 +15,9 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
-      <a href='{{ route('h::a::create') }}'>{!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Create automation', ['type' => 'submit', 'class' => 'btn btn-default waves-effect waves-light btn-create']) !!}</a>
+        @if(auth()->user()->can('createAutomations',Hub::findOrFail(session('currentHub'))))
+        <a href='{{ route('h::a::create') }}'>{!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Create automation', ['type' => 'submit', 'class' => 'btn btn-default waves-effect waves-light btn-create']) !!}</a>
+        @endif
         @if (count($automations)>0)
         <div class="table-responsive m-t-10">
         <table class="table table-hover table-striped">

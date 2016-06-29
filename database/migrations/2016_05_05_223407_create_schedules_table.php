@@ -24,10 +24,10 @@ class CreateSchedulesTable extends Migration
             $table->tinyInteger('condition_type');
             $table->tinyInteger('condition_method');
             $table->text('condition_data');
-            $table->text('activate_after');
-            $table->text('deactivate_after_times');
-            $table->text('deactivate_after_datetime');
-            $table->text('next_run_time');
+            $table->text('activate_after')->nullable();
+            $table->text('deactivate_after_times')->nullable();
+            $table->text('deactivate_after_datetime')->nullable();
+            $table->text('next_run_time')->nullable();
             $table->boolean('status');
             $table->integer('ran_times')->unsigned();
         });

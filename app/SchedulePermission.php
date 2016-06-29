@@ -8,7 +8,7 @@ class SchedulePermission extends Model
 {
     protected $table = 'schedulepermissions';
 
-    protected $fillable = ['user_id','schedule_id','high'];
+    protected $fillable = ['user_id','schedule_id','high','notice'];
 
     protected $hidden = [];
 
@@ -20,5 +20,9 @@ class SchedulePermission extends Model
 
     public function user() {
         return $this->belongsTo('SmartBots\User','user_id');
+    }
+
+    public function willNotice():boolean {
+        return $this->notice;
     }
 }

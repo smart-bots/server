@@ -54,17 +54,17 @@ function($) {
     var Notification = function() {};
 
     //simple notificaiton
-    Notification.prototype.notify = function(style,position, title, text) {
+    Notification.prototype.notify = function(style, position, title, text) {
         var icon = 'fa fa-adjust';
         if(style == "error"){
             icon = "fa fa-exclamation";
-        }else if(style == "warning"){
+        }else if (style == "warning"){
             icon = "fa fa-warning";
-        }else if(style == "success"){
+        }else if (style == "success"){
             icon = "fa fa-check";
-        }else if(style == "custom"){
-            icon = "md md-album";
-        }else if(style == "info"){
+        }else if (style == "custom"){
+            icon = "fa fa-signal";
+        }else if (style == "info"){
             icon = "fa fa-question";
         }else{
             icon = "fa fa-adjust";
@@ -86,7 +86,7 @@ function($) {
     },
 
     //auto hide notification
-    Notification.prototype.autoHideNotify = function (style,position, title, text) {
+    Notification.prototype.autoHideNotify = function (style, position, title, text) {
         var icon = "fa fa-adjust";
         if(style == "error"){
             icon = "fa fa-exclamation";

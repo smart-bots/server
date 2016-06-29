@@ -10,15 +10,12 @@
 </style>
 @endsection
 @section('additionFooter')
-<script src="@asset('public/libs/typeahead.js/typeahead.bundle.js')" type="text/javascript"></script>
-<script src="@asset('public/libs/handlebars/handlebars.js')" type="text/javascript"></script>
 <script src="@asset('public/libs/moment/moment.js')" type="text/javascript"></script>
-<script src="@asset('public/libs/moment/vi.js')" type="text/javascript"></script>
+{{-- <script src="@asset('public/libs/moment/vi.js')" type="text/javascript"></script> --}}
 <script src="@asset('public/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.js')" type="text/javascript"></script>
 <script src="@asset('public/libs/multiselect/js/jquery.multi-select.js')" type="text/javascript"></script>
 <script src="@asset('public/libs/quicksearch/jquery.quicksearch.js')" type="text/javascript"></script>
 <script>
-
   var bot = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
     queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -566,6 +563,15 @@
         </div>
       </div>
       <div id="just-for-repeat">
+      </div>
+      <div class="form-group">
+        {!! Form::label('notice', 'Get notify', ['class' => 'col-sm-2 control-label']) !!}
+        <div class="col-sm-10">
+          <div class="material-switch" style="margin-top:8px">
+              <input id="notice" name="notice" type="checkbox" value="1"/>
+              <label for="notice" class="label-default"></label>
+          </div>
+        </div>
       </div>
       <div class="form-group">
         {!! Form::label('permissions', 'Low permissions', ['class' => 'col-sm-2 control-label']) !!}

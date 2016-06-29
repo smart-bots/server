@@ -8,7 +8,7 @@ use SmartBots\Http\Requests;
 
 use Validator;
 
-use SmartBots\Hub;
+use SmartBots\{Hub, Member, HubPermission};
 
 class HubController extends Controller
 {
@@ -144,28 +144,6 @@ class HubController extends Controller
         $hub->save();
 
         return response()->json(['success' => 'Saved successfully']);
-    }
-
-    /**
-     * Return all changed-status bot
-     * @param  Request $request
-     * @return Illuminate\Http\JsonResponse
-     */
-    public function botsStatus(Request $request) {
-
-        $bots = Hub::findOrFail(session('currentHub'))->bots;
-        $bots2 = [];
-
-        for ($i=0;$i<count($bots);$i++) {
-            if ($bots[$i]['true'] == 0) {
-                $status = 2;
-            } else {
-                $status = $bots[$i]['status'];
-            }
-            $bots2[$bots[$i]['id']] = $status;
-        }
-
-        return response()->json($bots2);
     }
 
     /**

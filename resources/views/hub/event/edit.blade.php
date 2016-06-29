@@ -1,179 +1,233 @@
+<?php
+use SmartBots\{Bot, Event};
+?>
 @extends('hub.master')
 @section('title','Edit event')
 @section('additionHeader')
-  <link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
-  <style>
-    select {
-      width: 125px !important;
-    }
-  </style>
+<link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
+<style>
+  .action-item:first-child {
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 15px;
+    color: #fff;
+  }
+
+  .action-item {
+    margin-top: 5px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 15px;
+    color: #fff;
+  }
+
+  .action-image {
+    margin: 2px 5px;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #edf0f0;
+  }
+
+  .action-bot {
+    font-weight: 600;
+  }
+
+  .cond-item:first-child {
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 15px;
+    color: #fff;
+  }
+
+  .cond-item {
+    margin-top: 5px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 15px;
+    color: #fff;
+  }
+
+  .cond-image {
+    margin: 2px 5px;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #edf0f0;
+  }
+
+  .condd {
+    font-weight: 600;
+  }
+
+  .data {
+    font-size: 16px;
+  }
+
+</style>
 @endsection
 @section('additionFooter')
-  <script src="@asset('public/libs/typeahead.js/typeahead.bundle.js')" type="text/javascript"></script>
-  <script src="@asset('public/libs/handlebars/handlebars.js')" type="text/javascript"></script>
-  <script src="@asset('public/libs/multiselect/js/jquery.multi-select.js')" type="text/javascript"></script>
-  <script src="@asset('public/libs/quicksearch/jquery.quicksearch.js')" type="text/javascript"></script>
-  <script>
+<script src="@asset('public/libs/multiselect/js/jquery.multi-select.js')" type="text/javascript"></script>
+<script src="@asset('public/libs/quicksearch/jquery.quicksearch.js')" type="text/javascript"></script>
+<script>
 
-    var bot = new Bloodhound({
-      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-      queryTokenizer: Bloodhound.tokenizers.whitespace,
-      remote: {
-        url: '@route('h::b::search')/%Q/{{ session('currentHub') }}',
-        wildcard: '%Q'
-      }
-    });
-
-    var typeahead_bot_option = {
-      name: 'bot',
-      display: 'id',
-      source: bot,
-      templates: {
-        empty: [
-        '<div class="tt-no-result">',
-        'No result',
-        '</div>'
-        ].join(''),
-        suggestion: Handlebars.compile([
-          '<div class="">',
-            '<div class="pull-left">',
-                '<img src="@{{ image }}" alt="" class="user-mini-ava">',
-            '</div>',
-            '<div>',
-                '<strong>@{{ name }}</strong>',
-                '<p class="m-0">@{{ id }}</p>',
-            '</div>',
-          '</div>'].join(''))
-      }
-    };
-
-    var searchableObj = {
-        selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
-        selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
-        afterInit: function (ms) {
-            var that = this,
-                $selectableSearch = that.$selectableUl.prev(),
-                $selectionSearch = that.$selectionUl.prev(),
-                selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
-                selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
-
-            that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-                .on('keydown', function (e) {
-                    if (e.which === 40) {
-                        that.$selectableUl.focus();
-                        return false;
-                    }
-                });
-
-            that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-                .on('keydown', function (e) {
-                    if (e.which == 40) {
-                        that.$selectionUl.focus();
-                        return false;
-                    }
-                });
-        },
-        afterSelect: function () {
-            this.qs1.cache();
-            this.qs2.cache();
-        },
-        afterDeselect: function () {
-            this.qs1.cache();
-            this.qs2.cache();
-        }
-    };
-
-    $("[name='permissions[]']").multiSelect(searchableObj);
-    $("[name='highpermissions[]']").multiSelect(searchableObj);
-    $('[name="trigger[bot]"]').typeahead(null, typeahead_bot_option);
-
-    function eventDeactivate(id) {
-      swal({
-        title: "Are you sure?",
-        text: "To deactivate this event?",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes"}, function() {
-          $.ajax({
-              url : '{{ route('h::e::deactivate',$event['id']) }}',
-              type : 'post',
-              dataType: 'json',
-              data : {
-                _token: '{{ csrf_token() }}',
-                id: id
-              },
-              success : function (response)
-              {
-                  $('#eventTus').text('Deactivated').removeClass('label-primary').addClass('label-danger');
-                  eventDeactivateBtn = $('#eventDeactivateBtn').attr('id','eventReactivateBtn').removeClass('btn-warning').addClass('btn-default').attr('onclick','eventReactivate()');
-                  eventDeactivateBtn.find('i').removeClass('fa-ban').addClass('fa-check-square-o');
-                  eventDeactivateBtn.find('span:not(.btn-label)').text('Reactivate');
-              }
-            });
-        });
-      }
-
-    function eventReactivate(id) {
-      swal({
-        title: "Are you sure?",
-        text: "To reactivate this event?",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes"}, function() {
-          $.ajax({
-              url : '{{ route('h::e::reactivate',$event['id']) }}',
-              type : 'post',
-              dataType: 'json',
-              data : {
-                _token: '{{ csrf_token() }}',
-                id: id
-              },
-              success : function (response)
-              {
-                  $('#eventTus').text('Activated').removeClass('label-danger').addClass('label-primary');
-                  eventReactivateBtn = $('#eventReactivateBtn').attr('id','eventDeactivateBtn').addClass('btn-warning').removeClass('btn-default').attr('onclick','eventDeactivate()');
-                  eventReactivateBtn.find('i').addClass('fa-ban').removeClass('fa-check-square-o');
-                  eventReactivateBtn.find('span:not(.btn-label)').text('Deactivate');
-              }
-            });
-        });
+  var bot = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    remote: {
+      url: '@route('h::b::search')/%Q/{{ session('currentHub') }}',
+      wildcard: '%Q'
     }
+  });
 
-    function eventDelete() {
-      swal({
-        title: "Are you sure?",
-        text: "To delete this event?",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes",
-        closeOnConfirm: false }, function() {
-          $.ajax({
-              url : '{!!  route('h::e::destroy',$event['id']) !!}',
-              type : 'post',
-              dataType: 'json',
-              data : { _token: '{{ csrf_token() }}' },
-              success : function (response)
-              {
-                  window.location.href = '{{ route('h::s::index') }}';
-              }
-            });
-        });
+  var typeahead_bot_option = {
+    name: 'bot',
+    display: 'id',
+    source: bot,
+    templates: {
+      empty: [
+      '<div class="tt-no-result">',
+      'No result',
+      '</div>'
+      ].join(''),
+      suggestion: Handlebars.compile([
+        '<div class="">',
+          '<div class="pull-left">',
+              '<img src="@{{ image }}" alt="" class="user-mini-ava">',
+          '</div>',
+          '<div>',
+              '<strong>@{{ name }}</strong>',
+              '<p class="m-0">@{{ id }}</p>',
+          '</div>',
+        '</div>'].join(''))
     }
+  };
 
-    function eventEdit() {
-      $.ajax({
-          url : '@route('h::e::edit',$event['id'])',
-          type : 'post',
-          data : $('[name=event-edit-form]').serializeArray(),
-          dataType : 'json',
-          success : function (response)
-          {
-              $('[name=event-edit-form]').validate(response);
-          }
+  var searchableObj = {
+      selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
+      selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
+      afterInit: function (ms) {
+          var that = this,
+              $selectableSearch = that.$selectableUl.prev(),
+              $selectionSearch = that.$selectionUl.prev(),
+              selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+              selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+          that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+              .on('keydown', function (e) {
+                  if (e.which === 40) {
+                      that.$selectableUl.focus();
+                      return false;
+                  }
+              });
+
+          that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+              .on('keydown', function (e) {
+                  if (e.which == 40) {
+                      that.$selectionUl.focus();
+                      return false;
+                  }
+              });
+      },
+      afterSelect: function () {
+          this.qs1.cache();
+          this.qs2.cache();
+      },
+      afterDeselect: function () {
+          this.qs1.cache();
+          this.qs2.cache();
+      }
+  };
+
+  $("[name='permissions[]']").multiSelect(searchableObj);
+  $("[name='highpermissions[]']").multiSelect(searchableObj);
+  $('[name="trigger[bot]"]').typeahead(null, typeahead_bot_option);
+
+  function eventDeactivate(id) {
+    swal({
+      title: "Are you sure?",
+      text: "To deactivate this event?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes"}, function() {
+        $.ajax({
+            url : '{{ route('h::e::deactivate',$event['id']) }}',
+            type : 'post',
+            dataType: 'json',
+            data : {
+              _token: '{{ csrf_token() }}',
+              id: id
+            },
+            success : function (response)
+            {
+                $('#eventTus').text('Deactivated').removeClass('label-primary').addClass('label-danger');
+                eventDeactivateBtn = $('#eventDeactivateBtn').attr('id','eventReactivateBtn').removeClass('btn-warning').addClass('btn-default').attr('onclick','eventReactivate()');
+                eventDeactivateBtn.find('i').removeClass('fa-ban').addClass('fa-check-square-o');
+                eventDeactivateBtn.find('span:not(.btn-label)').text('Reactivate');
+            }
+          });
       });
-      return false;
     }
-  </script>
+
+  function eventReactivate(id) {
+    swal({
+      title: "Are you sure?",
+      text: "To reactivate this event?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes"}, function() {
+        $.ajax({
+            url : '{{ route('h::e::reactivate',$event['id']) }}',
+            type : 'post',
+            dataType: 'json',
+            data : {
+              _token: '{{ csrf_token() }}',
+              id: id
+            },
+            success : function (response)
+            {
+                $('#eventTus').text('Activated').removeClass('label-danger').addClass('label-primary');
+                eventReactivateBtn = $('#eventReactivateBtn').attr('id','eventDeactivateBtn').addClass('btn-warning').removeClass('btn-default').attr('onclick','eventDeactivate()');
+                eventReactivateBtn.find('i').addClass('fa-ban').removeClass('fa-check-square-o');
+                eventReactivateBtn.find('span:not(.btn-label)').text('Deactivate');
+            }
+          });
+      });
+  }
+
+  function eventDelete() {
+    swal({
+      title: "Are you sure?",
+      text: "To delete this event?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      closeOnConfirm: false }, function() {
+        $.ajax({
+            url : '{!!  route('h::e::destroy',$event['id']) !!}',
+            type : 'post',
+            dataType: 'json',
+            data : { _token: '{{ csrf_token() }}' },
+            success : function (response)
+            {
+                window.location.href = '{{ route('h::s::index') }}';
+            }
+          });
+      });
+  }
+
+  function eventEdit() {
+    $.ajax({
+        url : '@route('h::e::edit',$event['id'])',
+        type : 'post',
+        data : $('[name=event-edit-form]').serializeArray(),
+        dataType : 'json',
+        success : function (response)
+        {
+            $('[name=event-edit-form]').validate(response);
+        }
+    });
+    return false;
+  }
+</script>
 @endsection
 @section('body')
 {!! content_header('Edit event', [
@@ -207,28 +261,28 @@
                 {!! Form::text('name', $event['name'], ['class' => 'form-control']) !!}
               </div>
             </div>
-            @if(!empty($automation->trigger_id))
+            @if(!empty($event->trigger_bot))
             <div class="form-group">
               {!! Form::label('trigger', 'Trigger', ['class' => 'col-sm-2 control-label']) !!}
               <div class="col-sm-10">
                 <?php
                   switch ($event->trigger_type) {
                     case 1:
-                      $bot = Bot::findOrFail($automation->trigger_id);
+                      $bot = Bot::findOrFail($event->trigger_bot);
                       $trigger_class = 'bg-custom';
                       $trigger_text = 'turned on';
                       $trigger_image = $bot->image;
                       $trigger_name = $bot->name;
                       break;
                     case 2:
-                      $bot = Bot::findOrFail($automation->trigger_id);
+                      $bot = Bot::findOrFail($event->trigger_bot);
                       $trigger_class = 'bg-danger';
                       $trigger_text = 'turned off';
                       $trigger_image = $bot->image;
                       $trigger_name = $bot->name;
                       break;
                     case 3:
-                      $bot = Bot::findOrFail($automation->trigger_id);
+                      $bot = Bot::findOrFail($event->trigger_bot);
                       $trigger_class = 'bg-primary';
                       $trigger_text = 'toggled';
                       $trigger_image = $bot->image;
@@ -245,6 +299,15 @@
             </div>
             @endif
             <div class="form-group">
+              {!! Form::label('notice', 'Get notify', ['class' => 'col-sm-2 control-label']) !!}
+              <div class="col-sm-10">
+                <div class="material-switch" style="margin-top:8px">
+                    <input id="notice" name="notice" type="checkbox" value="1" @if (auth()->user()->willNoticeByEvent($event['id'])) checked @endif/>
+                    <label for="notice" class="label-default"></label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
               {!! Form::label('permissions', 'Low permissions', ['class' => 'col-sm-2 control-label']) !!}
               <div class="col-sm-10">
                 {!! Form::select('permissions[]', $users, $selected, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
@@ -258,12 +321,14 @@
                 <span class="help-block margin-bottom-none">Users can edit/delete this bot</span>
               </div>
             </div>
-            {!! Form::button('<span class="btn-label"><i class="fa fa-floppy-o" aria-hidden="true"></i></span>Save', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
-            {!! Form::button('<span class="btn-label"><i class="fa fa-trash" aria-hidden="true"></i></span>Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'eventDelete()']) !!}</a>
-            @if ($event['status'] != -1)
-              {!! Form::button('<span class="btn-label"><i class="fa fa-ban" aria-hidden="true"></i></span><span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right m-r-5','id' => 'eventDeactivateBtn','onclick' => 'eventDeactivate()']) !!}
-            @else
-              {!! Form::button('<span class="btn-label"><i class="fa fa-check-square-o" aria-hidden="true"></i></i></span><span>Reactivate</span>', ['type' => 'button', 'class' => 'btn btn-default pull-right m-r-5','id' => 'eventReactivateBtn','onclick' => 'eventReactivate()']) !!}
+            @if(auth()->user()->can('high',Event::findOrFail($event['id'])))
+              {!! Form::button('<span class="btn-label"><i class="fa fa-floppy-o" aria-hidden="true"></i></span>Save', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
+              {!! Form::button('<span class="btn-label"><i class="fa fa-trash" aria-hidden="true"></i></span>Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'eventDelete()']) !!}</a>
+              @if ($event['status'] != -1)
+                {!! Form::button('<span class="btn-label"><i class="fa fa-ban" aria-hidden="true"></i></span><span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right m-r-5','id' => 'eventDeactivateBtn','onclick' => 'eventDeactivate()']) !!}
+              @else
+                {!! Form::button('<span class="btn-label"><i class="fa fa-check-square-o" aria-hidden="true"></i></i></span><span>Reactivate</span>', ['type' => 'button', 'class' => 'btn btn-default pull-right m-r-5','id' => 'eventReactivateBtn','onclick' => 'eventReactivate()']) !!}
+              @endif
             @endif
         {!! Form::close() !!}
         </div>

@@ -6,8 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 use SmartBots\Event;
 
+use SmartBots\Events\BroadcastBot;
+
+use SmartBots\BotPermission;
+
+use SmartBots\Notification;
+
 class Bot extends Model
 {
+    private $virtual_true = true; // Alway return this status when change bot
+
     protected $table = 'bots';
 
     protected $fillable = ['hub_id','name','token','image','description','type','status','true'];
@@ -32,7 +40,7 @@ class Bot extends Model
         $botpermissions = $this->botpermissions;
         $users = [];
         foreach ($botpermissions as $botpermission) {
-            $users[] = $botpermissions->user;
+            $users[] = $botpermission->user;
         }
         return collect($users);
     }
@@ -52,8 +60,9 @@ class Bot extends Model
     public function control($state)
     {
         if ($this->status != -1) {
+
             $this->status = $state;
-            $this->true = false;
+            $this->true = $this->virtual_true;
             $this->save();
 
             if ($this->status == true) {
@@ -72,6 +81,33 @@ class Bot extends Model
             })->get();
             foreach ($automations as $automation) {
                 $automation->fire();
+            }
+
+            $users = $this->users();
+            foreach ($users as $user) {
+                event(new BroadcastBot($this->id,$user->id,session('currentHub'),'change',$state));
+            }
+
+            $needToNotice = BotPermission::where('notice',1)->where('bot_id',$this->id)->get();
+
+            if ($state == 1) {
+                $state_text = 'on';
+            } else {
+                $state_text = 'off';
+            }
+
+            foreach ($needToNotice as $perm) {
+                if ($perm->user_id != auth()->user()->id) {
+                    Notification::send([
+                        'user_id' => $perm->user_id,
+                        'hub_id'  => $this->hub_id,
+                        'subject' => 'Bot "'.$this->name.'" is turned '.$state_text,
+                        'body'    => 'Someone just turned '.$state_text.' this bot',
+                        // 'href' => route('h::b::edit',$this->id),
+                        'href'    => '#',
+                        'holder'  => 'image:'.$this->image
+                    ]);
+                }
             }
         }
     }
@@ -85,7 +121,7 @@ class Bot extends Model
                 $this->status = 1;
             }
 
-            $this->true = false;
+            $this->true = $this->virtual_true;
             $this->save();
 
             if ($this->status == true) {
@@ -104,6 +140,11 @@ class Bot extends Model
             })->get();
             foreach ($automations as $automation) {
                 $automation->fire();
+            }
+
+            $users = $this->users();
+            foreach ($users as $user) {
+                event(new BroadcastBot($this->id,$user->id,session('currentHub'),'change',!$this->status));
             }
         }
     }
@@ -122,7 +163,7 @@ class Bot extends Model
 
     public function realStatus()
     {
-        if ($this->true = false) {
+        if ($this->true == false) {
             return 2;
         } else {
             return $this->status;

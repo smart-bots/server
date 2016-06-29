@@ -38,6 +38,14 @@ class Hub extends Model
         return $this->hasMany('SmartBots\Event','hub_id');
     }
 
+    public function notifications() {
+        return $this->hasMany('SmartBots\Notification','hub_id');
+    }
+
+    public function quickcontrol() {
+        return $this->hasMany('SmartBots\QuickControl','hub_id');
+    }
+
     public function users() {
         return $this->belongsToMany('SmartBots\User','members');
     }

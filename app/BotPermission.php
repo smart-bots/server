@@ -8,7 +8,7 @@ class BotPermission extends Model
 {
     protected $table = 'botpermissions';
 
-    protected $fillable = ['user_id','bot_id','high'];
+    protected $fillable = ['user_id','bot_id','high','notice'];
 
     protected $hidden = [];
 
@@ -20,5 +20,9 @@ class BotPermission extends Model
 
     public function user() {
         return $this->belongsTo('SmartBots\User','user_id');
+    }
+
+    public function willNotice():boolean {
+        return $this->notice;
     }
 }

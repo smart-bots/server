@@ -8,7 +8,7 @@ class EventPermission extends Model
 {
     protected $table = 'eventpermissions';
 
-    protected $fillable = ['user_id','event_id','high'];
+    protected $fillable = ['user_id','event_id','high','notice'];
 
     protected $hidden = [];
 
@@ -20,5 +20,9 @@ class EventPermission extends Model
 
     public function user() {
         return $this->belongsTo('SmartBots\User','user_id');
+    }
+
+    public function willNotice():boolean {
+        return $this->notice;
     }
 }
