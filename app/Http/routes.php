@@ -31,10 +31,6 @@ Route::group([
     Route::post('/subscribe','LandingController@subscribe')->name('::subscribe');
 });
 
-Route::get('test', function () {
-    return view('test');
-});
-
 Route::group([
     'middleware' => [],
     'prefix'     => 'api',

@@ -156,7 +156,7 @@
 		</div>
 	</div>
 
-<!--     <div id ="useit" class="content-section-a">
+	<div id ="useit" class="content-section-a">
 
         <div class="container">
 
@@ -223,7 +223,6 @@
 			</div>
         </div>
     </div>
- -->
 
 	<!-- Screenshot -->
 	<div id="screen" class="content-section-a">
@@ -255,21 +254,27 @@
 					</div>
 				</a>
 
-				<a href="{{ asset('public/landing/img/slide/1.png') }}" class="image-link">
+				<a href="{{ asset('public/landing/img/slide/4.png') }}" class="image-link">
 					<div class="item">
-						<img  class="img-responsive img-rounded" src="{{ asset('public/landing/img/slide/1.png') }}" alt="Owl Image">
+						<img  class="img-responsive img-rounded" src="{{ asset('public/landing/img/slide/4.png') }}" alt="Owl Image">
 					</div>
 				</a>
 
-               <a href="{{ asset('public/landing/img/slide/2.png') }}" class="image-link">
+               <a href="{{ asset('public/landing/img/slide/5.png') }}" class="image-link">
 					<div class="item">
-						<img  class="img-responsive img-rounded" src="{{ asset('public/landing/img/slide/2.png') }}" alt="Owl Image">
+						<img  class="img-responsive img-rounded" src="{{ asset('public/landing/img/slide/5.png') }}" alt="Owl Image">
 					</div>
 				</a>
 
-				<a href="{{ asset('public/landing/img/slide/3.png') }}" class="image-link">
+				<a href="{{ asset('public/landing/img/slide/6.png') }}" class="image-link">
 					<div class="item">
-						<img  class="img-responsive img-rounded" src="{{ asset('public/landing/img/slide/3.png') }}" alt="Owl Image">
+						<img  class="img-responsive img-rounded" src="{{ asset('public/landing/img/slide/6.png') }}" alt="Owl Image">
+					</div>
+				</a>
+
+				<a href="{{ asset('public/landing/img/slide/7.png') }}" class="image-link">
+					<div class="item">
+						<img  class="img-responsive img-rounded" src="{{ asset('public/landing/img/slide/7.png') }}" alt="Owl Image">
 					</div>
 				</a>
               </div>

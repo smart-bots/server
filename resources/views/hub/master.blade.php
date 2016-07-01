@@ -103,7 +103,14 @@
     @if (session()->has('currentHub'))
         @include('hub.partials.right-side-bar')
     @endif
+
 </div>
+
+<div class="languague-bar" style="position: fixed; bottom: 10px; right: 10px;">
+    <a href="javascript:setLang('vi')"><img src="@asset('public/images/vi.png')" style="width: 30px"></a>
+    <a href="javascript:setLang('en')"><img src="@asset('public/images/en.png')" style="width: 30px"></a>
+</div>
+
 <script>
     var resizefunc = [];
 </script>
