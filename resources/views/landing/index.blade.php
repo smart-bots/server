@@ -20,13 +20,13 @@
     <link href="@asset('public/libs/bootstrap/css/bootstrap.css')" rel="stylesheet" type="text/css"/>
     <link href="@asset('public/libs/font-awesome/css/font-awesome.css')" rel="stylesheet" type="text/css"/>
 
-    <link href="{{ asset('public/landing/css/general.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/landing/css/custom.css') }}" rel="stylesheet">
-	<link href="{{ asset('public/landing/css/owl.carousel.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/landing/css/owl.theme.css') }}" rel="stylesheet">
-	<link href="{{ asset('public/landing/css/style.css') }}" rel="stylesheet">
-	<link href="@asset('public/libs/animate.css/animate.css')" rel="stylesheet" type="text/css"/>
-	<link rel="stylesheet" href="{{ asset('public/landing/css/magnific-popup.css') }}">
+    <link href="{{ asset('public/landing/css/general.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('public/landing/css/custom.min.css') }}" rel="stylesheet">
+	<link href="{{ asset('public/landing/css/owl.carousel.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('public/landing/css/owl.theme.min.css') }}" rel="stylesheet">
+	<link href="{{ asset('public/landing/css/style.min.css') }}" rel="stylesheet">
+	<link href="@asset('public/libs/animate.css/animate.min.css')" rel="stylesheet" type="text/css"/>
+	<link rel="stylesheet" href="{{ asset('public/landing/css/magnific-popup.min.css') }}">
 
 	<style>
 	.tick {
@@ -45,7 +45,7 @@
 		<script src="{{ asset('public/landing/js/PIE_IE678.js') }}"></script>
 	<![endif]-->
 	<!--[if lt IE 9]>
-		<script src="{{ asset('public/landing/js/html5shiv.js') }}"></script>
+		<script src="{{ asset('public/landing/js/html5shiv.min.js') }}"></script>
 	<![endif]-->
 
 </head>
@@ -424,18 +424,18 @@
       </div>
     </footer>
 
-    <script src="{{ asset('public/landing/js/jquery-1.10.2.js') }}"></script>
+    <script src="{{ asset('public/landing/js/jquery-1.10.2.min.js') }}"></script>
     <script type="text/javascript" src="@asset('public/libs/raven-js/raven.js')"></script>
     <script>Raven.config('https://fbc910700f1a485c9fc08c38fc8cbec1@app.getsentry.com/83304').install()</script>
     <script type="text/javascript" src="@asset('public/libs/bootstrap/js/bootstrap.js')"></script>
-	<script type="text/javascript" src="{{ asset('public/landing/js/owl.carousel.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('public/landing/js/script.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('public/landing/js/owl.carousel.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('public/landing/js/script.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('public/landing/js/stickUp.min.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('public/landing/js/jquery.corner.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('public/landing/js/jquery.corner.min.js') }}"></script>
 	<script type="text/javascript" src="@asset('public/libs/wow/wow.js')"></script>
-	<script type="text/javascript" src="{{ asset('public/landing/js/classie.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('public/landing/js/uiMorphingButton_inflow.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('public/landing/js/jquery.magnific-popup.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('public/landing/js/classie.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('public/landing/js/uiMorphingButton_inflow.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('public/landing/js/jquery.magnific-popup.min.js') }}"></script>
 
 	<script type="text/javascript">
 	  jQuery(function($) {

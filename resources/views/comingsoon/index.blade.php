@@ -13,8 +13,8 @@
 	<!--[if IE]><![endif]-->
 	<link href="@asset('public/libs/font-awesome/css/font-awesome.css')" rel="stylesheet" type="text/css"/>
 	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,400,400italic,600,600italic,700,700italic,900,900italic">
-	<link rel="stylesheet" href="@asset('public/comingsoon/css/reset.css')">
-	<link rel="stylesheet" href="@asset('public/comingsoon/css/style.css')">
+	<link rel="stylesheet" href="@asset('public/comingsoon/css/reset.min.css')">
+	<link rel="stylesheet" href="@asset('public/comingsoon/css/style.min.css')">
 	<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>
 <body id="backtotop">
@@ -65,7 +65,7 @@
 		</div>
 	</div>
 	<script src="@asset('public/libs/jquery/jquery.js')"></script>
-	<script src="@asset('public/comingsoon/js/countdown.js')"></script>
+	<script src="@asset('public/comingsoon/js/countdown.min.js')"></script>
 	<script>
 		$(document).ready(function() {
 			"use strict";
