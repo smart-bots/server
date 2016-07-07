@@ -74,10 +74,15 @@ io.on('connection', function(socket) {
 
         } else { // NonAuthenicated
 
-            console.log('Guest connected and kicked out');
+            // console.log('Guest connected and kicked out');
 
-            socket.disconnect();
+            // socket.disconnect();
         }
+    });
+    //-----------------------------------------------------------------------------------------------------------------
+
+    socket.on('test', function (data) {
+      console.log(data);
     });
 
     //-----------------------------------------------------------------------------------------------------------------

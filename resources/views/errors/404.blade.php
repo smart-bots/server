@@ -1,5 +1,5 @@
 @extends('errors.master')
-@section('title','Forbidden')
+@section('title','Not Found')
 @section('content')
 <div class="text-error"><span class="text-primary">4</span><span class="text-pink">0</span><span class="text-info">4</span></div>
 <h2>Who0ps! Page not found</h2><br>

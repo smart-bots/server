@@ -25,7 +25,7 @@
 	<link href="{{ asset('public/landing/css/owl.carousel.min.css') }}" rel="stylesheet">
     <link href="{{ asset('public/landing/css/owl.theme.min.css') }}" rel="stylesheet">
 	<link href="{{ asset('public/landing/css/style.min.css') }}" rel="stylesheet">
-	<link href="@asset('public/libs/animate.css/animate.min.css')" rel="stylesheet" type="text/css"/>
+	<link href="@asset('public/libs/animate.css/animate.css')" rel="stylesheet" type="text/css"/>
 	<link rel="stylesheet" href="{{ asset('public/landing/css/magnific-popup.min.css') }}">
 
 	<style>

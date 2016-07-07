@@ -1,5 +1,5 @@
 @extends('errors.master')
-@section('title','Bad Request')
+@section('title','Internal Server Error')
 @section('content')
 <div class="text-error"><span class="text-primary">5</span><span class="text-pink">0</span><span class="text-info">0</span></div>
 <h2>Internal Server Error.</h2><br>

@@ -19,7 +19,7 @@ class ApiController extends Controller
      * @param  int  $status status of the bot
      * @param  int $hard if equal to 1 (true), it's a hard change, the server must follow
      * @return Illuminate\Http\JsonResponse
-     * @example http://dev.env/smartbots/api/BqkbCjdsOIicxLwQo5CT7e9gBKxbcHM9hHJs4JH19UlnsntCmx/up/abcabcabc1/0/1
+     * @example http://dev.env/smartbots/api/Vznx2HNra15IBNEGys8I1xsjm6FTq80v9ZJe8sufj5CVsjOgqK/up/abcabcabc1/1
      */
     public function up(string $token,string $bot_token,int $status,int $hard = 0) {
 
@@ -39,9 +39,7 @@ class ApiController extends Controller
                     return [true];
                 }
             } else {
-                $bot->true = 1;
-                $bot->status = $status;
-                $bot->save();
+                $bot->control($status, true);
                 return [true];
             }
         } else {
@@ -53,7 +51,7 @@ class ApiController extends Controller
      * Use by hub to receive changed-status bots
      * @param  string $token
      * @return Illuminate\Http\JsonResponse
-     * @example http://dev.env/smartbots/api/BqkbCjdsOIicxLwQo5CT7e9gBKxbcHM9hHJs4JH19UlnsntCmx/down
+     * @example http://dev.env/smartbots/api/Vznx2HNra15IBNEGys8I1xsjm6FTq80v9ZJe8sufj5CVsjOgqK/down
      */
     public function down(string $token) {
 

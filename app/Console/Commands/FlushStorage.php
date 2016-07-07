@@ -40,6 +40,7 @@ class FlushStorage extends Command
     public function handle()
     {
         Storage::disk('pub')->delete(Storage::disk('pub')->allFiles());
+        Storage::disk('pub')->put('.gitkeep','');
         $this->info('Flushed all storaged files');
     }
 }

@@ -12,9 +12,11 @@ use SmartBots\BotPermission;
 
 use SmartBots\Notification;
 
+use Log;
+
 class Bot extends Model
 {
-    private $virtual_true = true; // Alway return this status when change bot
+    private $virtual_true = false; // Alway return this status when change bot
 
     protected $table = 'bots';
 
@@ -57,12 +59,15 @@ class Bot extends Model
         return $query->where('status','!=',-1);
     }
 
-    public function control($state)
+    public function control($state, $hard = false)
     {
         if ($this->status != -1) {
 
             $this->status = $state;
             $this->true = $this->virtual_true;
+            if ($hard) {
+                $this->true = 1;
+            }
             $this->save();
 
             if ($this->status == true) {
@@ -85,7 +90,7 @@ class Bot extends Model
 
             $users = $this->users();
             foreach ($users as $user) {
-                event(new BroadcastBot($this->id,$user->id,session('currentHub'),'change',$state));
+                event(new BroadcastBot($this->id,$user->id,$this->hub->id,'change',$state));
             }
 
             $needToNotice = BotPermission::where('notice',1)->where('bot_id',$this->id)->get();
@@ -97,7 +102,12 @@ class Bot extends Model
             }
 
             foreach ($needToNotice as $perm) {
-                if ($perm->user_id != auth()->user()->id) {
+                if (auth()->check()) {
+                    $id = auth()->user()->id;
+                } else {
+                    $id = 0;
+                }
+                if ($perm->user_id != $id) {
                     Notification::send([
                         'user_id' => $perm->user_id,
                         'hub_id'  => $this->hub_id,

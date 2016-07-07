@@ -41,6 +41,8 @@
 
   socket.on('bot:change', function(message) {
 
+    console.log(message);
+
     var state = message.state;
     var id = message.id;
 
@@ -58,6 +60,21 @@
         $("#bot"+message.id).prop('checked', true, true);
       break;
       case '2':
+        $("#bot"+message.id).prop('disabled', true);
+      break;
+      case -1:
+        alert(message.id);
+        $("#bot"+message.id).prop('disabled', true);
+      break;
+      case 0:
+        $("#bot"+message.id).prop('disabled', false);
+        $("#bot"+message.id).prop('checked', false);
+      break;
+      case 1:
+        $("#bot"+message.id).prop('disabled', false);
+        $("#bot"+message.id).prop('checked', true, true);
+      break;
+      case 2:
         $("#bot"+message.id).prop('disabled', true);
       break;
     }

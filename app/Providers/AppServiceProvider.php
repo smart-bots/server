@@ -16,6 +16,9 @@ class AppServiceProvider extends ServiceProvider
         // if ($this->app->environment('production')) {
         //     $this->app->register(\Jenssegers\Rollbar\RollbarServiceProvider::class);
         // }
+        // if (!\App::environment('local')) {
+        //     \URL::forceSchema('https');
+        // }
     }
 
     /**

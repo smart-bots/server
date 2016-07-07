@@ -15,21 +15,21 @@ use SmartBots\{
 
 use SmartBots\Events\VerifyServerSentEvents;
 
-Route::group([
-    'middleware' => [],
-    'as'         => 'comingsoon'
-], function() {
-    Route::get('','ComingSoonController@index')->name('::index');
-    Route::post('/subscribe','ComingSoonController@subscribe')->name('::subscribe');
-});
-
 // Route::group([
-//     'as'         => 'landing'
+//     'middleware' => [],
+//     'as'         => 'comingsoon'
 // ], function() {
-//     Route::get('/','LandingController@index')->name('::index');
-//     Route::post('/contact','LandingController@contact')->name('::contact');
-//     Route::post('/subscribe','LandingController@subscribe')->name('::subscribe');
+//     Route::get('','ComingSoonController@index')->name('::index');
+//     Route::post('/subscribe','ComingSoonController@subscribe')->name('::subscribe');
 // });
+
+Route::group([
+    'as'         => 'landing'
+], function() {
+    Route::get('/','LandingController@index')->name('::index');
+    Route::post('/contact','LandingController@contact')->name('::contact');
+    Route::post('/subscribe','LandingController@subscribe')->name('::subscribe');
+});
 
 Route::group([
     'middleware' => [],
