@@ -91,7 +91,7 @@
 				<ul class="nav navbar-nav">
 
 					<li class="menuItem"><a href="#whatis">What is?</a></li>
-					<li class="menuItem"><a href="#useit">Features</a></li>
+					<li class="menuItem"><a href="#features">Features</a></li>
 					<li class="menuItem"><a href="#screen">Screenshot</a></li>
 					<li class="menuItem"><a href="#credits">Team</a></li>
 					<li class="menuItem"><a href="#contact">Contact</a></li>
@@ -156,28 +156,19 @@
 		</div>
 	</div>
 
-	<div id ="useit" class="content-section-a">
+	<div id ="features" class="content-section-a">
 
         <div class="container">
 
             <div class="row">
 
-				<div class="col-sm-6 pull-right wow fadeInRightBig">
-                    <img class="img-responsive " src="{{ asset('public/landing/img/ipad.png') }}" alt="">
+				<div class="col-sm-4 pull-right wow fadeInRightBig">
+                    <img class="img-responsive " src="{{ asset('public/landing/img/1.png') }}" alt="">
                 </div>
 
-                <div class="col-sm-6 wow fadeInLeftBig"  data-animation-delay="200">
-                    <h3 class="section-heading">Full Responsive</h3>
-					<div class="sub-title lead3">Lorem ipsum dolor sit atmet sit dolor greand fdanrh<br> sdfs sit atmet sit dolor greand fdanrh sdfs</div>
-                    <p class="lead">
-						In his igitur partibus duabus nihil erat, quod Zeno commuta rest gestiret.
-						Sed virtutem ipsam inchoavit, nihil ampliusuma. Scien tiam pollicentur,
-						uam non erat mirum sapientiae lorem cupido
-						patria esse cariorem. Quae qui non vident, nihilamane umquam magnum ac cognitione.
-					</p>
-
-					 <p><a class="btn btn-embossed btn-primary" href="#" role="button">View Details</a>
-					 <a class="btn btn-embossed btn-info" href="#" role="button">Visit Website</a></p>
+                <div class="col-sm-8 wow fadeInLeftBig"  data-animation-delay="200">
+                    <h3 class="section-heading">Automation - Event - Schedule</h3>
+                    <p class="lead">With 3 features above, users can make SmartBots run automatically. With Automation, users can create many many workflow that make SmartBots work exactly the right way that users want to. With event, users can monitor all activities of bots. With Schedule, users can make SmartBots work automatically intime</p>
 				</div>
             </div>
         </div>
@@ -187,40 +178,52 @@
 
 		<div class="container">
             <div class="row">
-                <div class="col-sm-6 wow fadeInLeftBig">
-                     <div id="owl-demo-1" class="owl-carousel">
-						<a href="{{ asset('public/landing/img/iphone.png') }}" class="image-link">
-							<div class="item">
-								<img  class="img-responsive img-rounded" src="{{ asset('public/landing/img/iphone.png') }}" alt="">
-							</div>
-						</a>
-						<a href="{{ asset('public/landing/img/iphone.png') }}" class="image-link">
-							<div class="item">
-								<img  class="img-responsive img-rounded" src="{{ asset('public/landing/img/iphone.png') }}" alt="">
-							</div>
-						</a>
-						<a href="{{ asset('public/landing/img/iphone.png') }}" class="image-link">
-							<div class="item">
-								<img  class="img-responsive img-rounded" src="{{ asset('public/landing/img/iphone.png') }}" alt="">
-							</div>
-						</a>
-					</div>
+
+                <div class="col-sm-2 pull-left wow fadeInLeftBig">
+                    <img class="img-responsive " src="{{ asset('public/landing/img/2.png') }}" alt="">
                 </div>
 
-                <div class="col-sm-6 wow fadeInRightBig"  data-animation-delay="200">
-                    <h3 class="section-heading">Drag Gallery</h3>
-					<div class="sub-title lead3">Lorem ipsum dolor sit atmet sit dolor greand fdanrh<br> sdfs sit atmet sit dolor greand fdanrh sdfs</div>
-                    <p class="lead">
-						In his igitur partibus duabus nihil erat, quod Zeno commuta rest gestiret.
-						Sed virtutem ipsam inchoavit, nihil ampliusuma. Scien tiam pollicentur,
-						uam non erat mirum sapientiae lorem cupido
-						patria esse cariorem. Quae qui non vident, nihilamane umquam magnum ac cognitione.
-					</p>
-
-					 <p><a class="btn btn-embossed btn-primary" href="#" role="button">View Details</a>
-					 <a class="btn btn-embossed btn-info" href="#" role="button">Visit Website</a></p>
+                <div class="col-sm-10 wow fadeInRightBig"  data-animation-delay="200">
+                    <h3 class="section-heading">Notification System</h3>
+                    <p class="lead">SmartBots's notification system bring a more comprehensive monitor to user, that notice them everything happened in everywhere at anytime.</p>
 				</div>
 			</div>
+        </div>
+    </div>
+
+    <div id ="useit" class="content-section-a">
+
+        <div class="container">
+
+            <div class="row">
+
+				<div class="col-sm-2 pull-right wow fadeInRightBig">
+                    <img class="img-responsive " src="{{ asset('public/landing/img/3.png') }}" alt="">
+                </div>
+
+                <div class="col-sm-10 wow fadeInLeftBig"  data-animation-delay="200">
+                    <h3 class="section-heading">Quick Control Panel</h3>
+                    <p class="lead">This is a very interesting and useful of SmartBots. Quick Control Panel will give users the right to control some bot they want in every page</p>
+				</div>
+            </div>
+        </div>
+    </div>
+
+    <div id ="useit" class="content-section-b">
+
+        <div class="container">
+
+            <div class="row">
+
+				<div class="col-sm-4 pull-right wow fadeInRightBig">
+                    <img class="img-responsive " src="{{ asset('public/landing/img/4.png') }}" alt="">
+                </div>
+
+                <div class="col-sm-8 wow fadeInLeftBig"  data-animation-delay="200">
+                    <h3 class="section-heading">Awesome Technology</h3>
+                    <p class="lead">The SmartBots system is building on top of many awesome technologies: PHP, NodeJS, Laravel, MariaDB, Redis, ExpressJS, SocketIO, LESS, Gulp,...</p>
+				</div>
+            </div>
         </div>
     </div>
 

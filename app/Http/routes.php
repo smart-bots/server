@@ -36,8 +36,10 @@ Route::group([
     'prefix'     => 'api',
     'as'         => 'api'
 ], function() {
-    Route::get('{hub_token}/up/{bot_token}/{status}/{hard?}','ApiController@up')->name('::up');
-    Route::get('{hub_token}/down','ApiController@down')->name('::down');
+    // Route::get('{hub_token}/up/{bot_token}/{status}/{hard?}','ApiController@up')->name('::up');
+    // Route::get('{hub_token}/down','ApiController@down')->name('::down');
+    Route::post('up','ApiController@up')->name('::up');
+    Route::post('down','ApiController@down')->name('::down');
 });
 
 Route::group([

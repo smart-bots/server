@@ -1,1 +1,295 @@
-!function(){var e={},t=null,n=null,i=null,o=null,r={},a=window.devicePixelRatio||1,l=16*a,c={width:7,height:9,font:10*a+"px arial",color:"#ffffff",background:"#F03D25",fallback:!0,crossOrigin:!0,abbreviate:!0},u=function(){var e=navigator.userAgent.toLowerCase();return function(t){return-1!==e.indexOf(t)}}(),f={ie:u("trident"),chrome:u("chrome"),webkit:u("chrome")||u("safari"),safari:u("safari")&&!u("chrome"),mozilla:u("mozilla")&&!u("chrome")&&!u("safari")},d=function(){for(var e=document.getElementsByTagName("link"),t=0,n=e.length;n>t;t++)if((e[t].getAttribute("rel")||"").match(/\bicon\b/i))return e[t];return!1},m=function(){for(var e=document.getElementsByTagName("link"),t=document.getElementsByTagName("head")[0],n=0,i=e.length;i>n;n++){var o="undefined"!=typeof e[n];o&&(e[n].getAttribute("rel")||"").match(/\bicon\b/i)&&t.removeChild(e[n])}},g=function(){if(!n||!t){var e=d();t=e?e.getAttribute("href"):"/favicon.ico",n||(n=t)}return t},h=function(){return o||(o=document.createElement("canvas"),o.width=l,o.height=l),o},s=function(e){if(e){m();var t=document.createElement("link");t.type="image/x-icon",t.rel="icon",t.href=e,document.getElementsByTagName("head")[0].appendChild(t)}},b=function(e,t){if(!h().getContext||f.ie||f.safari||"force"===r.fallback)return v(e);var n=h().getContext("2d"),t=t||"#000000",o=g();i=document.createElement("img"),i.onload=function(){n.clearRect(0,0,l,l),n.drawImage(i,0,0,i.width,i.height,0,0,l,l),(e+"").length>0&&k(n,e,t),y()},!o.match(/^data/)&&r.crossOrigin&&(i.crossOrigin="anonymous"),i.src=o},v=function(e){if(r.fallback){var t=document.title;"("===t[0]&&(t=t.slice(t.indexOf(" "))),(e+"").length>0?document.title="("+e+") "+t:document.title=t}},k=function(e,t,n){"number"==typeof t&&t>99&&r.abbreviate&&(t=T(t));var i=(t+"").length-1,o=r.width*a+6*a*i,c=r.height*a,u=l-c,d=l-o-a,m=16*a,g=16*a,h=2*a;e.font=(f.webkit?"bold ":"")+r.font,e.fillStyle=r.background,e.strokeStyle=r.background,e.lineWidth=a,e.beginPath(),e.moveTo(d+h,u),e.quadraticCurveTo(d,u,d,u+h),e.lineTo(d,m-h),e.quadraticCurveTo(d,m,d+h,m),e.lineTo(g-h,m),e.quadraticCurveTo(g,m,g,m-h),e.lineTo(g,u+h),e.quadraticCurveTo(g,u,g-h,u),e.closePath(),e.fill(),e.beginPath(),e.strokeStyle="rgba(0,0,0,0.3)",e.moveTo(d+h/2,m),e.lineTo(g-h/2,m),e.stroke(),e.fillStyle=r.color,e.textAlign="right",e.textBaseline="top",e.fillText(t,2===a?29:15,f.mozilla?7*a:6*a)},y=function(){h().getContext&&s(h().toDataURL())},T=function(e){for(var t=[["G",1e9],["M",1e6],["k",1e3]],n=0;n<t.length;++n)if(e>=t[n][1]){e=w(e/t[n][1])+t[n][0];break}return e},w=function(e,t){var n=new Number(e);return n.toFixed(t)};e.setOptions=function(e){r={},e.colour&&(e.color=e.colour);for(var t in c)r[t]=e.hasOwnProperty(t)?e[t]:c[t];return this},e.setImage=function(e){return t=e,y(),this},e.setBubble=function(e,t){return e=e||"",b(e,t),this},e.reset=function(){t=n,s(n)},e.setOptions(c),"function"==typeof define&&define.amd?define(e):"undefined"!=typeof module?module.exports=e:window.Tinycon=e}();
+/*!
+ * Tinycon - A small library for manipulating the Favicon
+ * Tom Moor, http://tommoor.com
+ * Copyright (c) 2015 Tom Moor
+ * @license MIT Licensed
+ * @version 0.6.4
+ */
+
+(function(){
+
+  var Tinycon = {};
+  var currentFavicon = null;
+  var originalFavicon = null;
+  var faviconImage = null;
+  var canvas = null;
+  var options = {};
+  var r = window.devicePixelRatio || 1;
+  var size = 16 * r;
+  var defaults = {
+    width: 7,
+    height: 9,
+    font: 10 * r + 'px arial',
+    color: '#ffffff',
+    background: '#F03D25',
+    fallback: true,
+    crossOrigin: true,
+    abbreviate: true
+  };
+
+  var ua = (function () {
+    var agent = navigator.userAgent.toLowerCase();
+    // New function has access to 'agent' via closure
+    return function (browser) {
+      return agent.indexOf(browser) !== -1;
+    };
+  }());
+
+  var browser = {
+    ie: ua('trident'),
+    chrome: ua('chrome'),
+    webkit: ua('chrome') || ua('safari'),
+    safari: ua('safari') && !ua('chrome'),
+    mozilla: ua('mozilla') && !ua('chrome') && !ua('safari')
+  };
+
+  // private methods
+  var getFaviconTag = function(){
+
+    var links = document.getElementsByTagName('link');
+
+    for(var i=0, len=links.length; i < len; i++) {
+      if ((links[i].getAttribute('rel') || '').match(/\bicon\b/i)) {
+        return links[i];
+      }
+    }
+
+    return false;
+  };
+
+  var removeFaviconTag = function(){
+
+    var links = document.getElementsByTagName('link');
+    var head = document.getElementsByTagName('head')[0];
+
+    for(var i=0, len=links.length; i < len; i++) {
+      var exists = (typeof(links[i]) !== 'undefined');
+      if (exists && (links[i].getAttribute('rel') || '').match(/\bicon\b/i)) {
+        head.removeChild(links[i]);
+      }
+    }
+  };
+
+  var getCurrentFavicon = function(){
+
+    if (!originalFavicon || !currentFavicon) {
+      var tag = getFaviconTag();
+      currentFavicon = tag ? tag.getAttribute('href') : '/favicon.ico';
+      if (!originalFavicon) {
+        originalFavicon = currentFavicon;
+      }
+    }
+
+    return currentFavicon;
+  };
+
+  var getCanvas = function (){
+
+    if (!canvas) {
+      canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+    }
+
+    return canvas;
+  };
+
+  var setFaviconTag = function(url){
+    if(url){
+      removeFaviconTag();
+
+      var link = document.createElement('link');
+      link.type = 'image/x-icon';
+      link.rel = 'icon';
+      link.href = url;
+      document.getElementsByTagName('head')[0].appendChild(link);
+    }
+  };
+
+  var log = function(message){
+    if (window.console) window.console.log(message);
+  };
+
+  var drawFavicon = function(label, color) {
+
+    // fallback to updating the browser title if unsupported
+    if (!getCanvas().getContext || browser.ie || browser.safari || options.fallback === 'force') {
+      return updateTitle(label);
+    }
+
+    var context = getCanvas().getContext("2d");
+    var color = color || '#000000';
+    var src = getCurrentFavicon();
+
+    faviconImage = document.createElement('img');
+    faviconImage.onload = function() {
+
+      // clear canvas
+      context.clearRect(0, 0, size, size);
+
+      // draw the favicon
+      context.drawImage(faviconImage, 0, 0, faviconImage.width, faviconImage.height, 0, 0, size, size);
+
+      // draw bubble over the top
+      if ((label + '').length > 0) drawBubble(context, label, color);
+
+      // refresh tag in page
+      refreshFavicon();
+    };
+
+    // allow cross origin resource requests if the image is not a data:uri
+    // as detailed here: https://github.com/mrdoob/three.js/issues/1305
+    if (!src.match(/^data/) && options.crossOrigin) {
+      faviconImage.crossOrigin = 'anonymous';
+    }
+
+    faviconImage.src = src;
+  };
+
+  var updateTitle = function(label) {
+
+    if (options.fallback) {
+      // Grab the current title that we can prefix with the label
+      var originalTitle = document.title;
+
+      // Strip out the old label if there is one
+      if (originalTitle[0] === '(') {
+        originalTitle = originalTitle.slice(originalTitle.indexOf(' '));
+      }
+
+      if ((label + '').length > 0) {
+        document.title = '(' + label + ') ' + originalTitle;
+      } else {
+        document.title = originalTitle;
+      }
+    }
+  };
+
+  var drawBubble = function(context, label, color) {
+
+    // automatic abbreviation for long (>2 digits) numbers
+    if (typeof label == 'number' && label > 99 && options.abbreviate) {
+      label = abbreviateNumber(label);
+    }
+
+    // bubble needs to be larger for double digits
+    var len = (label + '').length-1;
+
+    var width = options.width * r + (6 * r * len),
+      height = options.height * r;
+
+    var top = size - height,
+            left = size - width - r,
+            bottom = 16 * r,
+            right = 16 * r,
+            radius = 2 * r;
+
+    // webkit seems to render fonts lighter than firefox
+    context.font = (browser.webkit ? 'bold ' : '') + options.font;
+    context.fillStyle = options.background;
+    context.strokeStyle = options.background;
+    context.lineWidth = r;
+
+    // bubble
+    context.beginPath();
+        context.moveTo(left + radius, top);
+    context.quadraticCurveTo(left, top, left, top + radius);
+    context.lineTo(left, bottom - radius);
+        context.quadraticCurveTo(left, bottom, left + radius, bottom);
+        context.lineTo(right - radius, bottom);
+        context.quadraticCurveTo(right, bottom, right, bottom - radius);
+        context.lineTo(right, top + radius);
+        context.quadraticCurveTo(right, top, right - radius, top);
+        context.closePath();
+        context.fill();
+
+    // bottom shadow
+    context.beginPath();
+    context.strokeStyle = "rgba(0,0,0,0.3)";
+    context.moveTo(left + radius / 2.0, bottom);
+    context.lineTo(right - radius / 2.0, bottom);
+    context.stroke();
+
+    // label
+    context.fillStyle = options.color;
+    context.textAlign = "right";
+    context.textBaseline = "top";
+
+    // unfortunately webkit/mozilla are a pixel different in text positioning
+    context.fillText(label, r === 2 ? 29 : 15, browser.mozilla ? 7*r : 6*r);
+  };
+
+  var refreshFavicon = function(){
+    // check support
+    if (!getCanvas().getContext) return;
+
+    setFaviconTag(getCanvas().toDataURL());
+  };
+
+  var abbreviateNumber = function(label) {
+    var metricPrefixes = [
+      ['G', 1000000000],
+      ['M',    1000000],
+      ['k',       1000]
+    ];
+
+    for(var i = 0; i < metricPrefixes.length; ++i) {
+      if (label >= metricPrefixes[i][1]) {
+        label = round(label / metricPrefixes[i][1]) + metricPrefixes[i][0];
+        break;
+      }
+    }
+
+    return label;
+  };
+
+  var round = function (value, precision) {
+    var number = new Number(value);
+    return number.toFixed(precision);
+  };
+
+  // public methods
+  Tinycon.setOptions = function(custom){
+    options = {};
+
+    // account for deprecated UK English spelling
+    if (custom.colour) {
+      custom.color = custom.colour;
+    }
+
+    for(var key in defaults){
+      options[key] = custom.hasOwnProperty(key) ? custom[key] : defaults[key];
+    }
+    return this;
+  };
+
+  Tinycon.setImage = function(url){
+    currentFavicon = url;
+    refreshFavicon();
+    return this;
+  };
+
+  Tinycon.setBubble = function(label, color) {
+    label = label || '';
+    drawFavicon(label, color);
+    return this;
+  };
+
+  Tinycon.reset = function(){
+    currentFavicon = originalFavicon;
+    setFaviconTag(originalFavicon);
+  };
+
+  Tinycon.setOptions(defaults);
+
+  if(typeof define === 'function' && define.amd) {
+    define(Tinycon);
+  } else if (typeof module !== 'undefined') {
+    module.exports = Tinycon;
+  } else {
+    window.Tinycon = Tinycon;
+  }
+
+})();
+
+//# sourceMappingURL=tinycon.js.map

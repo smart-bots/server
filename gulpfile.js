@@ -42,12 +42,11 @@ var
         'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' : 'bootstrap-datetimepicker/bootstrap-datetimepicker.js',
         'bootstrap-select/dist/js/bootstrap-select.js'                               : 'bootstrap-select/bootstrap-select.js',
         'raven-js/dist/raven.js'                                                     : 'raven-js/raven.js',
-        'amcharts3/amcharts/amcharts.js'                                             : 'amcharts/amcharts.js',
-        'amcharts3/amcharts/serial.js'                                               : 'amcharts/serial.js',
         'socket.io-client/socket.io.js'                                              : 'socket.io/socket.io.js',
         'intl-tel-input/build/js/intlTelInput.js'                                    : 'intl-tel-input/js/intlTelInput.js',
         'notifyjs/dist/notify.js'                                                    : 'notifyjs/js/notify.js',
-        'tinycon/tinycon.js'                                                         : 'tinycon/tinycon.js'
+        'tinycon/tinycon.js'                                                         : 'tinycon/tinycon.js',
+        'highcharts/highcharts.js'                                                   : 'highcharts/highcharts.js'
 
     },
 

@@ -21,7 +21,15 @@ class ApiController extends Controller
      * @return Illuminate\Http\JsonResponse
      * @example http://dev.env/smartbots/api/Vznx2HNra15IBNEGys8I1xsjm6FTq80v9ZJe8sufj5CVsjOgqK/up/abcabcabc1/1
      */
-    public function up(string $token,string $bot_token,int $status,int $hard = 0) {
+    // public function up(string $token,string $bot_token,int $status,int $hard = 0,float $data = 0) {
+
+    public function up(Request $request) {
+
+        $token = $request->hubToken;
+        $bot_token = $request->botToken;
+        $status = $request->status;
+        $hard = $request->hard;
+        $data = $request->data;
 
         if (Hub::where('token',$token)->firstOrFail()->hasBotToken($bot_token))
         {
@@ -53,13 +61,19 @@ class ApiController extends Controller
      * @return Illuminate\Http\JsonResponse
      * @example http://dev.env/smartbots/api/Vznx2HNra15IBNEGys8I1xsjm6FTq80v9ZJe8sufj5CVsjOgqK/down
      */
-    public function down(string $token) {
+    // public function down(string $token) {
+    public function down(Request $request) {
+
+        $token = $request->hubToken;
 
         $bots  = Hub::where('token',$token)->firstOrFail()->bots()->activated()->where('true',0)->get();
         $nBots = ["c" => count($bots)];
 
         for ($i=0; $i < count($bots); $i++) {
-            $nBots[$i] = $bots[$i]['token'].$bots[$i]['status'];
+            $nBots[$i] = [
+                'token' => $bots[$i]['token'],
+                'state' => $bots[$i]['status']
+            ];
         }
 
         return response()->json($nBots);

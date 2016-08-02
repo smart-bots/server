@@ -112,7 +112,7 @@ class UserController extends Controller
 
             $seconds = $this->secondsRemainingOnLockout($request);
 
-            $error = ['global' => trans('login.throttle',['second' => $seconds])];
+            $error = ['global' => trans('account/login.throttle',['second' => $seconds])];
 
             return response()->json($error);
         }
@@ -137,7 +137,7 @@ class UserController extends Controller
             $this->incrementLoginAttempts($request);
         }
 
-        $error = ['global' => trans('login.failed')];
+        $error = ['global' => trans('account/login.failed')];
 
         return response()->json($error);
     }
@@ -166,7 +166,7 @@ class UserController extends Controller
             'password_confirmation' => 'required'
         ];
 
-        $validator = Validator::make($request->all(), $rules, ['agree_with_terms.required' => trans('register.terms_disagreement')]);
+        $validator = Validator::make($request->all(), $rules, ['agree_with_terms.required' => trans('account/register.terms_disagreement')]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors());
@@ -274,7 +274,7 @@ class UserController extends Controller
             'phone' => 'required|numeric|unique:users,id,'.auth()->user()->id
         ];
 
-        $validator = Validator::make($request->all(), $rules, ['agree_with_terms.required' => trans('register.terms_disagreement')]);
+        $validator = Validator::make($request->all(), $rules, ['agree_with_terms.required' => trans('account/register.terms_disagreement')]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors());

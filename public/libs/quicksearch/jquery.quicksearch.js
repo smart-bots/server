@@ -1,1 +1,183 @@
-!function(t,e,s,n){t.fn.quicksearch=function(s,n){var i,r,o,u,h="",l=this,a=t.extend({delay:100,selector:null,stripeRows:null,loader:null,noResults:"",matchedResultsCount:0,bind:"keyup",onBefore:function(){},onAfter:function(){},show:function(){this.style.display=""},hide:function(){this.style.display="none"},prepareQuery:function(t){return t.toLowerCase().split(" ")},testQuery:function(t,e,s){for(var n=0;n<t.length;n+=1)if(-1===e.indexOf(t[n]))return!1;return!0}},n);return this.go=function(){for(var t=0,e=0,s=!0,n=a.prepareQuery(h),i=0===h.replace(" ","").length,t=0,u=o.length;u>t;t++)i||a.testQuery(n,r[t],o[t])?(a.show.apply(o[t]),s=!1,e++):a.hide.apply(o[t]);return s?this.results(!1):(this.results(!0),this.stripe()),this.matchedResultsCount=e,this.loader(!1),a.onAfter(),this},this.search=function(t){h=t,l.trigger()},this.currentMatchedResults=function(){return this.matchedResultsCount},this.stripe=function(){if("object"==typeof a.stripeRows&&null!==a.stripeRows){var e=a.stripeRows.join(" "),s=a.stripeRows.length;u.not(":hidden").each(function(n){t(this).removeClass(e).addClass(a.stripeRows[n%s])})}return this},this.strip_html=function(e){var s=e.replace(new RegExp("<[^<]+>","g"),"");return s=t.trim(s.toLowerCase())},this.results=function(e){return"string"==typeof a.noResults&&""!==a.noResults&&(e?t(a.noResults).hide():t(a.noResults).show()),this},this.loader=function(e){return"string"==typeof a.loader&&""!==a.loader&&(e?t(a.loader).show():t(a.loader).hide()),this},this.cache=function(){u=t(s),"string"==typeof a.noResults&&""!==a.noResults&&(u=u.not(a.noResults));var e="string"==typeof a.selector?u.find(a.selector):t(s).not(a.noResults);return r=e.map(function(){return l.strip_html(this.innerHTML)}),o=u.map(function(){return this}),h=h||this.val()||"",this.go()},this.trigger=function(){return this.loader(!0),a.onBefore(),e.clearTimeout(i),i=e.setTimeout(function(){l.go()},a.delay),this},this.cache(),this.results(!0),this.stripe(),this.loader(!1),this.each(function(){t(this).on(a.bind,function(){h=t(this).val(),l.trigger()})})}}(jQuery,this,document);
+(function($, window, document, undefined) {
+	$.fn.quicksearch = function (target, opt) {
+		
+		var timeout, cache, rowcache, jq_results, val = '', e = this, options = $.extend({ 
+			delay: 100,
+			selector: null,
+			stripeRows: null,
+			loader: null,
+			noResults: '',
+			matchedResultsCount: 0,
+			bind: 'keyup',
+			onBefore: function () { 
+				return;
+			},
+			onAfter: function () { 
+				return;
+			},
+			show: function () {
+				this.style.display = "";
+			},
+			hide: function () {
+				this.style.display = "none";
+			},
+			prepareQuery: function (val) {
+				return val.toLowerCase().split(' ');
+			},
+			testQuery: function (query, txt, _row) {
+				for (var i = 0; i < query.length; i += 1) {
+					if (txt.indexOf(query[i]) === -1) {
+						return false;
+					}
+				}
+				return true;
+			}
+		}, opt);
+		
+		this.go = function () {
+			
+			var i = 0,
+				numMatchedRows = 0,
+				noresults = true, 
+				query = options.prepareQuery(val),
+				val_empty = (val.replace(' ', '').length === 0);
+			
+			for (var i = 0, len = rowcache.length; i < len; i++) {
+				if (val_empty || options.testQuery(query, cache[i], rowcache[i])) {
+					options.show.apply(rowcache[i]);
+					noresults = false;
+					numMatchedRows++;
+				} else {
+					options.hide.apply(rowcache[i]);
+				}
+			}
+			
+			if (noresults) {
+				this.results(false);
+			} else {
+				this.results(true);
+				this.stripe();
+			}
+			
+			this.matchedResultsCount = numMatchedRows;
+			this.loader(false);
+			options.onAfter();
+			
+			return this;
+		};
+		
+		/*
+		 * External API so that users can perform search programatically. 
+		 * */
+		this.search = function (submittedVal) {
+			val = submittedVal;
+			e.trigger();
+		};
+		
+		/*
+		 * External API to get the number of matched results as seen in 
+		 * https://github.com/ruiz107/quicksearch/commit/f78dc440b42d95ce9caed1d087174dd4359982d6
+		 * */
+		this.currentMatchedResults = function() {
+			return this.matchedResultsCount;
+		};
+		
+		this.stripe = function () {
+			
+			if (typeof options.stripeRows === "object" && options.stripeRows !== null)
+			{
+				var joined = options.stripeRows.join(' ');
+				var stripeRows_length = options.stripeRows.length;
+				
+				jq_results.not(':hidden').each(function (i) {
+					$(this).removeClass(joined).addClass(options.stripeRows[i % stripeRows_length]);
+				});
+			}
+			
+			return this;
+		};
+		
+		this.strip_html = function (input) {
+			var output = input.replace(new RegExp('<[^<]+\>', 'g'), "");
+			output = $.trim(output.toLowerCase());
+			return output;
+		};
+		
+		this.results = function (bool) {
+			if (typeof options.noResults === "string" && options.noResults !== "") {
+				if (bool) {
+					$(options.noResults).hide();
+				} else {
+					$(options.noResults).show();
+				}
+			}
+			return this;
+		};
+		
+		this.loader = function (bool) {
+			if (typeof options.loader === "string" && options.loader !== "") {
+				 (bool) ? $(options.loader).show() : $(options.loader).hide();
+			}
+			return this;
+		};
+		
+		this.cache = function () {
+			
+			jq_results = $(target);
+			
+			if (typeof options.noResults === "string" && options.noResults !== "") {
+				jq_results = jq_results.not(options.noResults);
+			}
+			
+			var t = (typeof options.selector === "string") ? jq_results.find(options.selector) : $(target).not(options.noResults);
+			cache = t.map(function () {
+				return e.strip_html(this.innerHTML);
+			});
+			
+			rowcache = jq_results.map(function () {
+				return this;
+			});
+
+			/*
+			 * Modified fix for sync-ing "val". 
+			 * Original fix https://github.com/michaellwest/quicksearch/commit/4ace4008d079298a01f97f885ba8fa956a9703d1
+			 * */
+			val = val || this.val() || "";
+			
+			return this.go();
+		};
+		
+		this.trigger = function () {
+			this.loader(true);
+			options.onBefore();
+			
+			window.clearTimeout(timeout);
+			timeout = window.setTimeout(function () {
+				e.go();
+			}, options.delay);
+			
+			return this;
+		};
+		
+		this.cache();
+		this.results(true);
+		this.stripe();
+		this.loader(false);
+		
+		return this.each(function () {
+			
+			/*
+			 * Changed from .bind to .on.
+			 * */
+			$(this).on(options.bind, function () {
+				
+				val = $(this).val();
+				e.trigger();
+			});
+		});
+		
+	};
+
+}(jQuery, this, document));
+
+//# sourceMappingURL=jquery.quicksearch.js.map
