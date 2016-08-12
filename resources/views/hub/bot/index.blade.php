@@ -2,7 +2,7 @@
   use SmartBots\Hub;
 ?>
 @extends('hub.master')
-@section('title','Hub bots')
+@section('title',trans('hub/bot.index'))
 @section('additionHeader')
 @endsection
 @section('additionFooter')
@@ -96,7 +96,7 @@
             {!! Form::button('<span class="btn-label"><i class="fa fa-plus" aria-hidden="true"></i></span>Add bot', ['type' => 'button', 'class' => 'btn btn-default waves-effect waves-light btn-create']) !!}
           </a>
           @endif
-          <h3 class="m-t-0 header-title"><b>Bots list</b></h3>
+          <h3 class="m-t-0 header-title"><b>@trans('hub/bot.list')</b></h3>
           @if (count($bots)>0)
             <ul class="hubs-list clearfix">
             @foreach ($bots as $bot)
@@ -112,7 +112,7 @@
             @endforeach
             </ul>
           @else
-            <p>No bot found.</p>
+            <p>@trans('hub/bot.no_bot')</p>
           @endif
         </div>
     </div>

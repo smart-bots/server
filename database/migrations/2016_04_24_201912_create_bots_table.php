@@ -23,6 +23,7 @@ class CreateBotsTable extends Migration
             $table->tinyInteger('type');
             $table->boolean('status');
             $table->boolean('true');
+            $table->text('data');
         });
     }
 

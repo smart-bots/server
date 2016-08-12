@@ -1,5 +1,5 @@
 @extends('hub.master')
-@section('title','Add new bot')
+@section('title',trans('hub/bot.add_new_bot'))
 @section('additionHeader')
 <link rel="stylesheet" href="@asset('public/libs/html5imageupload/html5imageupload.css')">
 <link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
@@ -12,8 +12,8 @@
   $('.dropzone').html5imageupload();
 
   var searchableObj = {
-      selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
-      selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
+      selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='@trans('hub/bot.search')'>",
+      selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='@trans('hub/bot.search')'>",
       afterInit: function (ms) {
           var that = this,
               $selectableSearch = that.$selectableUl.prev(),

@@ -46,7 +46,7 @@ var
         'intl-tel-input/build/js/intlTelInput.js'                                    : 'intl-tel-input/js/intlTelInput.js',
         'notifyjs/dist/notify.js'                                                    : 'notifyjs/js/notify.js',
         'tinycon/tinycon.js'                                                         : 'tinycon/tinycon.js',
-        'highcharts/highcharts.js'                                                   : 'highcharts/highcharts.js'
+        'highcharts/highstock.js'                                                    : 'highcharts/highstock.js'
 
     },
 

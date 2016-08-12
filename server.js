@@ -1,6 +1,10 @@
 var
     app            = require('express')(),
     http           = require('http').Server(app),
+    // https          = require('https').Server({
+    // key: fs.readFileSync('smartbotsxyz.key'),
+    // cert: fs.readFileSync('smartbotsxyz.crt'),
+    // requestCert: true}, app),
     io             = require('socket.io')(http),
     Redis          = require('ioredis'),
     redis          = new Redis(),

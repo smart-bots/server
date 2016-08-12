@@ -1,13 +1,13 @@
 <?php
 
 return [
-    'title' => 'Edit',
-    'account' => 'Account',
+    'title' => 'Chỉnh sửa',
+    'account' => 'Tài khoản',
     'avatar' => 'Avatar',
-    'username' => 'Username',
-    'name' => 'Name',
+    'username' => 'Tên tài khoản',
+    'name' => 'Tên',
     'email' => 'Email',
-    'phone' => 'Phone number',
-    'phone_verify' => 'Verify',
-    'edit' => 'Save'
+    'phone' => 'Số điện thoại',
+    'phone_verify' => 'Chứng thực',
+    'edit' => 'Lưu'
 ];

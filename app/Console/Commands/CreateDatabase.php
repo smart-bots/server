@@ -60,9 +60,9 @@ class CreateDatabase extends Command
         $sql = "CREATE DATABASE `$database` CHARACTER SET `$charset` COLLATE `$collation`";
 
         if (mysqli_query($conn, $sql)) {
-            $this->line('Database created successfully');
+            $this->info('Database created successfully!');
         } else {
-            $this->line('Error creating database: '.mysqli_error($conn));
+            $this->error('Error creating database: '.mysqli_error($conn));
         }
 
         mysqli_close($conn);

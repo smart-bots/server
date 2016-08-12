@@ -56,7 +56,7 @@
                     </div>
                     @endif
                     <form class="navbar-left app-search pull-left hidden-xs" role="search">
-                        <input class="form-control" placeholder="Search..." type="text">
+                        <input class="form-control" placeholder="{{ trans('hub/hub.search') }}" type="text">
                         <a href="#">
                             <i class="fa fa-search"></i>
                         </a>
@@ -151,6 +151,20 @@
                 });
             });
     }
+
+    function setLang(lang) {
+                $.ajax({
+                    url : '@route('lang')/'+lang,
+                    type : 'get',
+                    dataType : 'json',
+                    success : function (response)
+                    {
+                        window.location.reload();
+                    }
+                });
+
+                return false;
+            }
 </script>
 @if (session()->has('currentHub'))
 <script type="text/javascript" src="@asset('public/libs/socket.io/socket.io.js')"></script>
@@ -162,6 +176,7 @@
 <script>
 
     var socket = io('@env('APP_DOMAIN'):@env('SOCKETIO_PORT')@env('APP_NAMESPACE')');
+    //, {secure: true}
 
     function hubDeactivate() {
         $.ajax({

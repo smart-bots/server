@@ -32,6 +32,7 @@ class BotController extends Controller
     }
 
     /**
+     *
      * Show up bot create form
      * @return Illuminate\Contracts\View\View
      */

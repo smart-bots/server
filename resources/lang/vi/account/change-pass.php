@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'title' => 'Change password',
-    'account' => 'Account',
-    'cur_pass' => 'Current password',
-    'new_pass' =>' New password',
-    'confirm_pass' => 'Confirm password',
-    'change_pass' => 'Save'
+    'title' => 'Đổi mật khẩu',
+    'account' => 'Tài khoản',
+    'cur_pass' => 'Mật khẩu hiện tại',
+    'new_pass' =>' Mật khẩu mới',
+    'confirm_pass' => 'Xác nhận lại mật khẩu',
+    'change_pass' => 'Lưu'
 ];

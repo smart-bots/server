@@ -1,16 +1,16 @@
 <?php
 
 return [
-    'title' => 'Verify',
-    'helper' => 'Verify your account',
-    'mini_helper' => 'Please fill in the form below. Once completed, you will see a popup with a phone number. Then you have to dial the number within 90 seconds, otherwise verification will expired.',
-    'phone' => 'Phone number',
-    'verify' => 'Verify',
-    '2nd-helper' => 'Lost?',
-    'logout' => 'Not your account? Logout',
-    'info' => 'Dial this number within 90 secs from now to verify',
-    'expired_title' => 'Too late..',
-    'expired_text' => 'Your verification process is expired',
-    'verified_title' => 'Verified!',
-    'verified_text' => 'It\\\'s seems your number is correct'
+    'title' => 'Xác nhận',
+    'helper' => 'Xác nhận tài khoản của bạn',
+    'mini_helper' => 'Xin vui lòng điền vào mẫu dưới đây. Sau khi hoàn thành, bạn sẽ thấy một popup với một số điện thoại hiện ra. Sau đó, bạn phải gọi đến số đó trong vòng 90 giây, nếu không xác minh sẽ hết hạn.',
+    'phone' => 'Số điện thoại',
+    'verify' => 'Xác nhận',
+    '2nd-helper' => 'Lạc đường?',
+    'logout' => 'Không phải tài khoản của bạn? Đăng xuất',
+    'info' => 'Gọi đến số điện thoại này trong vòng 90 giây để xác nhận',
+    'expired_title' => 'Quá trễ...',
+    'expired_text' => 'Phiên xác nhận của bạn đã hết hạn',
+    'verified_title' => 'Xác nhân thành công',
+    'verified_text' => 'Số điện thoại của bạn là chính xác'
 ];

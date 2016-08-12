@@ -179,4 +179,12 @@ class Bot extends Model
             return $this->status;
         }
     }
+
+    public function getDataAttribute($value) {
+        return json_decode($value);
+    }
+
+    public function setAttributeData($data) {
+        $this->attributes['data'] = json_encode($data);
+    }
 }

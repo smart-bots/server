@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'title' => 'Leave your account?',
-    'text' => 'Are you sure?',
-    'confirm' => 'Logout',
-    'cancel' => 'Stay'
+    'title' => 'Thoát khỏi tài khoản?',
+    'text' => 'Bạn có chắc không?',
+    'confirm' => 'Đăng xuất',
+    'cancel' => 'Ở lại'
 ];

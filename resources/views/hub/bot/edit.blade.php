@@ -2,7 +2,7 @@
   use SmartBots\Bot;
 ?>
 @extends('hub.master')
-@section('title','Edit bot')
+@section('title',trans('hub/bot.edit_title'))
 @section('additionHeader')
 <link rel="stylesheet" href="@asset('public/libs/html5imageupload/html5imageupload.css')">
 <link href="@asset('public/libs/multiselect/css/multi-select.css')" media="screen" rel="stylesheet" type="text/css">
@@ -11,12 +11,13 @@
 <script src="@asset('public/libs/html5imageupload/html5imageupload.js')"></script>
 <script src="@asset('public/libs/multiselect/js/jquery.multi-select.js')" type="text/javascript"></script>
 <script src="@asset('public/libs/quicksearch/jquery.quicksearch.js')" type="text/javascript"></script>
+<script src="@asset('public/libs/highcharts/highstock.js')" type="text/javascript"></script>
 <script>
   $('.dropzone').html5imageupload();
 
   var searchableObj = {
-      selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
-      selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Search...'>",
+      selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='@trans('hub/bot.search')'>",
+      selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='@trans('hub/bot.search')'>",
       afterInit: function (ms) {
           var that = this,
               $selectableSearch = that.$selectableUl.prev(),
@@ -55,11 +56,11 @@
 
   function botDeactivate() {
     swal({
-      title: "Are you sure?",
-      text: "To deactivate this bot?",
+      title: "@trans('hub/bot.deactivate_title')",
+      text: "@trans('hub/bot.deactivate_text')",
       type: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes"}, function() {
+      confirmButtonText: "@trans('hub/bot.deactivate_confirm')"}, function() {
           $.ajax({
               url : '@route('h::b::deactivate',$bot['id'])',
               type : 'post',
@@ -78,11 +79,11 @@
 
   function botReactivate() {
     swal({
-        title: "Are you sure?",
-        text: "To reactivate this bot?",
+        title: "@trans('hub/bot.reactivate_title')",
+        text: "@trans('hub/bot.reactivate_text')",
         type: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes"}, function() {
+        confirmButtonText: "@trans('hub/bot.reactivate_confirm')"}, function() {
             $.ajax({
                 url : '@route('h::b::reactivate',$bot['id'])',
                 type : 'post',
@@ -101,11 +102,11 @@
 
   function botDelete() {
     swal({
-        title: "Are you sure?",
-        text: "To delete this bot?",
+        title: "@trans('hub/bot.delete_tile')",
+        text: "@trans('hub/bot.delete_text')",
         type: "error",
         showCancelButton: true,
-        confirmButtonText: "Yes",
+        confirmButtonText: "@trans('hub/bot.delete_confirm')",
         closeOnConfirm: false }, function() {
             $.ajax({
                 url : '@route('h::b::destroy',$bot['id'])',
@@ -133,6 +134,60 @@
     });
     return false;
   }
+
+  // $(function () {
+  //     $('#chart').highcharts('StockChart', {
+  //       credits: {
+  //           enabled: false
+  //       },
+  //       rangeSelector : {
+  //           selected: 1
+  //       },
+  //       title: {
+  //           text: 'Hourly power consumption',
+  //           x: -20
+  //       },
+  //       subtitle: {
+  //           text: 'of Plug-bot',
+  //           x: -20
+  //       },
+  //       xAxis: {
+  //           type: 'datetime',
+  //           tickInterval: 3600 * 1000,
+  //           min: Date.UTC(2016,4,22),
+  //           max: Date.UTC(2016,4,23),
+  //       },
+  //       yAxis: {
+  //           title: {
+  //               text: 'Ampe'
+  //           },
+  //           plotLines: [{
+  //               value: 0,
+  //               width: 1,
+  //               color: '#808080'
+  //           }]
+  //       },
+  //       tooltip: {
+  //           valueSuffix: 'A'
+  //       },
+  //       legend: {
+  //           enabled: false,
+  //           layout: 'vertical',
+  //           align: 'center',
+  //           verticalAlign: 'bottom',
+  //           borderWidth: 0
+  //       },
+  //       series: [{
+  //           name: 'Plug-bot',
+  //           data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6, 7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
+  //           pointStart: Date.UTC(2016, 4, 22),
+  //           pointInterval: 3600 * 1000,
+  //           tooltip: {
+  //               valueDecimals: 2
+  //           }
+  //       }]
+  //   });
+  // });
 </script>
 @endsection
 @section('body')
@@ -144,6 +199,7 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="card-box">
+      {{-- <div id="chart" style="width:100%; height:400px;"></div> --}}
     {!! Form::open(['route' => ['h::b::edit',$bot['id']], 'name' => 'bot-edit-form', 'class' => 'form-horizontal', 'onsubmit' => 'return botEdit()']) !!}
       {!! Form::hidden('id', $bot['id']) !!}
       <div class="form-group margin-bottom-sm">
@@ -152,20 +208,20 @@
           <?php
             switch ($bot['status']) {
               case -1:
-                echo '<h4><span class="label label-danger label-md" id="botTus">Deactivated</span></h4>';
+                echo '<h4><span class="label label-danger label-md" id="botTus">'.trans('hub/bot.deactivate').'</span></h4>';
                 break;
               case 0:
                 if ($bot['true'] == 1) {
-                  echo '<h4><span class="label label-default label-md" id="botTus">Turned off</span></h4>';
+                  echo '<h4><span class="label label-default label-md" id="botTus">'.trans('hub/bot.turning_off').'</span></h4>';
                 } else {
-                  echo '<h4><span class="label label-info label-md" id="botTus">Turning off</span></h4>';
+                  echo '<h4><span class="label label-info label-md" id="botTus">'.trans('hub/bot.turning_on').'</span></h4>';
                 }
                 break;
               case 1:
                 if ($bot['true'] == 1) {
-                  echo '<h4><span class="label label-success label-md" id="botTus">Turned on</span></h4>';
+                  echo '<h4><span class="label label-success label-md" id="botTus">'.trans('hub/bot.turning_off').'</span></h4>';
                 } else {
-                  echo '<h4><span class="label label-primary label-md" id="botTus">Turning on</span></h4>';
+                  echo '<h4><span class="label label-primary label-md" id="botTus">'.trans('hub/bot.turning_on').'</span></h4>';
                 }
                 break;
             }
@@ -173,19 +229,19 @@
         </div>
       </div>
       <div class="form-group">
-        {!! Form::label('name', 'Name', ['class' => 'col-sm-2 control-label']) !!}
+        {!! Form::label('name', trans('hub/bot.name'), ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
           {!! Form::text('name', $bot['name'], ['class' => 'form-control']) !!}
         </div>
       </div>
       <div class="form-group">
-        {!! Form::label('description', 'Description', ['class' => 'col-sm-2 control-label']) !!}
+        {!! Form::label('description', trans('hub/bot.description'), ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
           {!! Form::textarea('description', $bot['description'], ['class' => 'form-control']) !!}
         </div>
       </div>
       <div class="form-group">
-        {!! Form::label('image', 'Image', ['class' => 'col-sm-2 control-label']) !!}
+        {!! Form::label('image', trans('hub/bot.image'), ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
           <div class="dropzone image-dropzone" data-image="@asset($bot['image'])" data-ghost="false" data-canvas="true" data-originalsize="false" data-ajax="false" data-width="200" data-height="200">
             {!! Form::file('image') !!}
@@ -193,7 +249,7 @@
         </div>
       </div>
       <div class="form-group">
-        {!! Form::label('type', 'Type', ['class' => 'col-sm-2 control-label']) !!}
+        {!! Form::label('type', trans('hub/bot.type'), ['class' => 'col-sm-2 control-label']) !!}
         <div class="col-sm-10">
           {!! Form::select('type', [
             '1' => 'Flip-bot',
@@ -206,41 +262,41 @@
           </div>
         </div>
         <div class="form-group">
-          {!! Form::label('token', 'Token', ['class' => 'col-sm-2 control-label']) !!}
+          {!! Form::label('token', trans('hub/bot.token'), ['class' => 'col-sm-2 control-label']) !!}
           <div class="col-sm-10">
             {!! Form::text('token', $bot['token'], ['class' => 'form-control','readonly' => 'readonly']) !!}
           </div>
         </div>
         <div class="form-group">
-          {!! Form::label('notice', 'Get notify', ['class' => 'col-sm-2 control-label']) !!}
+          {!! Form::label('notice', trans('hub/bot.get_notify'), ['class' => 'col-sm-2 control-label']) !!}
           <div class="col-sm-10">
             <div class="material-switch" style="margin-top:8px">
                 <input id="notice" name="notice" type="checkbox" value="1" @if (auth()->user()->willNoticeByBot($bot['id'])) checked @endif/>
-                <label for="notice" class="label-default"></label>
+                <label for="notice" class="label-default0"></label>
             </div>
           </div>
         </div>
         <div class="form-group">
-          {!! Form::label('permissions', 'Low permissions', ['class' => 'col-sm-2 control-label']) !!}
+          {!! Form::label('permissions', trans('hub/bot.low_permissions'), ['class' => 'col-sm-2 control-label']) !!}
           <div class="col-sm-10">
             {!! Form::select('permissions[]', $users, $selected, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
-            <span class="help-block margin-bottom-none">Users can manage this bot</span>
+            <span class="help-block margin-bottom-none">@trans('hub/bot.low_perm_tip')</span>
           </div>
         </div>
         <div class="form-group">
-          {!! Form::label('highpermissions', 'High permissions', ['class' => 'col-sm-2 control-label']) !!}
+          {!! Form::label('highpermissions', trans('hub/bot.high_permissions'), ['class' => 'col-sm-2 control-label']) !!}
           <div class="col-sm-10">
             {!! Form::select('highpermissions[]', $users, $selected2, ['class' => 'form-control', 'multiple' => 'multiple']) !!}
-            <span class="help-block margin-bottom-none">Users can manage this bot</span>
+            <span class="help-block margin-bottom-none">@trans('hub/bot.high_perm_tip')</span>
           </div>
         </div>
         @if(auth()->user()->can('high',Bot::findOrFail($bot['id'])))
-          {!! Form::button('<span class="btn-label"><i class="fa fa-floppy-o" aria-hidden="true"></i></span>Save', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
-          {!! Form::button('<span class="btn-label"><i class="fa fa-trash" aria-hidden="true"></i></span>Delete', ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'botDelete()']) !!}</a>
+          {!! Form::button('<span class="btn-label"><i class="fa fa-floppy-o" aria-hidden="true"></i></span>'.trans('hub/bot.save'), ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
+          {!! Form::button('<span class="btn-label"><i class="fa fa-trash" aria-hidden="true"></i></span>'.trans('hub/bot.delete'), ['type' => 'button', 'class' => 'btn btn-danger pull-right', 'onclick' => 'botDelete()']) !!}</a>
           @if ($bot['status'] != -1)
-            {!! Form::button('<span class="btn-label"><i class="fa fa-ban" aria-hidden="true"></i></span><span>Deactivate</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right m-r-5','id' => 'botDeactivateBtn','onclick' => 'botDeactivate()']) !!}
+            {!! Form::button('<span class="btn-label"><i class="fa fa-ban" aria-hidden="true"></i></span><span>'.trans('hub/bot.deactivate').'</span>', ['type' => 'button', 'class' => 'btn btn-warning pull-right m-r-5','id' => 'botDeactivateBtn','onclick' => 'botDeactivate()']) !!}
           @else
-            {!! Form::button('<span class="btn-label"><i class="fa fa-check-square-o" aria-hidden="true"></i></i></span><span>Reactivate</span>', ['type' => 'button', 'class' => 'btn btn-default pull-right m-r-5','id' => 'botReactivateBtn','onclick' => 'botReactivate()']) !!}
+            {!! Form::button('<span class="btn-label"><i class="fa fa-check-square-o" aria-hidden="true"></i></i></span><span>'.trans('hub/bot.reactivate').'</span>', ['type' => 'button', 'class' => 'btn btn-default pull-right m-r-5','id' => 'botReactivateBtn','onclick' => 'botReactivate()']) !!}
           @endif
         @endif
     {!! Form::close() !!}

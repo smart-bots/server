@@ -1,5 +1,5 @@
 @extends('hub.master')
-@section('title','Hub login')
+@section('title',@trans('hub/hub.login'))
 @section('additionHeader')
 @endsection
 @section('additionFooter')
@@ -33,11 +33,11 @@
     <div class="col-sm-12">
         <div class="card-box">
           <a href="@route('h::create')">
-            {!! Form::button('<span class="btn-label"><i class="fa fa-plus"></i></span>New hub', ['class' => 'btn btn-default waves-effect waves-light btn-create']) !!}
+            {!! Form::button('<span class="btn-label"><i class="fa fa-plus"></i></span>'.trans('hub/hub.new_hub'), ['class' => 'btn btn-default waves-effect waves-light btn-create']) !!}
           </a>
           <p>
           @if (count($hubs) > 0)
-          Choose your hub to start your session</p>
+          {{ trans('hub/hub.login_tip_exist') }}</p>
             <ul class="hubs-list clearfix">
             @foreach ($hubs as $hub)
               <li>
@@ -50,7 +50,7 @@
             @endforeach
             </ul>
           @else
-          Add your own hub or join some hubs first</p>
+          {{ trans('hub/hub.login_tip_nothing') }}</p>
           @endif
         </div>
     </div>

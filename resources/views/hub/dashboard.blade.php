@@ -14,7 +14,7 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
-            Comming soon
+            Comming soon...
         </div>
     </div>
 </div>

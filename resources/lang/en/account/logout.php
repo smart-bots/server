@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'title' => 'Leave your account?',
-    'text' => 'Are you sure?',
+    'title'   => 'Leave your account?',
+    'text'    => 'Are you sure?',
     'confirm' => 'Logout',
-    'cancel' => 'Stay'
+    'cancel'  => 'Stay'
 ];
