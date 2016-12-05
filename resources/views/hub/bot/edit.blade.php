@@ -102,7 +102,7 @@
 
   function botDelete() {
     swal({
-        title: "@trans('hub/bot.delete_tile')",
+        title: "@trans('hub/bot.delete_title')",
         text: "@trans('hub/bot.delete_text')",
         type: "error",
         showCancelButton: true,
